@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/nexthover.png" type="Texture" id=2]
+[ext_resource path="res://Main.gd" type="Script" id=3]
+[ext_resource path="res://Assets/next.png" type="Texture" id=4]
+[ext_resource path="res://Assets/felt.jpg" type="Texture" id=5]
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 80
+font_data = ExtResource( 6 )
+
+[node name="Board" type="Node2D" groups=[
+"playersAlive",
+]]
+script = ExtResource( 3 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 959.834, 544.564 )
+scale = Vector2( 1.10033, 1.10033 )
+texture = ExtResource( 5 )
+
+[node name="TextureButton" type="TextureButton" parent="."]
+margin_left = 830.0
+margin_top = 400.0
+margin_right = 1090.0
+margin_bottom = 680.0
+texture_normal = ExtResource( 4 )
+texture_hover = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_left = 741.624
+margin_top = 326.315
+margin_right = 1180.62
+margin_bottom = 428.315
+custom_fonts/font = SubResource( 1 )
+text = "Player wins!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
