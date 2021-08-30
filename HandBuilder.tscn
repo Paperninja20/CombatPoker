@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
@@ -45,6 +45,14 @@
 
 [sub_resource type="DynamicFont" id=1]
 size = 80
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 150
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 170
 font_data = ExtResource( 2 )
 
 [node name="HandBuilder" type="Node2D"]
@@ -101,10 +109,10 @@ position = Vector2( 1368, 112.5 )
 scale = Vector2( 0.178, 0.178 )
 
 [node name="Back" type="TextureButton" parent="."]
-margin_left = 1486.06
-margin_top = 44.6292
-margin_right = 1998.06
-margin_bottom = 556.629
+margin_left = 1484.06
+margin_top = 18.6292
+margin_right = 1996.06
+margin_bottom = 530.629
 rect_scale = Vector2( 0.25, 0.25 )
 texture_normal = ExtResource( 39 )
 texture_pressed = ExtResource( 41 )
@@ -112,17 +120,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Delete" type="Label" parent="Back"]
+margin_left = 25.4277
+margin_top = 483.115
+margin_right = 504.428
+margin_bottom = 673.115
+rect_pivot_offset = Vector2( -12247.3, 1114.66 )
+custom_fonts/font = SubResource( 2 )
+text = "DELETE"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Done" type="TextureButton" parent="."]
-margin_left = 1682.4
-margin_top = 42.0311
-margin_right = 2882.4
-margin_bottom = 672.031
+margin_left = 1661.21
+margin_top = 20.8418
+margin_right = 2861.21
+margin_bottom = 650.842
 rect_scale = Vector2( 0.2, 0.2 )
 texture_normal = ExtResource( 38 )
 texture_pressed = ExtResource( 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Confirm" type="Label" parent="Done"]
+margin_left = 190.705
+margin_top = 688.651
+margin_right = 983.705
+margin_bottom = 910.651
+custom_fonts/font = SubResource( 3 )
+text = "CONFIRM"
+align = 1
+valign = 1
 
 [node name="CardSelect" type="Node2D" parent="."]
 position = Vector2( 24.0974, 247.34 )

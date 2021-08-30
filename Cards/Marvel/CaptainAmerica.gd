@@ -50,12 +50,13 @@ func activateBox():
 				attack += 4
 			else:
 				break
-	attack += target.externalBuffs
-	if target != attackingMinion:
-		attack += attackingMinion.externalBuffs
-	if attack < 0:
-		attack = 0
-	damageThreshold = attack
+	if Global.getActiveMinion(minionOwner) == self:
+		attack += target.externalBuffs
+		if target != attackingMinion:
+			attack += attackingMinion.externalBuffs
+		if attack < 0:
+			attack = 0
+		damageThreshold = attack
 	
 func trigger():
 	determineBox()

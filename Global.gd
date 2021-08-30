@@ -44,10 +44,11 @@ var cards = {
 }
 
 var deck = []
+var simulationMode = 1
 var playersToDamage = []
 # Called when the node enters the scene tree for the first time.
 var HandBuilding = 1
-var P1Hand = []
+var P1Hand = ["CaptainAmerica", "JeanGrey", "AntMan", "TheHulk", "NickFury"]
 var P2Hand = []
 var P3Hand = []
 var P4Hand = []

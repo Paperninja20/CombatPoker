@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/back.png" type="Texture" id=1]
+[ext_resource path="res://120Sim.gd" type="Script" id=3]
+[ext_resource path="res://Assets/felt.jpg" type="Texture" id=5]
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=6]
+[ext_resource path="res://Assets/backpressed.png" type="Texture" id=7]
+
+[sub_resource type="DynamicFont" id=2]
+size = 80
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 200
+font_data = ExtResource( 6 )
+
+[node name="120Sim" type="Node2D" groups=[
+"playersAlive",
+]]
+script = ExtResource( 3 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 955.327, 540 )
+scale = Vector2( 1.01146, 1.03079 )
+texture = ExtResource( 5 )
+
+[node name="Message" type="Label" parent="."]
+margin_left = 579.99
+margin_top = 469.99
+margin_right = 1334.99
+margin_bottom = 571.99
+custom_fonts/font = SubResource( 2 )
+text = "Calculating"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="TextureButton" parent="."]
+visible = false
+margin_left = 1067.6
+margin_top = 725.12
+margin_right = 1579.6
+margin_bottom = 1237.12
+rect_scale = Vector2( 0.25, 0.25 )
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Back"]
+margin_left = -199.572
+margin_top = 547.004
+margin_right = 843.428
+margin_bottom = 1056.0
+custom_fonts/font = SubResource( 3 )
+text = "Main Menu
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back2" type="TextureButton" parent="."]
+visible = false
+margin_left = 724.492
+margin_top = 730.348
+margin_right = 1236.49
+margin_bottom = 1242.35
+rect_scale = Vector2( 0.25, 0.25 )
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Back2"]
+margin_left = -256.654
+margin_top = 400.778
+margin_right = 786.346
+margin_bottom = 909.778
+custom_fonts/font = SubResource( 3 )
+text = "Reset"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Back2" to="." method="_on_Back2_pressed"]

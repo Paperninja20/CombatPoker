@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
@@ -9,12 +9,31 @@
 [ext_resource path="res://Assets/nexthover.png" type="Texture" id=7]
 [ext_resource path="res://CustomSimOptions.gd" type="Script" id=8]
 [ext_resource path="res://Assets/nextWhite.png" type="Texture" id=9]
+[ext_resource path="res://Assets/back.png" type="Texture" id=10]
+[ext_resource path="res://Assets/backpressed.png" type="Texture" id=11]
+
+[sub_resource type="DynamicFont" id=5]
+size = 250
+font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=1]
+size = 120
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 75
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 75
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
 size = 100
 font_data = ExtResource( 2 )
 
 [node name="SimOptions" type="Node2D"]
+position = Vector2( 0, 2.24493 )
 script = ExtResource( 8 )
 
 [node name="Background" type="Sprite" parent="."]
@@ -26,11 +45,68 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Back" type="TextureButton" parent="."]
+margin_left = 1709.8
+margin_top = 693.722
+margin_right = 2221.8
+margin_bottom = 1205.72
+rect_scale = Vector2( 0.25, 0.25 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackToMenu" type="Label" parent="Back"]
+margin_left = -745.315
+margin_top = 98.7766
+margin_right = -46.3154
+margin_bottom = 414.777
+custom_fonts/font = SubResource( 5 )
+text = "MENU"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeArrow" type="TextureButton" parent="."]
+margin_left = 1735.98
+margin_top = 123.459
+margin_right = 1995.98
+margin_bottom = 403.459
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Mode" type="Label" parent="ModeArrow"]
+margin_left = -403.63
+margin_top = -87.4532
+margin_right = -86.6304
+margin_bottom = 64.5468
+custom_fonts/font = SubResource( 1 )
+text = "MODE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeValue" type="Label" parent="ModeArrow"]
+margin_left = -467.538
+margin_top = 84.0896
+margin_right = -22.5383
+margin_bottom = 179.09
+rect_pivot_offset = Vector2( 395.676, 62.2455 )
+custom_fonts/font = SubResource( 2 )
+text = "Step-through"
+
 [node name="Continue" type="TextureButton" parent="."]
-margin_left = 1667.98
-margin_top = 859.806
-margin_right = 1927.98
-margin_bottom = 1139.81
+margin_left = 1683.98
+margin_top = 813.806
+margin_right = 1943.98
+margin_bottom = 1093.81
 rect_scale = Vector2( 0.75, 0.75 )
 texture_normal = ExtResource( 9 )
 texture_pressed = ExtResource( 7 )
@@ -38,12 +114,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ContinueText" type="Label" parent="Continue"]
+margin_left = -337.757
+margin_top = 85.3243
+margin_right = 26.2432
+margin_bottom = 180.324
+custom_fonts/font = SubResource( 3 )
+text = "CONTINUE"
+
 [node name="P1" type="Label" parent="."]
-margin_left = 112.514
-margin_top = 102.951
-margin_right = 630.514
-margin_bottom = 229.951
-custom_fonts/font = SubResource( 1 )
+margin_left = -104.267
+margin_top = 100.756
+margin_right = 413.733
+margin_bottom = 227.756
+custom_fonts/font = SubResource( 4 )
 text = "P1"
 align = 1
 valign = 1
@@ -95,11 +179,11 @@ scale = Vector2( 0.178, 0.178 )
 offset = Vector2( 3954.62, 133.042 )
 
 [node name="P2" type="Label" parent="."]
-margin_left = 112.514
-margin_top = 343.158
-margin_right = 630.514
-margin_bottom = 600.158
-custom_fonts/font = SubResource( 1 )
+margin_left = -104.267
+margin_top = 340.963
+margin_right = 413.733
+margin_bottom = 597.963
+custom_fonts/font = SubResource( 4 )
 text = "P2
 "
 align = 1
@@ -147,12 +231,11 @@ position = Vector2( 1247.4, 62.4133 )
 scale = Vector2( 0.178, 0.178 )
 
 [node name="P3" type="Label" parent="."]
-visible = false
-margin_left = 112.514
-margin_top = 585.61
-margin_right = 630.514
-margin_bottom = 972.61
-custom_fonts/font = SubResource( 1 )
+margin_left = -104.267
+margin_top = 583.415
+margin_right = 413.733
+margin_bottom = 970.415
+custom_fonts/font = SubResource( 4 )
 text = "P3
 
 "
@@ -201,12 +284,11 @@ position = Vector2( 1247.59, 63.2507 )
 scale = Vector2( 0.178, 0.178 )
 
 [node name="P4" type="Label" parent="."]
-visible = false
-margin_left = 112.514
-margin_top = 837.042
-margin_right = 630.514
-margin_bottom = 1354.04
-custom_fonts/font = SubResource( 1 )
+margin_left = -104.267
+margin_top = 834.847
+margin_right = 413.733
+margin_bottom = 1351.85
+custom_fonts/font = SubResource( 4 )
 text = "P4
 
 
@@ -254,6 +336,8 @@ scale = Vector2( 0.178, 0.178 )
 [node name="5" type="Sprite" parent="P4"]
 position = Vector2( 1247.62, 62.7368 )
 scale = Vector2( 0.178, 0.178 )
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="ModeArrow" to="." method="_on_ModeArrow_pressed"]
 [connection signal="pressed" from="Continue" to="." method="_on_Continue_pressed"]
 [connection signal="pressed" from="P1/EditButton1" to="P1/EditButton1" method="_on_EditButton1_pressed"]
 [connection signal="pressed" from="P2/EditButton2" to="P2/EditButton2" method="_on_EditButton1_pressed"]
