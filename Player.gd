@@ -42,6 +42,15 @@ func draw(count):
 		handIndex += 180
 		$Hand.add_child(newCard)
 		deck.remove(0)
+
+func drawCard(cardName):
+	var cardUniverse = Global.cards[cardName][0]
+	var card = load("res://Cards/" + cardUniverse + "/" + cardName + ".tscn")
+	var newCard = card.instance()
+	newCard.position.x = handIndex
+	handIndex += 180
+	$Hand.add_child(newCard)
+	Global.deck.erase([cardName, cardUniverse])
 	
 func takeDamage(damage):
 	health -= damage

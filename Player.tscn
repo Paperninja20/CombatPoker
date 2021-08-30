@@ -10,21 +10,21 @@
 [ext_resource path="res://PlayerTag.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
-size = 59
+size = 60
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 40
+size = 60
 font_data = ExtResource( 3 )
 
 [node name="Player" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="TextureButton" type="TextureButton" parent="."]
-margin_left = 112.75
-margin_top = -247.15
-margin_right = 862.75
-margin_bottom = 802.85
+margin_left = 112.0
+margin_top = -245.0
+margin_right = 862.0
+margin_bottom = 805.0
 rect_scale = Vector2( 0.165, 0.165 )
 texture_normal = ExtResource( 4 )
 __meta__ = {
@@ -48,10 +48,10 @@ scale = Vector2( 0.75, 0.75 )
 z_index = 1
 
 [node name="Label" type="Label" parent="."]
-margin_left = -78.0188
-margin_top = -43.0377
-margin_right = -38.0188
-margin_bottom = 46.9623
+margin_left = -75.436
+margin_top = -48.0931
+margin_right = -30.4364
+margin_bottom = 53.9069
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.933333, 0.0666667, 0.133333, 1 )
 text = "3"
@@ -63,8 +63,8 @@ __meta__ = {
 }
 
 [node name="Heart" type="Sprite" parent="."]
-position = Vector2( -106.071, 1.89995 )
-scale = Vector2( 0.137369, 0.137369 )
+position = Vector2( -103.148, 3.356 )
+scale = Vector2( 0.16, 0.16 )
 texture = ExtResource( 6 )
 
 [node name="Eliminated" type="Sprite" parent="."]
@@ -76,10 +76,10 @@ texture = ExtResource( 7 )
 offset = Vector2( -384.459, 433.304 )
 
 [node name="PlayerTag" type="Label" parent="."]
-margin_left = 40.0
-margin_top = -24.0
-margin_right = 80.0
-margin_bottom = 27.0
+margin_left = 40.7507
+margin_top = -38.4452
+margin_right = 113.75
+margin_bottom = 63.5548
 custom_fonts/font = SubResource( 2 )
 text = "P1"
 script = ExtResource( 8 )

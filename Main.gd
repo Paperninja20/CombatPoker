@@ -11,12 +11,36 @@ var gameOver = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	playerCount(4)
+	playerCount(Global.playerCount)
 	determineTargeting()
 	
 	#drawCards
 	for player in remainingPlayers:
-		player.draw(5)
+		match player.playerName:
+			"P1":
+				var count = 0
+				for card in Global.P1Hand:
+					player.drawCard(card)
+					count += 1
+				player.draw(5 - count)
+			"P2":
+				var count = 0
+				for card in Global.P2Hand:
+					player.drawCard(card)
+					count += 1
+				player.draw(5 - count)	
+			"P3":
+				var count = 0
+				for card in Global.P3Hand:
+					player.drawCard(card)
+					count += 1
+				player.draw(5 - count)	
+			"P4":
+				var count = 0
+				for card in Global.P4Hand:
+					player.drawCard(card)
+					count += 1
+				player.draw(5 - count)	
 		
 	#GAME SEQUENCE
 	#########
@@ -97,7 +121,7 @@ func attackPhase():
 		if player.health <= 0:
 			newlyDead.append(player)
 			player.get_node("Eliminated").visible = true
-			continue
+			continue	
 		#if player is out of steam
 		if Global.isHandEmpty(player) and not Global.hasActiveMinion(player):
 			newlyDead.append(player)
@@ -116,7 +140,9 @@ func attackPhase():
 		else:
 			$Label.text = "pot split!"
 		$Label.visible = true
-		get_tree().paused = true
+		$Back.visible = true
+		$Back2.visible = true
+		$Next.visible = false
 	
 	for player in remainingPlayers:
 		var activeMinion = Global.getActiveMinion(player)
@@ -139,16 +165,21 @@ func playerCount(number):
 	if number == 2:
 		var Player1 = participant.instance()
 		Player1.playerName = "P1"
-		Player1.position = Vector2(1350, 540)
+		Player1.position = Vector2(1400, 540)
+		#Player1.scale = Vector2(1.5, 1.5)
 		add_child(Player1)
 		remainingPlayers.append(Player1)
 		var Player2 = participant.instance()
 		Player2.playerName = "P2"
-		Player2.position = Vector2(550, 540)
+		Player2.position = Vector2(500, 540)
+		#Player2.scale = Vector2(1.5, 1.5)
 		add_child(Player2)
 		remainingPlayers.append(Player2)
+		$Next.rect_position = Vector2(830, 700)
 	if number == 3:
-		$TextureButton.rect_position = Vector2(1500, 700)
+		$Next.rect_position = Vector2(1350, 700)
+		$Back.rect_position = Vector2(400, 700)
+		$Back2.rect_position = Vector2(100, 700)
 		var Player1 = participant.instance()
 		Player1.playerName = "P1"
 		Player1.position = Vector2(1600, 350)
@@ -194,6 +225,16 @@ func _on_TextureButton_pressed():
 	if gameOver:
 		return
 	if minionPhase:
+		$Next/Phase.text = "Enter Attack Phase"
 		playMinions()
 	else:
+		$Next/Phase.text = "Enter Minion Playing Phase"
 		attackPhase()
+
+
+func _on_Back_pressed():
+	get_tree().change_scene("res://MainMenu.tscn")
+
+
+func _on_Back2_pressed():
+	get_tree().change_scene("res://CustomSimOptions.tscn")

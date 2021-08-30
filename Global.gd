@@ -4,6 +4,8 @@ extends Node
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var playerCount = 2
+
 var classes = ["Marvel", "Pokemon", "Star Wars", "Team Fortress", "Rodent"]
 
 var cards = {
@@ -44,6 +46,12 @@ var cards = {
 var deck = []
 var playersToDamage = []
 # Called when the node enters the scene tree for the first time.
+var HandBuilding = 1
+var P1Hand = []
+var P2Hand = []
+var P3Hand = []
+var P4Hand = []
+
 func _ready():
 	randomize()
 	for card in cards:
@@ -53,7 +61,6 @@ func _ready():
 			count += 1
 	deck.shuffle()
 	
-
 func reparent(node, newParent):
 	var parent = node.get_parent()
 	parent.remove_child(node)

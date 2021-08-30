@@ -1,0 +1,544 @@
+[gd_scene load_steps=44 format=2]
+
+[ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://Assets/CardSlot.png" type="Texture" id=3]
+[ext_resource path="res://CardSelection.gd" type="Script" id=4]
+[ext_resource path="res://Assets/CardAssets/MACHINE.png" type="Texture" id=5]
+[ext_resource path="res://Assets/CardAssets/Spy.png" type="Texture" id=6]
+[ext_resource path="res://Assets/CardAssets/SpeedyGonzales.png" type="Texture" id=7]
+[ext_resource path="res://Assets/CardAssets/RocketRaccoon.png" type="Texture" id=8]
+[ext_resource path="res://Assets/CardAssets/Gible.png" type="Texture" id=9]
+[ext_resource path="res://Assets/CardAssets/Palkia.png" type="Texture" id=10]
+[ext_resource path="res://Assets/CardAssets/TheHulk.png" type="Texture" id=11]
+[ext_resource path="res://Assets/CardAssets/CountDooku.png" type="Texture" id=12]
+[ext_resource path="res://Assets/CardAssets/JeanGrey.png" type="Texture" id=13]
+[ext_resource path="res://Assets/CardAssets/NickFury.png" type="Texture" id=14]
+[ext_resource path="res://Assets/CardAssets/DrNuvoVindi.png" type="Texture" id=15]
+[ext_resource path="res://Assets/CardAssets/CloneTrooper.png" type="Texture" id=16]
+[ext_resource path="res://Assets/CardAssets/ChuckE.png" type="Texture" id=17]
+[ext_resource path="res://Assets/CardAssets/Lugia.png" type="Texture" id=18]
+[ext_resource path="res://Assets/CardAssets/CaptainAmerica.png" type="Texture" id=19]
+[ext_resource path="res://Assets/CardAssets/Droideka.png" type="Texture" id=20]
+[ext_resource path="res://Assets/CardAssets/Scout.png" type="Texture" id=21]
+[ext_resource path="res://Assets/CardAssets/Heavy.png" type="Texture" id=22]
+[ext_resource path="res://Assets/CardAssets/Demoman.png" type="Texture" id=23]
+[ext_resource path="res://Assets/CardAssets/ObiWan.png" type="Texture" id=24]
+[ext_resource path="res://Assets/CardAssets/Exeggutor.png" type="Texture" id=25]
+[ext_resource path="res://Assets/CardAssets/CadBane.png" type="Texture" id=26]
+[ext_resource path="res://Assets/CardAssets/Entei.png" type="Texture" id=27]
+[ext_resource path="res://Assets/CardAssets/Pyro.png" type="Texture" id=28]
+[ext_resource path="res://Assets/CardAssets/GeneralLokDurd.png" type="Texture" id=29]
+[ext_resource path="res://Assets/CardAssets/Soldier.png" type="Texture" id=30]
+[ext_resource path="res://Assets/CardAssets/Dormammu.png" type="Texture" id=31]
+[ext_resource path="res://Assets/CardAssets/Snorlax.png" type="Texture" id=32]
+[ext_resource path="res://Assets/CardAssets/Ditto.png" type="Texture" id=33]
+[ext_resource path="res://Assets/CardAssets/Remy.png" type="Texture" id=34]
+[ext_resource path="res://Assets/CardAssets/Jerry.png" type="Texture" id=35]
+[ext_resource path="res://Assets/CardAssets/MickeyMouse.png" type="Texture" id=36]
+[ext_resource path="res://HandBuilder.gd" type="Script" id=37]
+[ext_resource path="res://Assets/done.png" type="Texture" id=38]
+[ext_resource path="res://Assets/back.png" type="Texture" id=39]
+[ext_resource path="res://Assets/donepressed.png" type="Texture" id=40]
+[ext_resource path="res://Assets/backpressed.png" type="Texture" id=41]
+[ext_resource path="res://Assets/CardAssets/AntMan.png" type="Texture" id=42]
+
+[sub_resource type="DynamicFont" id=1]
+size = 80
+font_data = ExtResource( 2 )
+
+[node name="HandBuilder" type="Node2D"]
+script = ExtResource( 37 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 1062.69, 255.56 )
+scale = Vector2( 1.01146, 1.03079 )
+texture = ExtResource( 1 )
+offset = Vector2( -106.151, 274.404 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="PlayerHeader" type="Label" parent="."]
+margin_left = 118.387
+margin_top = 16.8825
+margin_right = 433.387
+margin_bottom = 223.883
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 221.379, 86.8401 )
+custom_fonts/font = SubResource( 1 )
+text = "P1 HAND"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slots" type="Sprite" parent="."]
+position = Vector2( 971.811, 112.722 )
+scale = Vector2( 0.178961, 0.178961 )
+texture = ExtResource( 3 )
+
+[node name="1" type="Sprite" parent="."]
+position = Vector2( 569, 112.5 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="2" type="Sprite" parent="."]
+position = Vector2( 770.5, 112.5 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="3" type="Sprite" parent="."]
+position = Vector2( 972, 112.5 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="4" type="Sprite" parent="."]
+position = Vector2( 1166.5, 112.5 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="5" type="Sprite" parent="."]
+position = Vector2( 1368, 112.5 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="Back" type="TextureButton" parent="."]
+margin_left = 1486.06
+margin_top = 44.6292
+margin_right = 1998.06
+margin_bottom = 556.629
+rect_scale = Vector2( 0.25, 0.25 )
+texture_normal = ExtResource( 39 )
+texture_pressed = ExtResource( 41 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Done" type="TextureButton" parent="."]
+margin_left = 1682.4
+margin_top = 42.0311
+margin_right = 2882.4
+margin_bottom = 672.031
+rect_scale = Vector2( 0.2, 0.2 )
+texture_normal = ExtResource( 38 )
+texture_pressed = ExtResource( 40 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CardSelect" type="Node2D" parent="."]
+position = Vector2( 24.0974, 247.34 )
+scale = Vector2( 0.95, 0.95 )
+
+[node name="AntMan" type="TextureButton" parent="CardSelect"]
+margin_right = 750.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 42 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TheHulk" type="TextureButton" parent="CardSelect"]
+margin_left = 140.0
+margin_right = 890.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 11 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dormammu" type="TextureButton" parent="CardSelect"]
+margin_left = 560.0
+margin_right = 1310.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 31 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RocketRaccoon" type="TextureButton" parent="CardSelect"]
+margin_left = 280.0
+margin_right = 1030.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 8 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NickFury" type="TextureButton" parent="CardSelect"]
+margin_left = 420.0
+margin_right = 1170.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 14 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JeanGrey" type="TextureButton" parent="CardSelect"]
+margin_left = 700.0
+margin_right = 1450.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 13 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CaptainAmerica" type="TextureButton" parent="CardSelect"]
+margin_left = 840.0
+margin_right = 1590.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 19 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Snorlax" type="TextureButton" parent="CardSelect"]
+margin_left = 980.0
+margin_right = 1730.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 32 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exeggutor" type="TextureButton" parent="CardSelect"]
+margin_left = 1120.0
+margin_right = 1870.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 25 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gible" type="TextureButton" parent="CardSelect"]
+margin_left = 1260.0
+margin_right = 2010.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 9 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Entei" type="TextureButton" parent="CardSelect"]
+margin_left = 1400.0
+margin_right = 2150.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 27 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ditto" type="TextureButton" parent="CardSelect"]
+margin_left = 1540.0
+margin_right = 2290.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 33 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Palkia" type="TextureButton" parent="CardSelect"]
+margin_left = 1680.0
+margin_right = 2430.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 10 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lugia" type="TextureButton" parent="CardSelect"]
+margin_left = 1820.0
+margin_right = 2570.0
+margin_bottom = 1050.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 18 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CloneTrooper" type="TextureButton" parent="CardSelect"]
+margin_top = 192.0
+margin_right = 750.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 16 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CountDooku" type="TextureButton" parent="CardSelect"]
+margin_left = 140.0
+margin_top = 192.0
+margin_right = 890.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 12 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Droideka" type="TextureButton" parent="CardSelect"]
+margin_left = 280.0
+margin_top = 192.0
+margin_right = 1030.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 20 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DrNuvoVindi" type="TextureButton" parent="CardSelect"]
+margin_left = 420.0
+margin_top = 192.0
+margin_right = 1170.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 15 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CadBane" type="TextureButton" parent="CardSelect"]
+margin_left = 560.0
+margin_top = 192.0
+margin_right = 1310.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 26 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ObiWan" type="TextureButton" parent="CardSelect"]
+margin_left = 700.0
+margin_top = 192.0
+margin_right = 1450.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 24 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GeneralLokDurd" type="TextureButton" parent="CardSelect"]
+margin_left = 840.0
+margin_top = 192.0
+margin_right = 1590.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 29 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Demoman" type="TextureButton" parent="CardSelect"]
+margin_left = 980.0
+margin_top = 192.0
+margin_right = 1730.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 23 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scout" type="TextureButton" parent="CardSelect"]
+margin_left = 1120.0
+margin_top = 192.0
+margin_right = 1870.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 21 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Soldier" type="TextureButton" parent="CardSelect"]
+margin_left = 1260.0
+margin_top = 192.0
+margin_right = 2010.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 30 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Pyro" type="TextureButton" parent="CardSelect"]
+margin_left = 1400.0
+margin_top = 192.0
+margin_right = 2150.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 28 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spy" type="TextureButton" parent="CardSelect"]
+margin_left = 1540.0
+margin_top = 192.0
+margin_right = 2290.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 6 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Heavy" type="TextureButton" parent="CardSelect"]
+margin_left = 1680.0
+margin_top = 192.0
+margin_right = 2430.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 22 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MACHINE" type="TextureButton" parent="CardSelect"]
+margin_left = 1820.0
+margin_top = 192.0
+margin_right = 2570.0
+margin_bottom = 1242.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 5 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Jerry" type="TextureButton" parent="CardSelect"]
+margin_left = -1.25179
+margin_top = 384.0
+margin_right = 748.749
+margin_bottom = 1434.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 35 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Remy" type="TextureButton" parent="CardSelect"]
+margin_left = 138.748
+margin_top = 384.0
+margin_right = 888.749
+margin_bottom = 1434.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 34 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpeedyGonzales" type="TextureButton" parent="CardSelect"]
+margin_left = 280.0
+margin_top = 384.0
+margin_right = 1030.0
+margin_bottom = 1434.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 7 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MickeyMouse" type="TextureButton" parent="CardSelect"]
+margin_left = 420.0
+margin_top = 384.0
+margin_right = 1170.0
+margin_bottom = 1434.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 36 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChuckE" type="TextureButton" parent="CardSelect"]
+margin_left = 560.0
+margin_top = 384.0
+margin_right = 1310.0
+margin_bottom = 1434.0
+rect_scale = Vector2( 0.178, 0.178 )
+texture_normal = ExtResource( 17 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Done" to="." method="_on_Done_pressed"]
+[connection signal="pressed" from="CardSelect/AntMan" to="CardSelect/AntMan" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/TheHulk" to="CardSelect/TheHulk" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Dormammu" to="CardSelect/Dormammu" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/RocketRaccoon" to="CardSelect/RocketRaccoon" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/NickFury" to="CardSelect/NickFury" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/JeanGrey" to="CardSelect/JeanGrey" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/CaptainAmerica" to="CardSelect/CaptainAmerica" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Snorlax" to="CardSelect/Snorlax" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Exeggutor" to="CardSelect/Exeggutor" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Gible" to="CardSelect/Gible" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Entei" to="CardSelect/Entei" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Ditto" to="CardSelect/Ditto" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Palkia" to="CardSelect/Palkia" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Lugia" to="CardSelect/Lugia" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/CloneTrooper" to="CardSelect/CloneTrooper" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/CountDooku" to="CardSelect/CountDooku" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Droideka" to="CardSelect/Droideka" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/DrNuvoVindi" to="CardSelect/DrNuvoVindi" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/CadBane" to="CardSelect/CadBane" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/ObiWan" to="CardSelect/ObiWan" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/GeneralLokDurd" to="CardSelect/GeneralLokDurd" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Demoman" to="CardSelect/Demoman" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Scout" to="CardSelect/Scout" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Soldier" to="CardSelect/Soldier" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Pyro" to="CardSelect/Pyro" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Spy" to="CardSelect/Spy" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Heavy" to="CardSelect/Heavy" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/MACHINE" to="CardSelect/MACHINE" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Jerry" to="CardSelect/Jerry" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/Remy" to="CardSelect/Remy" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/SpeedyGonzales" to="CardSelect/SpeedyGonzales" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/MickeyMouse" to="CardSelect/MickeyMouse" method="_on_Card_Selected"]
+[connection signal="pressed" from="CardSelect/ChuckE" to="CardSelect/ChuckE" method="_on_Card_Selected"]
