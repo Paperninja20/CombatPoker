@@ -15,7 +15,8 @@ var sortedData = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var results = File.new()
-	results.open("C:/Users/jacob/Desktop/SimulationResults/winningHands.txt", File.WRITE)
+	var path = Global.dir
+	results.open(path + "\\winningHands.txt", File.WRITE)
 	
 	for entry in Global.deck:
 		deck.append(entry)

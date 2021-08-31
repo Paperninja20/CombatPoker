@@ -62,6 +62,8 @@ func drawCard(cardName):
 	playsThisRound.append([newCard.cardName, "drawn", ""])
 	
 func takeDamage(damage):
+	if health == 0:
+		return
 	health -= damage
 	if health > 5:
 		health = 5

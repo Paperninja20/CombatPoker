@@ -43,6 +43,7 @@ var cards = {
 	"SpeedyGonzales" : ["Rodent", 1]
 }
 
+var dir
 var deck = []
 var simulationMode = 1
 var gamesToSimulate = 100
@@ -55,6 +56,8 @@ var P3Hand = []
 var P4Hand = []
 
 func _ready():
+	dir = OS.get_executable_path().get_base_dir()
+	dir.replace("\\", "/")
 	randomize()
 	for card in cards:
 		var count = 0

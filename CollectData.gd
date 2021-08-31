@@ -16,17 +16,25 @@ var simulationData
 var handsThisRound
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var path = Global.dir
 	for entry in Global.deck:
 		deck.append(entry)
 		
 	var winrates = File.new()
+	#match Global.playerCount:
+		#2:
+		#	winrates.open("res://Winrates2.json", File.READ)
+		#3:
+		#	winrates.open("res://Winrates3.json", File.READ)
+		#4:
+		#	winrates.open("res://Winrates4.json", File.READ)
 	match Global.playerCount:
 		2:
-			winrates.open("res://Winrates2.json", File.READ)
+			winrates.open(path + "\\Winrates2.json", File.READ)
 		3:
-			winrates.open("res://Winrates3.json", File.READ)
+			winrates.open(path + "\\Winrates3.json", File.READ)
 		4:
-			winrates.open("res://Winrates4.json", File.READ)
+			winrates.open(path + "\\Winrates4.json", File.READ)
 	
 	var json = JSON.parse(winrates.get_as_text())
 	winrates.close()
@@ -80,24 +88,38 @@ func _ready():
 	
 	
 	winrates = File.new()
+	#match Global.playerCount:
+		#2:
+			#winrates.open("res://Winrates2.json", File.WRITE)
+		#3:
+			#winrates.open("res://Winrates3.json", File.WRITE)
+		#4:
+			#winrates.open("res://Winrates4.json", File.WRITE)
 	match Global.playerCount:
 		2:
-			winrates.open("res://Winrates2.json", File.WRITE)
+			winrates.open(path + "\\Winrates2.json", File.WRITE)
 		3:
-			winrates.open("res://Winrates3.json", File.WRITE)
+			winrates.open(path + "\\Winrates3.json", File.WRITE)
 		4:
-			winrates.open("res://Winrates4.json", File.WRITE)
+			winrates.open(path + "\\Winrates4.json", File.WRITE)
 	winrates.store_string(JSON.print(data, "  ", true))
 	winrates.close()
 	
 	winrates = File.new()
+	#match Global.playerCount:
+		#2:
+			#winrates.open("res://Winrates2.json", File.READ)
+		#3:
+			#winrates.open("res://Winrates3.json", File.READ)
+		#4:
+			#winrates.open("res://Winrates4.json", File.READ)
 	match Global.playerCount:
 		2:
-			winrates.open("res://Winrates2.json", File.READ)
+			winrates.open(path + "\\Winrates2.json", File.READ)
 		3:
-			winrates.open("res://Winrates3.json", File.READ)
+			winrates.open(path + "\\Winrates3.json", File.READ)
 		4:
-			winrates.open("res://Winrates4.json", File.READ)
+			winrates.open(path + "\\Winrates4.json", File.READ)
 	json = JSON.parse(winrates.get_as_text())
 	winrates.close()
 	data = json.result
@@ -110,14 +132,22 @@ func _ready():
 	#handsThisRound.close()
 	
 func formatJSON(data):
+	var path = Global.dir
 	var winrateData = File.new()
+	#match Global.playerCount:
+		#2:
+		#	winrateData.open("C:/Users/jacob/Desktop/SimulationResults/2playerWinrateData.txt", File.WRITE)
+		#3:
+		#	winrateData.open("C:/Users/jacob/Desktop/SimulationResults/3playerWinrateData.txt", File.WRITE)
+		#4:
+		#	winrateData.open("C:/Users/jacob/Desktop/SimulationResults/4playerWinrateData.txt", File.WRITE)
 	match Global.playerCount:
 		2:
-			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/2playerWinrateData.txt", File.WRITE)
+			winrateData.open(path + "\\2playerWinrateData.txt", File.WRITE)
 		3:
-			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/3playerWinrateData.txt", File.WRITE)
+			winrateData.open(path + "\\3playerWinrateData.txt", File.WRITE)
 		4:
-			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/4playerWinrateData.txt", File.WRITE)
+			winrateData.open(path + "\\4playerWinrateData.txt", File.WRITE)
 	for card in data:
 		var format_string = "%5.2f"
 		var winrate
@@ -147,7 +177,7 @@ func formatJSON(data):
 		winrateData.store_line("")
 		winrateData.store_line("    dupeBonus: ")
 		for stackNum in cardData["dupeBonus"]:
-			var bonus = cardData["classBonus"][stackNum]
+			var bonus = cardData["dupeBonus"][stackNum]
 			if bonus[1] == 0:
 				winrate = 0
 			else:

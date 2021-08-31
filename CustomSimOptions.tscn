@@ -234,6 +234,7 @@ position = Vector2( 1247.4, 62.4133 )
 scale = Vector2( 0.178, 0.178 )
 
 [node name="P3" type="Label" parent="."]
+visible = false
 margin_left = -104.267
 margin_top = 583.415
 margin_right = 413.733
@@ -287,6 +288,7 @@ position = Vector2( 1247.59, 63.2507 )
 scale = Vector2( 0.178, 0.178 )
 
 [node name="P4" type="Label" parent="."]
+visible = false
 margin_left = -104.267
 margin_top = 834.847
 margin_right = 413.733
