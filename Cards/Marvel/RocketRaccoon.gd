@@ -43,6 +43,8 @@ func determineBox():
 func activateBox():
 	#damageThreshold = baseAttack
 	attack = baseAttack
+	if triggered:
+		attack = target.attack + 1
 	discard = Global.getDiscard(minionOwner)
 	attack += target.externalBuffs
 	if target != attackingMinion:
@@ -56,7 +58,7 @@ func trigger():
 	if activeBox == 1:
 		attack = (target.attack + 1)
 		damageThreshold = attack
-	triggered = true
+		triggered = true
 
 func lastLaugh():
 	pass
@@ -71,6 +73,7 @@ func endRound():
 	if triggered:
 		attack = baseAttack
 		damageThreshold = baseAttack
+		triggered = false
 		$AttackLabel.update()
 	
 

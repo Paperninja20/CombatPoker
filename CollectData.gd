@@ -17,6 +17,7 @@ var handsThisRound
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var path = Global.dir
+	#print(path)
 	for entry in Global.deck:
 		deck.append(entry)
 		
@@ -149,7 +150,7 @@ func formatJSON(data):
 		4:
 			winrateData.open(path + "\\4playerWinrateData.txt", File.WRITE)
 	for card in data:
-		var format_string = "%5.2f"
+		var format_string = "%7.2f"
 		var winrate
 		var cardData = data[card]
 		winrateData.store_line("-------------------------------------\n")
@@ -287,6 +288,9 @@ func attackPhase():
 	var deathsFromAttacks = []
 	for player in remainingPlayers:
 		var activeMinion = Global.getActiveMinion(player)
+		#print(player.playerName, Global.getActiveMinion(player))
+		if activeMinion == null:
+			continue
 		deathsFromAttacks += activeMinion.doAttack()
 	
 	#death discards resolve

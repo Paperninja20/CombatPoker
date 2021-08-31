@@ -46,6 +46,8 @@ func determineBox():
 func activateBox():
 	attack = baseAttack
 	damageThreshold = baseAttack
+	if buffTriggered:
+		attack += 5
 	attack += target.externalBuffs
 	if target != attackingMinion:
 		attack += attackingMinion.externalBuffs
@@ -81,6 +83,7 @@ func endRound():
 	if buffTriggered:
 		attack -= 5
 		damageThreshold = attack
+		buffTriggered = false
 		triggered = false
 		$AttackLabel.update()
 		

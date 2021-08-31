@@ -27,17 +27,39 @@ func playMinion():
 #	Global.reparent($Hand.get_children()[choice], "Active")
 	if Global.isHandEmpty(self):
 		return
+	var explore = int(rand_range(0, Global.exploreFactor))
+	if explore != 0:
+		var minionToPlay = playBetterMinion()
+		if minionToPlay != null:
+			return minionToPlay
 	var playedMinion = $Hand.get_children()[0]
 	playedMinion.position.x = 0
 	Global.reparent(playedMinion, "Active")
 	Global.determinePlay(playedMinion)
-	if Global.isHandEmpty(self):
-		if discard.size() != 0:
-			if discard[discard.size() - 1].cardName == "Captain America":
-				Global.resetMinion(discard[discard.size() - 1])
-				Global.reparent(discard[discard.size() - 1], "Hand")
+	capCheck()
 	return playedMinion
-	
+			
+func playBetterMinion():
+	if discard.size() == 0:
+		return null
+	for card in Global.getHand(self):
+		if card.cardName == discard[0].cardName:
+			var playedMinion = card
+			playedMinion.position.x = 0
+			Global.reparent(playedMinion, "Active")
+			Global.determinePlay(playedMinion)
+			capCheck()
+			return playedMinion
+	for card in Global.getHand(self):
+		if card.universe in discard[0].universeTriggers:
+			var playedMinion = card
+			playedMinion.position.x = 0
+			Global.reparent(playedMinion, "Active")
+			Global.determinePlay(playedMinion)
+			capCheck()
+			return playedMinion
+		
+		
 func draw(count):
 	for _i in range(0, count):
 		var deck = Global.deck
@@ -79,7 +101,14 @@ func discardCard():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
+func capCheck():
+	if Global.isHandEmpty(self):
+		if discard.size() != 0:
+			if discard[discard.size() - 1].cardName == "Captain America":
+				Global.resetMinion(discard[discard.size() - 1])
+				Global.reparent(discard[discard.size() - 1], "Hand")
+					
+					
 func determineAdjacentMinions():
 	if not Global.hasActiveMinion(self):
 		return

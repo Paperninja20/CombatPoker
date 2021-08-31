@@ -44,9 +44,10 @@ var cards = {
 }
 
 var dir
+var exploreFactor = 10
 var deck = []
 var simulationMode = 1
-var gamesToSimulate = 100
+var gamesToSimulate = 1000
 var playersToDamage = []
 # Called when the node enters the scene tree for the first time.
 var HandBuilding = 1
