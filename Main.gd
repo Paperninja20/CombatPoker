@@ -66,6 +66,8 @@ func playMinions():
 			
 	for player in playersToRemove:
 		remainingPlayers.erase(player)
+	
+	determineTargeting()
 
 	#activate boxes
 	for player in remainingPlayers:

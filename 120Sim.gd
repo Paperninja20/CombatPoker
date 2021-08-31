@@ -122,7 +122,7 @@ func simulateGame(permutationOfHand):
 			didHandWin = true
 	
 	for player in allPlayers:
-		player.queue_free()
+		player.call_deferred("free")
 	
 	if didHandWin:
 		return true
@@ -154,6 +154,8 @@ func playMinions():
 			
 	for player in playersToRemove:
 		remainingPlayers.erase(player)
+
+	determineTargeting()
 
 	#activate boxes
 	for player in remainingPlayers:

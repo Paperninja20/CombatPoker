@@ -29,7 +29,7 @@ window/size/height=1080
 
 [memory]
 
-limits/message_queue/max_size_kb=999999999
+limits/message_queue/max_size_kb=16384
 
 [rendering]
 

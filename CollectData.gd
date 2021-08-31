@@ -18,9 +18,16 @@ var handsThisRound
 func _ready():
 	for entry in Global.deck:
 		deck.append(entry)
-			
+		
 	var winrates = File.new()
-	winrates.open("Winrates.json", File.READ)
+	match Global.playerCount:
+		2:
+			winrates.open("res://Winrates2.json", File.READ)
+		3:
+			winrates.open("res://Winrates3.json", File.READ)
+		4:
+			winrates.open("res://Winrates4.json", File.READ)
+	
 	var json = JSON.parse(winrates.get_as_text())
 	winrates.close()
 	var data = json.result
@@ -73,12 +80,24 @@ func _ready():
 	
 	
 	winrates = File.new()
-	winrates.open("Winrates.json", File.WRITE)
+	match Global.playerCount:
+		2:
+			winrates.open("res://Winrates2.json", File.WRITE)
+		3:
+			winrates.open("res://Winrates3.json", File.WRITE)
+		4:
+			winrates.open("res://Winrates4.json", File.WRITE)
 	winrates.store_string(JSON.print(data, "  ", true))
 	winrates.close()
 	
 	winrates = File.new()
-	winrates.open("Winrates.json", File.READ)
+	match Global.playerCount:
+		2:
+			winrates.open("res://Winrates2.json", File.READ)
+		3:
+			winrates.open("res://Winrates3.json", File.READ)
+		4:
+			winrates.open("res://Winrates4.json", File.READ)
 	json = JSON.parse(winrates.get_as_text())
 	winrates.close()
 	data = json.result
@@ -92,7 +111,13 @@ func _ready():
 	
 func formatJSON(data):
 	var winrateData = File.new()
-	winrateData.open("C:/Users/jacob/Desktop/SimulationResults/winrateData.txt", File.WRITE)
+	match Global.playerCount:
+		2:
+			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/2playerWinrateData.txt", File.WRITE)
+		3:
+			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/3playerWinrateData.txt", File.WRITE)
+		4:
+			winrateData.open("C:/Users/jacob/Desktop/SimulationResults/4playerWinrateData.txt", File.WRITE)
 	for card in data:
 		var format_string = "%5.2f"
 		var winrate
@@ -129,8 +154,7 @@ func formatJSON(data):
 				winrate = bonus[0][0]/bonus[1] * 100
 			winrateData.store_line("        " + str(stackNum) + ": " + format_string % winrate + "% | " + str(bonus[1]) + " games")
 		winrateData.store_line("\n")
-
-		
+	winrateData.close()
 		
 		
 	
@@ -175,7 +199,7 @@ func simulateGame():
 
 		
 	for player in allPlayers:
-		player.queue_free()
+		player.call_deferred("free")
 	
 	return roundData
 
@@ -205,6 +229,8 @@ func playMinions():
 			
 	for player in playersToRemove:
 		remainingPlayers.erase(player)
+	
+	determineTargeting()
 		
 	#activate boxes
 	for player in remainingPlayers:
@@ -218,7 +244,8 @@ func playMinions():
 		#minion.get_node("AttackLabel").update()
 	
 	for player in remainingPlayers:
-		Global.getActiveMinion(player).activateBox()
+		if Global.hasActiveMinion(player):
+			Global.getActiveMinion(player).activateBox()
 		#Global.getActiveMinion(player).get_node("AttackLabel").update()
 		
 	
@@ -266,12 +293,12 @@ func attackPhase():
 		#if player is at 0 health
 		if player.health <= 0:
 			newlyDead.append(player)
-			player.get_node("Eliminated").visible = true
+			#.get_node("Eliminated").visible = true
 			continue	
 		#if player is out of steam
 		if Global.isHandEmpty(player) and not Global.hasActiveMinion(player):
 			newlyDead.append(player)
-			player.get_node("Eliminated").visible = true
+			#player.get_node("Eliminated").visible = true
 	
 	#remove players from game
 	if newlyDead.size() > 0:
