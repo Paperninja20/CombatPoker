@@ -6,11 +6,11 @@
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=6]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=7]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 80
 font_data = ExtResource( 6 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 200
 font_data = ExtResource( 6 )
 
@@ -29,7 +29,7 @@ margin_left = 579.99
 margin_top = 469.99
 margin_right = 1334.99
 margin_bottom = 571.99
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Calculating"
 align = 1
 valign = 1
@@ -55,7 +55,7 @@ margin_left = -199.572
 margin_top = 547.004
 margin_right = 843.428
 margin_bottom = 1056.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Main Menu
 "
 align = 1
@@ -82,7 +82,7 @@ margin_left = -256.654
 margin_top = 400.778
 margin_right = 786.346
 margin_bottom = 909.778
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Reset"
 align = 1
 valign = 1

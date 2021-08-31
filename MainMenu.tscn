@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
@@ -6,8 +6,19 @@
 [ext_resource path="res://Assets/nextWhite.png" type="Texture" id=4]
 [ext_resource path="res://Assets/nexthover.png" type="Texture" id=5]
 [ext_resource path="res://CustomSimulationButton.gd" type="Script" id=6]
+[ext_resource path="res://CollectDataButton.gd" type="Script" id=7]
 
 [sub_resource type="DynamicFont" id=1]
+size = 90
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="DynamicFont" id=5]
 size = 90
 font_data = ExtResource( 2 )
 
@@ -24,10 +35,10 @@ __meta__ = {
 }
 
 [node name="CustomSimulation" type="Label" parent="."]
-margin_left = 493.682
-margin_top = 176.201
-margin_right = 1419.68
-margin_bottom = 290.201
+margin_left = 493.315
+margin_top = 187.636
+margin_right = 1419.32
+margin_bottom = 301.636
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "CUSTOM SIMULATION"
@@ -39,28 +50,30 @@ __meta__ = {
 }
 
 [node name="CollectData" type="Label" parent="."]
-margin_left = 630.198
-margin_top = 342.879
-margin_right = 1268.2
-margin_bottom = 573.879
+margin_left = 627.662
+margin_top = 599.381
+margin_right = 1265.66
+margin_bottom = 830.381
 rect_pivot_offset = Vector2( -1262.85, -482.581 )
+mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "COLLECT DATA
 "
 align = 1
 valign = 1
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PlayerCount" type="Label" parent="."]
-margin_left = 674.646
-margin_top = 612.737
-margin_right = 1192.65
-margin_bottom = 743.737
+margin_left = 578.784
+margin_top = 301.061
+margin_right = 1096.79
+margin_bottom = 432.061
 rect_pivot_offset = Vector2( 240.42, 95.5417 )
 custom_fonts/font = SubResource( 1 )
-text = "PLAYERS"
+text = "Players:"
 align = 1
 valign = 1
 __meta__ = {
@@ -68,10 +81,10 @@ __meta__ = {
 }
 
 [node name="Number" type="Label" parent="."]
-margin_left = 669.883
-margin_top = 757.19
-margin_right = 1187.88
-margin_bottom = 888.19
+margin_left = 802.745
+margin_top = 305.925
+margin_right = 1320.74
+margin_bottom = 436.925
 grow_horizontal = 2
 grow_vertical = 2
 rect_pivot_offset = Vector2( 240.42, 95.5417 )
@@ -84,16 +97,50 @@ __meta__ = {
 }
 
 [node name="Arrow" type="TextureButton" parent="."]
-margin_left = 972.277
-margin_top = 754.901
-margin_right = 1232.28
-margin_bottom = 1034.9
+margin_left = 1091.68
+margin_top = 303.273
+margin_right = 1351.69
+margin_bottom = 583.273
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Games" type="Label" parent="."]
+margin_left = 591.784
+margin_top = 710.061
+margin_right = 1109.79
+margin_bottom = 841.061
+rect_pivot_offset = Vector2( 240.42, 95.5417 )
+custom_fonts/font = SubResource( 1 )
+text = "Games:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GamesInput" type="LineEdit" parent="."]
+margin_left = 1028.0
+margin_top = 724.0
+margin_right = 1598.0
+margin_bottom = 838.0
+custom_styles/read_only = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "100"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="mouse_entered" from="CustomSimulation" to="CustomSimulation" method="_on_Custom_Simulation_mouse_entered"]
 [connection signal="mouse_exited" from="CustomSimulation" to="CustomSimulation" method="_on_Custom_Simulation_mouse_exited"]
+[connection signal="mouse_entered" from="CollectData" to="CollectData" method="_on_CollectData_mouse_entered"]
+[connection signal="mouse_exited" from="CollectData" to="CollectData" method="_on_CollectData_mouse_exited"]
 [connection signal="pressed" from="Arrow" to="." method="_on_Arrow_pressed"]
+[connection signal="text_changed" from="GamesInput" to="." method="_on_GamesInput_text_changed"]

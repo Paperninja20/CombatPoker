@@ -12,16 +12,12 @@
 [ext_resource path="res://Assets/back.png" type="Texture" id=10]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=11]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=1]
 size = 250
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=1]
-size = 120
-font_data = ExtResource( 2 )
-
 [sub_resource type="DynamicFont" id=2]
-size = 75
+size = 120
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -29,6 +25,10 @@ size = 75
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=4]
+size = 75
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
 size = 100
 font_data = ExtResource( 2 )
 
@@ -62,7 +62,7 @@ margin_left = -745.315
 margin_top = 98.7766
 margin_right = -46.3154
 margin_bottom = 414.777
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 1 )
 text = "MENU"
 align = 1
 valign = 1
@@ -87,7 +87,7 @@ margin_left = -403.63
 margin_top = -87.4532
 margin_right = -86.6304
 margin_bottom = 64.5468
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "MODE"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -99,8 +99,11 @@ margin_top = 84.0896
 margin_right = -22.5383
 margin_bottom = 179.09
 rect_pivot_offset = Vector2( 395.676, 62.2455 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Step-through"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Continue" type="TextureButton" parent="."]
 margin_left = 1683.98
@@ -119,7 +122,7 @@ margin_left = -337.757
 margin_top = 85.3243
 margin_right = 26.2432
 margin_bottom = 180.324
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "CONTINUE"
 
 [node name="P1" type="Label" parent="."]
@@ -127,7 +130,7 @@ margin_left = -104.267
 margin_top = 100.756
 margin_right = 413.733
 margin_bottom = 227.756
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "P1"
 align = 1
 valign = 1
@@ -183,7 +186,7 @@ margin_left = -104.267
 margin_top = 340.963
 margin_right = 413.733
 margin_bottom = 597.963
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "P2
 "
 align = 1
@@ -235,7 +238,7 @@ margin_left = -104.267
 margin_top = 583.415
 margin_right = 413.733
 margin_bottom = 970.415
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "P3
 
 "
@@ -288,7 +291,7 @@ margin_left = -104.267
 margin_top = 834.847
 margin_right = 413.733
 margin_bottom = 1351.85
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 text = "P4
 
 

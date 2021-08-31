@@ -45,10 +45,11 @@ var cards = {
 
 var deck = []
 var simulationMode = 1
+var gamesToSimulate = 100
 var playersToDamage = []
 # Called when the node enters the scene tree for the first time.
 var HandBuilding = 1
-var P1Hand = ["CaptainAmerica", "JeanGrey", "AntMan", "TheHulk", "NickFury"]
+var P1Hand = []
 var P2Hand = []
 var P3Hand = []
 var P4Hand = []
@@ -89,8 +90,16 @@ func getHand(player):
 		return null
 	return player.get_node("Hand").get_children()
 
+func getHandCards(player):
+	if isHandEmpty(player):
+		return null
+	var resultArr = []
+	for card in getHand(player):
+		resultArr.append(card.cardName)
+	return resultArr
+
 func isDiscardEmpty(player):
-	if player.get_node("Discard").get_child_count() == 0:
+	if player.discard.size() == 0:
 		return true
 	return false
 
@@ -122,3 +131,45 @@ func resetMinion(minion):
 	minion.killedBy = null
 	minion.attributes.clear()
 	
+func determinePlay(minion):
+	var player = minion.minionOwner
+	var stack = 0
+	var bonusType
+	if isDiscardEmpty(player):
+		bonusType = "vanilla"
+		player.playsThisRound.append([minion.cardName, bonusType, ""])
+		return
+	var discard = getDiscard(player)
+	if discard[0].cardName == minion.cardName:
+		bonusType = "dupeBonus"
+		for card in discard:
+			if card.cardName == minion.cardName:
+				stack += 1
+			else:
+				break
+		player.playsThisRound.append([minion.cardName, bonusType, stack, ""])
+		return
+	elif (minion.universe in discard[0].universeTriggers) or MACHINECheck(minion, discard[0]):
+		bonusType = "classBonus"
+		for card in discard:
+			if (minion.universe in card.universeTriggers) or MACHINECheck(minion, card):
+				stack += 1
+			else:
+				break
+		player.playsThisRound.append([minion.cardName, bonusType, stack, ""])
+		return
+	else:
+		bonusType = "vanilla"
+		player.playsThisRound.append([minion.cardName, bonusType, ""])
+		return
+	
+func MACHINECheck(activeMinion, card):
+	if activeMinion.universe == "Team Fortress":
+		if card.cardName == "M.A.C.H.I.N.E.":
+			return true
+		return false
+	return false
+		
+			
+	
+		

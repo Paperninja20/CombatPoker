@@ -38,7 +38,15 @@ func _ready():
 			if count == 120:
 				break
 			
-		sortedData.sort()
+		var wins = []
+		var losses = []
+		for data in sortedData:
+			if data[1] == "WON":
+				wins.append(data)
+			else:
+				losses.append(data)
+				
+		sortedData = wins + losses
 		for hand in sortedData:
 			results.store_line("ORDER: " + str(hand[0]) + " ---- RESULT: " + str(hand[1]))
 
@@ -46,6 +54,14 @@ func _ready():
 		$Back.visible = true
 		$Back2.visible = true
 
+
+class winLossSort:
+	static func winFirst(a, b):
+		if a[1] == "WON":
+			return true
+		if b[1] == "LOST":
+			return false
+		
 func permute(currentHand, possibleCards):
 	if possibleCards.size() == 0:
 		handPermutations.append(currentHand)
@@ -57,9 +73,6 @@ func permute(currentHand, possibleCards):
 		newPossibleCards.erase(card)
 		permute(newHand, newPossibleCards)
 
-		
-	
-	
 	
 	
 func simulateGame(permutationOfHand):
@@ -97,6 +110,8 @@ func simulateGame(permutationOfHand):
 					count += 1
 				player.draw(5 - count)	
 	
+	
+	
 	while remainingPlayers.size() > 1:
 		playMinions()
 		attackPhase()
@@ -129,9 +144,16 @@ func playMinions():
 		if minion != null:
 			newMinionsPlayed.append(minion)
 	
+	var playersToRemove = []
 	#update minion targets
 	for player in remainingPlayers:
-		player.determineAdjacentMinions()
+		if Global.hasActiveMinion(player):
+			player.determineAdjacentMinions()
+		else:
+			playersToRemove.append(player)
+			
+	for player in playersToRemove:
+		remainingPlayers.erase(player)
 
 	#activate boxes
 	for player in remainingPlayers:
@@ -147,6 +169,7 @@ func playMinions():
 	for player in remainingPlayers:
 		Global.getActiveMinion(player).activateBox()
 		Global.getActiveMinion(player).get_node("AttackLabel").update()
+		
 		
 	
 func attackPhase():

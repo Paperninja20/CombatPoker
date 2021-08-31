@@ -56,9 +56,16 @@ func playMinions():
 		if minion != null:
 			newMinionsPlayed.append(minion)
 	
+	var playersToRemove = []
 	#update minion targets
 	for player in remainingPlayers:
-		player.determineAdjacentMinions()
+		if Global.hasActiveMinion(player):
+			player.determineAdjacentMinions()
+		else:
+			playersToRemove.append(player)
+			
+	for player in playersToRemove:
+		remainingPlayers.erase(player)
 
 	#activate boxes
 	for player in remainingPlayers:

@@ -17,7 +17,6 @@ _global_script_class_icons={
 
 config/name="CombatPoker"
 run/main_scene="res://MainMenu.tscn"
-config/icon="res://icon.png"
 
 [autoload]
 
@@ -27,6 +26,10 @@ Global="*res://Global.gd"
 
 window/size/width=1920
 window/size/height=1080
+
+[memory]
+
+limits/message_queue/max_size_kb=999999999
 
 [rendering]
 

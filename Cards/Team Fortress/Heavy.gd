@@ -5,6 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 export var cardName = "Heavy"
+var idName = "Heavy"
 export var baseAttack = 5
 export var attack = 5
 export var rarity = "Epic"
@@ -67,7 +68,7 @@ func trigger():
 		while tempTarget != minionOwner:
 			tempTarget.takeDamage(spray)
 			tempTarget = tempTarget.targeting
-		print("Heavy Dealt " + str(spray) + " aoe")
+		#print("Heavy Dealt " + str(spray) + " aoe")
 			
 			
 

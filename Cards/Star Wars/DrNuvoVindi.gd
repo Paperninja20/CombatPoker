@@ -4,7 +4,8 @@ extends Node2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-export var cardName = "Dr. Nuvo Vindi"
+export var cardName = "Dr.Nuvo Vindi"
+var idName = "DrNuvoVindi"
 export var baseAttack = 0
 export var attack = 0
 export var rarity = "Rare"

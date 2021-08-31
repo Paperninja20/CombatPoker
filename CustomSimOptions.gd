@@ -55,7 +55,7 @@ func _on_ModeArrow_pressed():
 	if Global.simulationMode == 1:
 		$ModeArrow/ModeValue.text = "Step-through"
 	elif Global.simulationMode == 2:
-		$ModeArrow/ModeValue.text = "Optimal Line"
+		$ModeArrow/ModeValue.text = "Optimal Line\n(for P1 Hand)"
 		
 func _on_Back_pressed():
 	get_tree().change_scene("res://MainMenu.tscn")

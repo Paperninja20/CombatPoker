@@ -5,6 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 export var cardName = "Jean Grey"
+var idName = "JeanGrey"
 export var baseAttack = 5
 export var attack = 5
 export var rarity = "Epic"

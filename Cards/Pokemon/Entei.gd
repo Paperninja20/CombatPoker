@@ -5,6 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 export var cardName = "Entei"
+var idName = "Entei"
 export var baseAttack = 4
 export var attack = 4
 export var rarity = "Rare"
@@ -53,7 +54,8 @@ func activateBox():
 func trigger():
 	determineBox()
 	if activeBox == 1:
-		var attackersAttacker = attackingMinion.attackingMinion
+		if Global.isHandEmpty(attackingPlayer):
+			return
 		Global.reparent(attackingMinion, "Hand")
 		var newMinion = attackingPlayer.playMinion()
 		minionOwner.determineAdjacentMinions()

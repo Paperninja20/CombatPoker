@@ -5,6 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 export var cardName = "Palkia"
+var idName = "Palkia"
 export var baseAttack = 3
 export var attack = 3
 export var rarity = "Epic"
@@ -65,14 +66,14 @@ func trigger():
 			if Global.isHandEmpty(tempTarget):
 				continue
 			for card in Global.getHand(tempTarget):
-				Global.deck.append([card.cardName, card.universe])
+				Global.deck.append([card.idName, card.universe])
 				card.queue_free()
 			tempTarget = tempTarget.targeting
 			
 		#shuffle own hand back
 		if not Global.isHandEmpty(tempTarget):
 			for card in Global.getHand(minionOwner):
-				Global.deck.append([card.cardName, card.universe])
+				Global.deck.append([card.idName, card.universe])
 				card.queue_free()
 
 	elif activeBox == 2:
