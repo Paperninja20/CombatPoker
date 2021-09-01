@@ -56,7 +56,8 @@ func activateBox():
 func trigger():
 	determineBox()
 	if activeBox == 1:
-		attack = (target.attack + 1)
+		if attack != 9999:	
+			attack = (target.attack + 1)
 		damageThreshold = attack
 		triggered = true
 

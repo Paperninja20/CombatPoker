@@ -59,6 +59,9 @@ var P4Hand = []
 func _ready():
 	dir = OS.get_executable_path().get_base_dir()
 	dir.replace("\\", "/")
+	resetDeck()
+
+func resetDeck():
 	randomize()
 	for card in cards:
 		var count = 0

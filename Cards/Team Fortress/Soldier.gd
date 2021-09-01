@@ -49,7 +49,7 @@ func activateBox():
 	if activeBox == 1:
 		for card in discard:
 			if card.cardName == cardName or card.cardName == "M.A.C.H.I.N.E.":
-				attack += 3
+				attack *= 2
 			else:
 				break
 	elif activeBox == 2:

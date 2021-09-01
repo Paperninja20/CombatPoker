@@ -57,12 +57,17 @@ func activateBox():
 		attack += attackingMinion.externalBuffs
 	if attack < 0:
 		attack = 0
-	damageThreshold = attack
+	if triggered:
+		damageThreshold = 9999
+	else:
+		damageThreshold = attack
 	
 func trigger():
 	determineBox()
 	if activeBox == 1:
 		targetPlayer.takeDamage(targetPlayer.health)
+		damageThreshold = 9999
+		triggered = true
 	elif activeBox == 2:
 		targetPlayer.takeDamage(1)
 
@@ -77,6 +82,7 @@ func doAttack():
 		return []
 		
 func endRound():
+	triggered = false
 	pass
 	
 

@@ -31,10 +31,19 @@ func _ready():
 	minionOwner = get_parent().get_parent()
 
 func determineBox():
-	#discard = Global.getDiscard(minionOwner)
-	#if discard.size() == 0:
-		#return
-	pass
+	discard = Global.getDiscard(minionOwner)
+	if discard.size() == 0:
+		return
+	var consecutiveGreen = 0
+	for card in discard:
+		if universe in card.universeTriggers:
+			consecutiveGreen += 1
+		else:
+			break
+	if consecutiveGreen >= 2:
+		activeBox = 1
+	else:
+		activeBox = 0
 	
 func activateBox():
 	#determineBox()
@@ -49,8 +58,12 @@ func activateBox():
 	damageThreshold = attack
 	
 func trigger():
-	#determineBox()
-	pass
+	determineBox()
+	if activeBox == 1:
+		var tempTarget = targetPlayer
+		while tempTarget != minionOwner:
+			tempTarget.discardCard()
+			tempTarget = tempTarget.targeting
 
 func lastLaugh():
 	determineBox()

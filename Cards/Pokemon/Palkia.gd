@@ -81,6 +81,8 @@ func trigger():
 		attackingPlayer.get_node("Active").add_child(self)
 		attackingPlayer.get_node("Active").remove_child(attackingMinion)
 		minionOwner.get_node("Active").add_child(attackingMinion)
+		attackingMinion.minionOwner = minionOwner
+		minionOwner = attackingPlayer
 		minionOwner.targeting.determineAdjacentMinions()
 		minionOwner.determineAdjacentMinions()
 		attackingPlayer.determineAdjacentMinions()

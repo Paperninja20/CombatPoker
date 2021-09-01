@@ -6,8 +6,8 @@ extends Node2D
 # var b = "text"
 export var cardName = "Count Dooku"
 var idName = "CountDooku"
-export var baseAttack = 3
-export var attack = 3
+export var baseAttack = 2
+export var attack = 2
 export var rarity = "Common"
 export var universe = "Star Wars"
 var universeTriggers = ["Star Wars"]
