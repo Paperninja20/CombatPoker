@@ -8,12 +8,16 @@ var participant = preload("res://Player.tscn")
 var remainingPlayers = []
 var minionPhase = true
 var gameOver = false
+var deck = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	playerCount(Global.playerCount)
 	determineTargeting()
 	
+	for entry in Global.deck:
+		deck.append(entry)
+		
 	#drawCards
 	for player in remainingPlayers:
 		match player.playerName:
@@ -73,16 +77,19 @@ func playMinions():
 	for player in remainingPlayers:
 		Global.getActiveMinion(player).activateBox()
 		Global.getActiveMinion(player).get_node("AttackLabel").update()
+		Global.getActiveMinion(player).get_node("AttackLabel2").update()
 		
 	#trigger phase and update Labels and status
 	for minion in newMinionsPlayed:
 		minion.trigger()
 		minion.activateBox()
 		minion.get_node("AttackLabel").update()
+		minion.get_node("AttackLabel2").update()
 	
 	for player in remainingPlayers:
 		Global.getActiveMinion(player).activateBox()
 		Global.getActiveMinion(player).get_node("AttackLabel").update()
+		Global.getActiveMinion(player).get_node("AttackLabel2").update()
 		
 	
 func attackPhase():
@@ -118,6 +125,7 @@ func attackPhase():
 				var minion = Global.getActiveMinion(player)
 				minion.activateBox()
 				minion.get_node("AttackLabel").update()
+				minion.get_node("AttackLabel2").update()
 			else:
 				continue
 		else:
@@ -242,8 +250,10 @@ func _on_TextureButton_pressed():
 
 
 func _on_Back_pressed():
+	Global.deck = deck.duplicate(true)
 	get_tree().change_scene("res://MainMenu.tscn")
 
 
 func _on_Back2_pressed():
+	Global.deck = deck.duplicate(true)
 	get_tree().change_scene("res://CustomSimOptions.tscn")

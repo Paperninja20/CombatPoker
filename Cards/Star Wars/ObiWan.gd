@@ -55,7 +55,8 @@ func activateBox():
 func trigger():
 	determineBox()
 	if activeBox == 1:
-		minionOwner.draw(2)
+		minionOwner.draw(1)
+		minionOwner.takeDamage(-2)
 	elif activeBox == 2:
 		minionOwner.draw(2)
 		minionOwner.takeDamage(-2)

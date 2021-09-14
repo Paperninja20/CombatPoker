@@ -20,6 +20,7 @@ func _ready():
 	
 	for entry in Global.deck:
 		deck.append(entry)
+		
 	if handToCheck.size() < 5:
 		$Message.text = "Please select all 5 cards!"
 		$Back.visible = true
