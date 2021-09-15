@@ -14,6 +14,7 @@ var handPermutations = []
 var sortedData = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.exploreFactor = 0
 	var results = File.new()
 	var path = Global.dir
 	results.open(path + "\\winningHands.txt", File.WRITE)

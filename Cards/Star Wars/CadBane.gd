@@ -34,10 +34,19 @@ func determineBox():
 	discard = Global.getDiscard(minionOwner)
 	if discard.size() == 0:
 		return
-	if universe in discard[0].universe:
-		activeBox = 1
+	if discard.size() == 1 and discard[0] == self:
+		return
+	if discard[0] == self:
+		if universe in discard[1].universe:
+			activeBox = 1
+		else:
+			activeBox = 0
 	else:
-		activeBox = 0
+		if universe in discard[0].universe:
+			activeBox = 1
+		else:
+			activeBox = 0
+
 	
 func activateBox():
 	determineBox()

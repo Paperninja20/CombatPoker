@@ -16,6 +16,8 @@ var simulationData
 var handsThisRound
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	Global.exploreFactor = 10
 	var path = Global.dir
 	#print(path)
 	for entry in Global.deck:

@@ -12,6 +12,7 @@ var deck = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	Global.exploreFactor = 0
 	playerCount(Global.playerCount)
 	determineTargeting()
 	
