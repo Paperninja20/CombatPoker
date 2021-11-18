@@ -43,6 +43,12 @@
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=41]
 [ext_resource path="res://Assets/CardAssets/AntMan.png" type="Texture" id=42]
 
+
+
+
+
+
+
 [sub_resource type="DynamicFont" id=1]
 size = 80
 font_data = ExtResource( 2 )

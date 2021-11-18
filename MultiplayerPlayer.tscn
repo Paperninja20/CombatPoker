@@ -1,0 +1,157 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Avatar.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/Discard.png" type="Texture" id=4]
+[ext_resource path="res://Label.gd" type="Script" id=5]
+[ext_resource path="res://Assets/heart.png" type="Texture" id=6]
+[ext_resource path="res://Assets/eliminated.png" type="Texture" id=7]
+[ext_resource path="res://Cards/Marvel/AntMan.tscn" type="PackedScene" id=8]
+
+[sub_resource type="DynamicFont" id=4]
+size = 58
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 60
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 61
+font_data = ExtResource( 3 )
+
+[node name="Player" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BettingPhase" type="Node2D" parent="."]
+
+[node name="Preflop" type="Node2D" parent="BettingPhase"]
+position = Vector2( -180, -100 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="AntMan" parent="BettingPhase/Preflop" instance=ExtResource( 8 )]
+
+[node name="3rdSlot" type="Node2D" parent="BettingPhase"]
+position = Vector2( 0, -100 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="4thSlot" type="Node2D" parent="BettingPhase"]
+position = Vector2( 90, -100 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="5thSlot" type="Node2D" parent="BettingPhase"]
+position = Vector2( 180, -100 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="AntMan" parent="BettingPhase/5thSlot" instance=ExtResource( 8 )]
+
+[node name="Discard1" type="Node2D" parent="BettingPhase"]
+position = Vector2( -45, -230 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="AntMan" parent="BettingPhase/Discard1" instance=ExtResource( 8 )]
+
+[node name="Discard2" type="Node2D" parent="BettingPhase"]
+position = Vector2( 45, -230 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="BetAmount" type="Label" parent="BettingPhase"]
+margin_left = -52.2444
+margin_top = -380.172
+margin_right = 45.7556
+margin_bottom = -306.172
+custom_fonts/font = SubResource( 4 )
+text = "100"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CombatPhase" type="Node2D" parent="."]
+visible = false
+
+[node name="Hand" type="Node2D" parent="CombatPhase"]
+position = Vector2( -180, 100 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Active" type="Node2D" parent="CombatPhase"]
+position = Vector2( 0, -160 )
+
+[node name="Discard" type="Node2D" parent="CombatPhase"]
+position = Vector2( 175, -160 )
+scale = Vector2( 0.75, 0.75 )
+z_index = 1
+
+[node name="Label" type="Label" parent="CombatPhase"]
+margin_left = -75.436
+margin_top = -48.0931
+margin_right = -30.4364
+margin_bottom = 53.9069
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.933333, 0.0666667, 0.133333, 1 )
+text = "3"
+align = 1
+valign = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Heart" type="Sprite" parent="CombatPhase"]
+position = Vector2( -103.148, 3.356 )
+scale = Vector2( 0.16, 0.16 )
+texture = ExtResource( 6 )
+
+[node name="TextureButton" type="TextureButton" parent="CombatPhase"]
+margin_left = 112.0
+margin_top = -245.0
+margin_right = 862.0
+margin_bottom = 805.0
+rect_scale = Vector2( 0.165, 0.165 )
+texture_normal = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+
+[node name="Eliminated" type="Sprite" parent="."]
+visible = false
+position = Vector2( 584.684, -182.384 )
+rotation = 0.725621
+z_index = 2
+texture = ExtResource( 7 )
+offset = Vector2( -384.459, 433.304 )
+
+[node name="PlayerTag" type="Label" parent="."]
+margin_left = 40.7507
+margin_top = -38.4452
+margin_right = 113.75
+margin_bottom = 63.5548
+custom_fonts/font = SubResource( 2 )
+text = "P1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Money" type="Label" parent="."]
+margin_left = -91.6147
+margin_top = 36.4422
+margin_right = 60.3853
+margin_bottom = 114.442
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "$500"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="button_down" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_down"]
+[connection signal="button_up" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_up"]

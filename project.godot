@@ -21,6 +21,7 @@ run/main_scene="res://MainMenu.tscn"
 [autoload]
 
 Global="*res://Global.gd"
+Network="*res://Network.gd"
 
 [display]
 
