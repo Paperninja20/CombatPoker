@@ -66,7 +66,7 @@ func playMinions():
 	for player in remainingPlayers:
 		if not Global.hasActiveMinion(player):
 			playersToRemove.append(player)
-			
+	
 	for player in playersToRemove:
 		remainingPlayers.erase(player)
 	
@@ -252,9 +252,13 @@ func _on_TextureButton_pressed():
 
 func _on_Back_pressed():
 	Global.deck = deck.duplicate(true)
+	randomize()
+	Global.deck.shuffle()
 	get_tree().change_scene("res://MainMenu.tscn")
 
 
 func _on_Back2_pressed():
 	Global.deck = deck.duplicate(true)
+	randomize()
+	Global.deck.shuffle()
 	get_tree().change_scene("res://CustomSimOptions.tscn")

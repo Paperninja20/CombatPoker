@@ -10,7 +10,7 @@ func _input(event):
 	if event is InputEventMouseButton and hovering:
 		if event.is_pressed():
 			print(get_parent().get_node("NicknameField").text)
-			Network.JoinLobby(get_parent().get_node("NicknameField").text)
+			Network.JoinLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text))
 			get_tree().change_scene("res://MultiplayerGame.tscn")
 			hovering = false
 			set("custom_colors/font_color", Color("#c9a17e"))

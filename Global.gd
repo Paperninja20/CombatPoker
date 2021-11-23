@@ -43,6 +43,8 @@ var cards = {
 	"SpeedyGonzales" : ["Rodent", 1]
 }
 
+var turnTimer = 15
+var blindAmount = 10
 var dir
 var exploreFactor = 10
 var deck = []
@@ -55,6 +57,8 @@ var P1Hand = []
 var P2Hand = []
 var P3Hand = []
 var P4Hand = []
+
+var altDown = false
 
 func _ready():
 	dir = OS.get_executable_path().get_base_dir()
@@ -117,7 +121,24 @@ func getDiscard(player):
 	#iscard.invert()
 	var discard = player.discard
 	return discard
+	
+func getTentativeHand(player):
+	var tentativeHand = []
+	if player.get_node("BettingPhase/Preflop").get_child_count < 2:
+		return tentativeHand
+	tentativeHand += player.get_node("BettingPhase/Preflop").get_children()
+	
+	if player.get_node("BettingPhase/3rdSlot").get_child_count == 0:
+		return tentativeHand
+	tentativeHand += player.get_node("BettingPhase/3rdSlot").get_children()
+	
+	if player.get_node("BettingPhase/4thSlot").get_child_count == 0:
+		return tentativeHand
+	tentativeHand += player.get_node("BettingPhase/4thSlot").get_children()
 
+	if player.get_node("BettingPhase/5thSlot").get_child_count == 0:
+		return tentativeHand
+	tentativeHand += player.get_node("BettingPhase/5thSlot").get_children()
 	
 func killMinion(minion, murderer):
 	if not minion in minion.minionOwner.discard:
@@ -176,7 +197,27 @@ func MACHINECheck(activeMinion, card):
 			return true
 		return false
 	return false
-		
-			
 	
-		
+func _input(event):
+	if event.is_action_pressed("Alt"):
+		altDown = true
+	if event.is_action_released("Alt"):
+		altDown = false
+	
+func magnify(card):
+	card.scale *= 4.75
+	if not card.z_index > 300:
+		card.z_index += 500	
+	card.magnified = true
+
+func demagnify(card, newScale):
+	card.scale = newScale
+	card.z_index -= 500
+	card.magnified = false
+
+#fix for alt-tabs
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		pass
+	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		altDown = false

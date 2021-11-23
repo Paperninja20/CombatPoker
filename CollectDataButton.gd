@@ -12,7 +12,7 @@ func _input(event):
 		if event.is_pressed():
 			get_tree().change_scene("res://CollectData.tscn")
 			hovering = false
-			set("custom_colors/font_color", Color("#c9a17e"))
+			set("custom_colors/font_color", Color("#ffffff"))
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

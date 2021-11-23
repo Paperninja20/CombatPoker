@@ -9,7 +9,7 @@
 [ext_resource path="res://CollectDataButton.gd" type="Script" id=7]
 
 [sub_resource type="DynamicFont" id=1]
-size = 90
+size = 50
 font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxEmpty" id=2]
@@ -19,7 +19,7 @@ font_data = ExtResource( 2 )
 [sub_resource type="StyleBoxEmpty" id=4]
 
 [sub_resource type="DynamicFont" id=5]
-size = 90
+size = 50
 font_data = ExtResource( 2 )
 
 [node name="Menu" type="Node2D"]

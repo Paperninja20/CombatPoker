@@ -58,9 +58,9 @@ __meta__ = {
 
 [node name="NicknameLabel" type="Label" parent="."]
 margin_left = 289.99
-margin_top = 276.983
+margin_top = 206.983
 margin_right = 915.99
-margin_bottom = 507.983
+margin_bottom = 437.983
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "NICKNAME:"
@@ -70,11 +70,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MoneyLabel" type="Label" parent="."]
+margin_left = 354.173
+margin_top = 316.472
+margin_right = 980.173
+margin_bottom = 547.472
+mouse_filter = 1
+custom_fonts/font = SubResource( 1 )
+text = "MONEY:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="NicknameField" type="LineEdit" parent="."]
 margin_left = 881.794
-margin_top = 334.117
+margin_top = 264.117
 margin_right = 1451.79
-margin_bottom = 448.117
+margin_bottom = 378.117
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )
@@ -82,6 +96,23 @@ custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "Player"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoneyField" type="LineEdit" parent="."]
+margin_left = 879.906
+margin_top = 371.719
+margin_right = 1449.9
+margin_bottom = 485.719
+custom_styles/read_only = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "500"
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false

@@ -10,12 +10,17 @@ var player = preload("res://MultiplayerPlayer.tscn")
 func _ready():
 	var mainPlayer = player.instance()
 	var playerInfo = Network.self_data
+	mainPlayer.name = playerInfo.name
+	mainPlayer.id = playerInfo.id
+	mainPlayer.set_network_master(playerInfo.id, true)
 	mainPlayer.get_node("PlayerTag").text = playerInfo.name
-	mainPlayer.get_node("Money").text = "$" + str(playerInfo.money)
-	mainPlayer.scale = Vector2(1, 1)
-	mainPlayer.position = Vector2(960, 900)
-	get_tree().get_root().add_child(mainPlayer)
-
+	mainPlayer.get_node("BettingPhase/Money").text = "$" + str(playerInfo.money)
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.65,0.65)
+	mainPlayer.scale = Vector2(.9, .9)
+	mainPlayer.position = Vector2(960, 920)
+	get_tree().get_root().get_node("Board").add_child(mainPlayer)
+	mainPlayer.add_to_group("Players")
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

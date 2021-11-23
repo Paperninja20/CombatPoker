@@ -4,6 +4,8 @@ extends Node2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var seat = 0
+
 var playerName
 var health = 3
 var targetedBy
@@ -64,7 +66,7 @@ func draw(count):
 	for _i in range(0, count):
 		var deck = Global.deck
 		#var randIndex = randi() % deck.size()
-		var card = load("res://Cards/" + deck[0][1] + "/" + deck[0][0] + ".tscn")
+		var card = load("res://Cards/" + deck[0][0] + ".tscn")
 		var newCard = card.instance()
 		newCard.position.x = handIndex
 		handIndex += 180
@@ -75,7 +77,7 @@ func draw(count):
 
 func drawCard(cardName):
 	var cardUniverse = Global.cards[cardName][0]
-	var card = load("res://Cards/" + cardUniverse + "/" + cardName + ".tscn")
+	var card = load("res://Cards/" + cardName + ".tscn")
 	var newCard = card.instance()
 	newCard.position.x = handIndex
 	handIndex += 180
