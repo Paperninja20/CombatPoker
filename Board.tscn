@@ -20,9 +20,7 @@ font_data = ExtResource( 6 )
 size = 200
 font_data = ExtResource( 6 )
 
-[node name="Board" type="Node2D" groups=[
-"playersAlive",
-]]
+[node name="Board" type="Node2D"]
 script = ExtResource( 3 )
 
 [node name="Background" type="Sprite" parent="."]

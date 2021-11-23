@@ -42,6 +42,23 @@ func submit():
 	RiverTurnInfo.currentlyDiscarding += discards.size()
 	RiverTurnInfo.slotsAvailable -= keeps.size()
 	
+	var myPlayer = Global.getMyPlayer()
+			
+	for card in keeps:
+		var cardInstance = load("res://Cards/" + card + ".tscn")
+		var newCard = cardInstance.instance()
+		newCard.position.x += 180 * myPlayer.find_node("Keeps").get_child_count()
+		myPlayer.find_node("Keeps").add_child(newCard)
+	for card in discards:
+		var cardInstance = load("res://Cards/" + card + ".tscn")
+		var newCard = cardInstance.instance()
+		newCard.position.x += 180 * myPlayer.find_node("Discards").get_child_count()
+		myPlayer.find_node("Discards").add_child(newCard)
+		
+	
 	Network.sendFlopToServer(Network.self_data.name, keeps, discards)
 	get_parent().reset()
+	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
+	turnTimer.stop()
+	turnTimer.wait_time = Global.turnTimer
 

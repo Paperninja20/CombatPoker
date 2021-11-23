@@ -78,6 +78,11 @@ func reparent(node, newParent):
 	var parent = node.get_parent()
 	parent.remove_child(node)
 	parent.get_parent().get_node(newParent).add_child(node)
+	
+func getMyPlayer():
+	for player in get_tree().get_nodes_in_group("Players"):
+		if player.name == Network.self_data.name:
+			return player
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

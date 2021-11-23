@@ -43,9 +43,14 @@ remotesync var big = null
 remotesync var small = null
 
 var justFolded = false
+var checksAllAround = true
 var confirmedFlops = 0
 var confirmedTurns = 0
 var confirmedRivers = 0
+var confirmedPlays = 0
+
+var clickableHand = false
+
 
 var leftSeats = {
 	Vector2(360, 750): null,
@@ -199,6 +204,7 @@ remotesync func removePlayer(player_id, info):
 
 func updateGame(cardsOrVals):
 	if cardsOrVals == "cards":
+		print(gamestate)
 		rpc('updateGameState', gamestate)
 		gamestate = {}
 	elif cardsOrVals == "vals":
@@ -206,17 +212,23 @@ func updateGame(cardsOrVals):
 	
 remotesync func updateGameState(state):
 	for participant in state:
-		print(participant)
+		if participant == self_data.name:
+			continue
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
 		for area in state[participant]:
 			var areaNode = playerNode.find_node(area)
 			for card in state[participant][area]:
+				if typeof(card) == TYPE_INT:
+					areaNode.get_children()[0].queue_free()
+					continue
 				var faceUp = false
 				var cardInstance = load("res://Cards/" + card + ".tscn")
 				var newCard = cardInstance.instance()
 				newCard.set_network_master(playerNode.get_network_master())
 				if area != "Discard":
 					newCard.position.x += 180 * areaNode.get_child_count()
+				if area == "Active":
+					faceUp = true
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
 					faceUp = true
 				elif area == "Discards":
@@ -266,6 +278,7 @@ func sendRaise(amount):
 	if moneyToSubtract < 0:
 		moneyToSubtract = 0
 	self_data.money -= moneyToSubtract
+	checksAllAround = false
 	rset('lastBetter', self_data.name)
 	rset('currentBet', amount)
 	rset('raisedThisRound', true)
@@ -328,7 +341,7 @@ func sendBetActions():
 	if not firstRound:
 		i = 0
 		rset('currentBet', 0)
-	firstBetter = activePlayers[i].name
+	checksAllAround = true
 	
 	var iterations = 0
 	while true:
@@ -340,7 +353,7 @@ func sendBetActions():
 					pass
 				else:
 					break
-		if firstBetter == activePlayers[i].name and iterations > 0 and currentBet == 0:
+		if checksAllAround and not firstRound and iterations > 0:
 			break
 		if bigBlindCheckedFirstRound:
 			bigBlindCheckedFirstRound = false
@@ -355,7 +368,7 @@ func sendBetActions():
 		justFolded = false
 		if i == activePlayers.size():
 			i = 0
-		iterations += 1
+			iterations += 1
 	consolidatePot()
 	
 	if phase == "preflop":
@@ -367,6 +380,12 @@ func sendBetActions():
 	elif phase == "turn":
 		sendRiver()
 		rset('phase', "river")
+	elif phase == "river":
+		var remainingNames = []
+		for remaining in activePlayers:
+			remainingNames.append(remaining.name)
+		rpc('prepareBattlePhase', remainingNames)
+		rset('phase', "Battle")
 	
 	if firstRound:
 		rset('firstRound', false)	
@@ -439,6 +458,32 @@ remotesync func bettingPhase():
 		betActionsNode.get_node("Raise").rect_position.x += 170
 	betActionsNode.visible = true
 
+func sendPreflop():
+	for remainingPlayer in activePlayers:
+		var preflopToSend = []
+		for _i in range(0, 2):
+			var card = Global.deck.pop_front()
+			preflopToSend.append(card[0])
+		rpc_id(remainingPlayer.id, 'drawPreflop', preflopToSend)
+		gamestate[remainingPlayer.name] = {}
+		gamestate[remainingPlayer.name]["Keeps"] = preflopToSend
+	updateGame("cards")
+	
+remotesync func drawPreflop(preflop):
+	var KeepsNode = Global.getMyPlayer().find_node("Keeps")
+	var card = load("res://Cards/" + preflop[0] + ".tscn")
+	var card1 = card.instance()
+	card1.position.x += 180 * KeepsNode.get_child_count()
+	KeepsNode.add_child(card1)
+	
+	card = load("res://Cards/" + preflop[1] + ".tscn")
+	var card2 = card.instance()
+	card2.position.x += 180 * KeepsNode.get_child_count()
+	KeepsNode.add_child(card2)
+	
+	Network.gamestate[self_data.name] = {}
+	Network.gamestate[self_data.name]["Keeps"] = [card1.idName, card2.idName]
+		
 func sendFlop():
 	confirmedFlops = 0
 	for remainingPlayer in activePlayers:
@@ -549,3 +594,62 @@ remotesync func receiveRiver(playerName, Keeps, Discards):
 	if confirmedRivers >= activePlayers.size():
 		updateGame("cards")
 		sendBetActions()
+
+
+
+
+
+#BATTLE PHASE FUNCS
+
+remotesync func prepareBattlePhase(remaining):
+	for participant in get_tree().get_nodes_in_group("Players"):
+		if participant.name in remaining:
+			participant.transitionHand()
+		else:
+			participant.resetBettingArea()
+	if get_tree().is_network_server():
+		get_tree().get_root().get_node("Board").battlePhase()
+		
+func determineTargeting(remainingPlayers):
+	for i in range(0, remainingPlayers.size()):
+		if i == 0:
+			remainingPlayers[i].targetedBy = remainingPlayers[remainingPlayers.size() - 1]
+		else:
+			remainingPlayers[i].targetedBy = remainingPlayers[i - 1]
+		if i == remainingPlayers.size() - 1:
+			remainingPlayers[i].targeting = remainingPlayers[0]
+		else:
+			remainingPlayers[i].targeting = remainingPlayers[i + 1]
+
+func playMinions():
+	determineTargeting(activePlayers)
+	
+	var newMinionsPlayed = []
+	
+	confirmedPlays = 0
+	for participant in activePlayers:
+		var minion = rpc_id(participant.id, 'playMinion')
+		if minion != null:
+			newMinionsPlayed.append(minion)
+	
+	
+func attackPhase():
+	pass
+
+
+remotesync func playMinion():
+	clickableHand = true
+	
+func sendPlayToServer(playerName, play):
+	rpc_id(1, 'receivePlay', playerName, play)
+	
+remotesync func receivePlay(playerName, play):
+	gamestate[playerName] = {}
+	gamestate[playerName]["Active"] = [play]
+	gamestate[playerName]["Hand"] = -1
+	
+	confirmedPlays += 1
+	if confirmedPlays >= activePlayers.size():
+		updateGame("cards")
+	
+

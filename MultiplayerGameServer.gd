@@ -49,8 +49,7 @@ func startRound():
 	for participant in Network.activePlayers:
 		participant.get_node("BettingPhase").visible = true
 		participant.get_node("CombatPhase").visible = false
-		participant.drawPreflop()
-	Network.updateGame("cards")
+	Network.sendPreflop()
 	
 	#set and call blinds
 	var big = Network.activePlayers[1]
@@ -64,5 +63,9 @@ func betting():
 	
 func flop():
 	Network.sendFlop()
+	
+func battlePhase():
+	Network.determineTargeting(Network.activePlayers)
+	Network.playMinions()
 	
 

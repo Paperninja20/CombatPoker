@@ -93,17 +93,50 @@ func drawPreflop():
 	#var randIndex = randi() % deck.size()
 	var card = load("res://Cards/" + deck[0][0] + ".tscn")
 	var card1 = card.instance()
+	card1.position.x += 180 * $BettingPhase/Keeps.get_child_count()
+	$BettingPhase/Keeps.add_child(card1)
 	deck.remove(0)
 	
 	card = load("res://Cards/" + deck[0][0] + ".tscn")
 	var card2 = card.instance()
+	card2.position.x += 180 * $BettingPhase/Keeps.get_child_count()
+	$BettingPhase/Keeps.add_child(card2)
 	deck.remove(0)
 	
 	Network.gamestate[self.get_name()] = {}
 	Network.gamestate[self.get_name()]["Keeps"] = [card1.idName, card2.idName]
 	
-	
-	
+
+func resetBettingArea():
+	for child in $BettingPhase/Keeps.get_children():
+		child.queue_free()
+	for child in $BettingPhase/Discards.get_children():
+		child.queue_free()
+	$BettingPhase/BetAmount.text = '0'
+	$BettingPhase/BetAmount.visible = false
+	$BettingPhase.visible = false
+
+func transitionHand():
+	#var handPositionTracker = 0
+	for card in $BettingPhase/Keeps.get_children():
+		$BettingPhase/Keeps.remove_child(card)
+		$CombatPhase/Hand.add_child(card)
+		if not self.is_network_master():
+			card.get_node("Cardback").visible = true
+		else:
+			var handButton = load("res://HandButton.tscn")
+			var newButton = handButton.instance()
+			#newButton.handPosition = handPositionTracker
+			card.add_child(newButton)
+			card.move_child(newButton, 0)
+		#handPositionTracker += 1
+			
+	for child in $BettingPhase/Discards.get_children():
+		child.queue_free()
+	$BettingPhase/BetAmount.text = '0'
+	$BettingPhase/BetAmount.visible = false
+	$BettingPhase.visible = false
+	$CombatPhase.visible = true
 	
 	
 func takeDamage(damage):
@@ -138,7 +171,7 @@ func reorient():
 		get_node("BettingPhase/Money").rect_position.y = -108
 		get_node("BettingPhase/BetAmount").rect_position.y = 300
 		get_node("CombatPhase/Active").position.y = 160
-		get_node("CombatPhase/Hand").position.y = 160
+		get_node("CombatPhase/Hand").position.y = -100
 		get_node("CombatPhase/Discard").position.y = -100
 		get_node("CombatPhase/TextureButton").rect_position.y = 75
 	if position.y > 540:
@@ -147,7 +180,7 @@ func reorient():
 		get_node("BettingPhase/Money").rect_position.y = 36
 		get_node("BettingPhase/BetAmount").rect_position.y = -380
 		get_node("CombatPhase/Active").position.y = -160
-		get_node("CombatPhase/Hand").position.y = -160
+		get_node("CombatPhase/Hand").position.y = 100
 		get_node("CombatPhase/Discard").position.y = 100
 		get_node("CombatPhase/TextureButton").rect_position.y = -245
 		
@@ -183,3 +216,4 @@ func _on_TextureButton_button_up():
 		card.position = Vector2(0, 0)
 		card.z_index -= 3
 		card.scale /= 1.5
+
