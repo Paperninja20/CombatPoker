@@ -87,24 +87,24 @@ func getMyPlayer():
 #func _process(delta):
 #	pass
 func getActiveMinion(player):
-	if player.get_node("Active").get_child_count() != 0:
-		return player.get_node("Active").get_children()[0]
+	if player.find_node("Active").get_child_count() != 0:
+		return player.find_node("Active").get_children()[0]
 	return null
 
 func hasActiveMinion(player):
-	if player.get_node("Active").get_child_count() == 0:
+	if player.find_node("Active").get_child_count() == 0:
 		return false
 	return true
 
 func isHandEmpty(player):
-	if player.get_node("Hand").get_child_count() == 0:
+	if player.find_node("Hand").get_child_count() == 0:
 		return true
 	return false
 
 func getHand(player):
 	if isHandEmpty(player):
 		return null
-	return player.get_node("Hand").get_children()
+	return player.find_node("Hand").get_children()
 
 func getHandCards(player):
 	if isHandEmpty(player):
@@ -122,7 +122,7 @@ func isDiscardEmpty(player):
 func getDiscard(player):
 	if isDiscardEmpty(player):
 		return []
-	#var discard = player.get_node("Discard").get_children()
+	#var discard = player.find_node("Discard").get_children()
 	#iscard.invert()
 	var discard = player.discard
 	return discard

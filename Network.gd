@@ -6,6 +6,7 @@ const DEFAULT_PORT = 1909
 const MAX_PLAYERS = 6
 
 signal turnOver
+signal continueGameSequence
 
 var gamestate = {}
 
@@ -18,11 +19,12 @@ var gamestate = {}
 #			"Discard": [cardname...]
 #	}
 
-var gamestateOther = {}
+var gamestateValues = {}
 
-#var gamestateOther = {
+#var gamestateValues = {
 #	playerNickname:
 #		Lives: 3
+#		ActiveAttack: 5
 #		Money: 500
 #		BetAmount: 100
 #		Eliminated: false
@@ -50,6 +52,7 @@ var confirmedRivers = 0
 var confirmedPlays = 0
 
 var clickableHand = false
+var newMinionsPlayed = []
 
 
 var leftSeats = {
@@ -204,11 +207,10 @@ remotesync func removePlayer(player_id, info):
 
 func updateGame(cardsOrVals):
 	if cardsOrVals == "cards":
-		print(gamestate)
 		rpc('updateGameState', gamestate)
 		gamestate = {}
 	elif cardsOrVals == "vals":
-		pass
+		rpc('updateGameValues', gamestateValues)
 	
 remotesync func updateGameState(state):
 	for participant in state:
@@ -219,7 +221,7 @@ remotesync func updateGameState(state):
 			var areaNode = playerNode.find_node(area)
 			for card in state[participant][area]:
 				if typeof(card) == TYPE_INT:
-					areaNode.get_children()[0].queue_free()
+					areaNode.get_children()[0].queue_free()	
 					continue
 				var faceUp = false
 				var cardInstance = load("res://Cards/" + card + ".tscn")
@@ -229,11 +231,13 @@ remotesync func updateGameState(state):
 					newCard.position.x += 180 * areaNode.get_child_count()
 				if area == "Active":
 					faceUp = true
+					newMinionsPlayed.append(newCard)
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
 					faceUp = true
 				elif area == "Discards":
 					faceUp = true
 				areaNode.add_child(newCard)
+				newCard.minionOwner = playerNode
 				if not newCard.is_network_master():
 					if not faceUp:
 						newCard.get_node("Cardback").visible = true
@@ -597,8 +601,6 @@ remotesync func receiveRiver(playerName, Keeps, Discards):
 
 
 
-
-
 #BATTLE PHASE FUNCS
 
 remotesync func prepareBattlePhase(remaining):
@@ -607,6 +609,11 @@ remotesync func prepareBattlePhase(remaining):
 			participant.transitionHand()
 		else:
 			participant.resetBettingArea()
+	for playerName in remaining:
+		gamestateValues[playerName] = {
+			'Lives': 3,
+			'ActiveAttack': 0
+		}
 	if get_tree().is_network_server():
 		get_tree().get_root().get_node("Board").battlePhase()
 		
@@ -624,20 +631,52 @@ func determineTargeting(remainingPlayers):
 func playMinions():
 	determineTargeting(activePlayers)
 	
-	var newMinionsPlayed = []
-	
 	confirmedPlays = 0
+	
+	newMinionsPlayed = []
 	for participant in activePlayers:
-		var minion = rpc_id(participant.id, 'playMinion')
-		if minion != null:
-			newMinionsPlayed.append(minion)
+		rpc_id(participant.id, 'playMinion')
+		
+	yield(self, "continueGameSequence")
 	
+	determineTargeting(activePlayers)
+	for participant in activePlayers:
+		participant.determineAdjacentMinions()
 	
+	for participant in activePlayers:
+		var activeMinion = Global.getActiveMinion(participant)
+		activeMinion.activateBox()
+		gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
+	
+		#trigger phase and update Labels and status
+	for minion in newMinionsPlayed:
+		minion.trigger()
+		minion.activateBox()
+		gamestateValues[minion.minionOwner.name]["ActiveAttack"] = minion.attack
+	
+	for participant in activePlayers:
+		var activeMinion = Global.getActiveMinion(participant)
+		activeMinion.activateBox()
+		gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
+	
+	updateGame("vals")
+	
+remotesync func updateGameValues(state):
+	for participant in state:
+		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
+		var activeMinion = Global.getActiveMinion(playerNode)
+		activeMinion.attack = state[participant]["ActiveAttack"]
+		activeMinion.get_node("AttackLabel").update()
+		activeMinion.get_node("AttackLabel2").update()
+		playerNode.find_node("Lives").text = str(state[participant]["Lives"])
+		
+	
+
 func attackPhase():
 	pass
 
-
 remotesync func playMinion():
+	#send some message
 	clickableHand = true
 	
 func sendPlayToServer(playerName, play):
@@ -646,10 +685,10 @@ func sendPlayToServer(playerName, play):
 remotesync func receivePlay(playerName, play):
 	gamestate[playerName] = {}
 	gamestate[playerName]["Active"] = [play]
-	gamestate[playerName]["Hand"] = -1
+	gamestate[playerName]["Hand"] = [-1]
 	
 	confirmedPlays += 1
 	if confirmedPlays >= activePlayers.size():
 		updateGame("cards")
+		emit_signal("continueGameSequence")
 	
-

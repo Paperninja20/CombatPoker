@@ -117,19 +117,17 @@ func resetBettingArea():
 	$BettingPhase.visible = false
 
 func transitionHand():
-	#var handPositionTracker = 0
 	for card in $BettingPhase/Keeps.get_children():
 		$BettingPhase/Keeps.remove_child(card)
 		$CombatPhase/Hand.add_child(card)
+		card.minionOwner = card.minionOwner.get_parent()
 		if not self.is_network_master():
 			card.get_node("Cardback").visible = true
 		else:
 			var handButton = load("res://HandButton.tscn")
 			var newButton = handButton.instance()
-			#newButton.handPosition = handPositionTracker
 			card.add_child(newButton)
 			card.move_child(newButton, 0)
-		#handPositionTracker += 1
 			
 	for child in $BettingPhase/Discards.get_children():
 		child.queue_free()

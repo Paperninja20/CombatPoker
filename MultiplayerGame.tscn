@@ -56,7 +56,7 @@ shader_param/blurSize = 15
 size = 170
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=9]
 size = 170
 font_data = ExtResource( 2 )
 
@@ -470,7 +470,7 @@ margin_left = 190.705
 margin_top = 688.651
 margin_right = 983.705
 margin_bottom = 910.651
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 9 )
 text = "CONFIRM"
 align = 1
 valign = 1
