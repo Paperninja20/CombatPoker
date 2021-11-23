@@ -12,15 +12,15 @@
 size = 50
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=5]
+size = 90
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxEmpty" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="DynamicFont" id=5]
-size = 50
-font_data = ExtResource( 2 )
 
 [node name="Menu" type="Node2D"]
 script = ExtResource( 3 )
@@ -127,17 +127,18 @@ margin_left = 1028.0
 margin_top = 724.0
 margin_right = 1598.0
 margin_bottom = 838.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 5 )
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "1000"
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="mouse_entered" from="CustomSimulation" to="CustomSimulation" method="_on_Custom_Simulation_mouse_entered"]
 [connection signal="mouse_exited" from="CustomSimulation" to="CustomSimulation" method="_on_Custom_Simulation_mouse_exited"]
 [connection signal="mouse_entered" from="CollectData" to="CollectData" method="_on_CollectData_mouse_entered"]
