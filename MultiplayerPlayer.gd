@@ -32,12 +32,7 @@ func playMinion():
 #	Global.reparent($Hand.get_children()[choice], "Active")
 	if Global.isHandEmpty(self):
 		return
-	var explore = int(rand_range(0, Global.exploreFactor))
-	if explore != 0:
-		var minionToPlay = playBetterMinion()
-		if minionToPlay != null:
-			return minionToPlay
-	var playedMinion = $Hand.get_children()[0]
+	var playedMinion = find_node('Hand').get_children()[0]
 	playedMinion.position.x = 0
 	Global.reparent(playedMinion, "Active")
 	Global.determinePlay(playedMinion)
@@ -71,9 +66,21 @@ func draw(count):
 		#var randIndex = randi() % deck.size()
 		var card = load("res://Cards/" + deck[0][0] + ".tscn")
 		var newCard = card.instance()
-		newCard.position.x = handIndex
-		handIndex += 180
+		var handPos = 0
+		for existingCard in $CombatPhase/Hand.get_children():
+			existingCard.position.x = handPos
+			handPos += 180
+		newCard.position.x += 180 * $CombatPhase/Hand.get_child_count()
 		$CombatPhase/Hand.add_child(newCard)
+		
+		if self.is_network_master():
+			var handButton = load("res://HandButton.tscn")
+			var newButton = handButton.instance()
+			newCard.add_child(newButton)
+			newCard.move_child(newButton, 0)
+		else:
+			newCard.get_node("Cardback").visible = true
+		
 		deck.remove(0)
 		
 		playsThisRound.append([newCard.cardName, "drawn", ""])
@@ -107,10 +114,29 @@ func drawPreflop():
 	Network.gamestate[self.get_name()]["Keeps"] = [card1.idName, card2.idName]
 	
 
+func resetAll():
+	resetBettingArea()
+	for child in $CombatPhase/Hand.get_children():
+		$CombatPhase/Hand.remove_child(child)
+	for child in $CombatPhase/Active.get_children():
+		$CombatPhase/Active.remove_child(child)
+	for child in $CombatPhase/Discard.get_children():
+		$CombatPhase/Discard.remove_child(child)
+	$CombatPhase/Lives.text = '3'
+	$Eliminated.visible = false
+	$CombatPhase.visible = false
+	$BettingPhase.visible = true
+	health = 3
+	discard = []
+	
+
+
 func resetBettingArea():
 	for child in $BettingPhase/Keeps.get_children():
+		$BettingPhase/Keeps.remove_child(child)
 		child.queue_free()
 	for child in $BettingPhase/Discards.get_children():
+		$BettingPhase/Discards.remove_child(child)
 		child.queue_free()
 	$BettingPhase/BetAmount.text = '0'
 	$BettingPhase/BetAmount.visible = false
@@ -120,7 +146,7 @@ func transitionHand():
 	for card in $BettingPhase/Keeps.get_children():
 		$BettingPhase/Keeps.remove_child(card)
 		$CombatPhase/Hand.add_child(card)
-		card.minionOwner = card.minionOwner.get_parent()
+		card.minionOwner = self
 		if not self.is_network_master():
 			card.get_node("Cardback").visible = true
 		else:
@@ -170,7 +196,7 @@ func reorient():
 		get_node("BettingPhase/BetAmount").rect_position.y = 300
 		get_node("CombatPhase/Active").position.y = 160
 		get_node("CombatPhase/Hand").position.y = -100
-		get_node("CombatPhase/Discard").position.y = -100
+		get_node("CombatPhase/Discard").position.y = 160
 		get_node("CombatPhase/TextureButton").rect_position.y = 75
 	if position.y > 540:
 		get_node("BettingPhase/Keeps").position.y = -100
@@ -179,7 +205,7 @@ func reorient():
 		get_node("BettingPhase/BetAmount").rect_position.y = -380
 		get_node("CombatPhase/Active").position.y = -160
 		get_node("CombatPhase/Hand").position.y = 100
-		get_node("CombatPhase/Discard").position.y = 100
+		get_node("CombatPhase/Discard").position.y = -160
 		get_node("CombatPhase/TextureButton").rect_position.y = -245
 		
 	if position.x > 960:
@@ -201,16 +227,28 @@ func determineAdjacentMinions():
 	active.target = Global.getActiveMinion(targeting)
 
 func _on_TextureButton_button_down():
-	var x = 960 - (195 * discard.size())/2
+	var DiscardNode = find_node("Discard")
+	if DiscardNode.get_child_count() <= 0:
+		return
+		
+	var playerDiscard = DiscardNode.get_children()
+		
+	var x = 960 - (195 * playerDiscard.size())/2
 	var y = 540
-	for card in discard:
+	for card in playerDiscard:
 		card.scale *= 1.5
 		card.z_index += 3
 		card.global_position = Vector2(x, y)
 		x += 195
 
 func _on_TextureButton_button_up():
-	for card in discard:
+	var DiscardNode = find_node("Discard")
+	if DiscardNode.get_child_count() <= 0:
+		return
+		
+	var playerDiscard = DiscardNode.get_children()
+	
+	for card in playerDiscard:
 		card.position = Vector2(0, 0)
 		card.z_index -= 3
 		card.scale /= 1.5

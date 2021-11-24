@@ -447,9 +447,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfirmPlay" type="TextureButton" parent="." groups=[
-"RiverTurn",
-]]
+[node name="ConfirmPlay" type="TextureButton" parent="."]
 visible = false
 margin_left = 735.581
 margin_top = 703.272
@@ -463,9 +461,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfirmLabel" type="Label" parent="ConfirmPlay" groups=[
-"RiverTurn",
-]]
+[node name="ConfirmLabel" type="Label" parent="ConfirmPlay"]
 margin_left = 190.705
 margin_top = 688.651
 margin_right = 983.705

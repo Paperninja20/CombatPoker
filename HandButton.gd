@@ -11,6 +11,7 @@ var magnified
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_parent().get_node("Area2D").visible = false
+	get_parent().hovering = false
 	pass # Replace with function body.
 
 
@@ -32,10 +33,14 @@ func _on_Hand_Button_pressed():
 			return
 		originalPosition = card.position
 		card.position = Vector2(0,0)
+		if card.has_method("preview"):
+			card.preview(true)
 		Global.reparent(card, "Active")
 		get_tree().get_root().get_node("Board").get_node("ConfirmPlay").visible = true
 	elif parentName == "Active":
 		card.position = originalPosition
+		if card.has_method("preview"):
+			card.preview(false)
 		Global.reparent(card, "Hand")
 		get_tree().get_root().get_node("Board").get_node("ConfirmPlay").visible = false
 	else:
@@ -61,6 +66,14 @@ func _input(event):
 			Global.magnify(get_parent())
 			magnified = true
 	if event.is_action_released("Alt"):
+		if magnified:
+			Global.demagnify(get_parent(), Vector2(1,1))
+			magnified = false
+		
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		pass
+	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 		if magnified:
 			Global.demagnify(get_parent(), Vector2(1,1))
 			magnified = false

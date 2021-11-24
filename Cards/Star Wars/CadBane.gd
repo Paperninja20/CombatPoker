@@ -70,7 +70,7 @@ func lastLaugh():
 	if activeBox == 1:
 		get_parent().remove_child(self)
 		var playerWhoKilledCad = killedBy.minionOwner
-		playerWhoKilledCad.get_node("Discard").add_child(self)
+		playerWhoKilledCad.find_node("Discard").add_child(self)
 		playerWhoKilledCad.discard.push_front(self)
 		if Global.hasActiveMinion(playerWhoKilledCad):
 			Global.getActiveMinion(playerWhoKilledCad).determineBox()

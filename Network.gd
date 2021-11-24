@@ -7,6 +7,7 @@ const MAX_PLAYERS = 6
 
 signal turnOver
 signal continueGameSequence
+signal attackPhase
 
 var gamestate = {}
 
@@ -39,7 +40,7 @@ remotesync var lastBetter = null
 remotesync var firstBetter = null
 remotesync var raisedThisRound = false
 remotesync var bigBlindCheckedFirstRound = false
-remotesync var bigBlindFoldedFirstRound
+remotesync var bigBlindFoldedFirstRound = false
 
 remotesync var big = null
 remotesync var small = null
@@ -49,10 +50,15 @@ var checksAllAround = true
 var confirmedFlops = 0
 var confirmedTurns = 0
 var confirmedRivers = 0
-var confirmedPlays = 0
+var confirmedPlays = 0 setget setConfirmedPlays, getConfirmedPlays
 
 var clickableHand = false
 var newMinionsPlayed = []
+var winningPlayers = []
+var gameOver = false
+
+var playerOrder = []
+var activePlayers = []
 
 
 var leftSeats = {
@@ -68,11 +74,9 @@ var rightSeats = {
 }
 
 var players = {}
-var self_data = {name = '', money = 500, seat = 1, id = 0}
+var self_data = {name = '', money = 500, id = 0}
 var player = preload("res://MultiplayerPlayer.tscn")
 
-var playerOrder = []
-var activePlayers = []
 
 func _ready():
 	pass
@@ -172,56 +176,65 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.add_to_group("Players")
 	playerOrder.append(new_player)
 
-remotesync func removePlayer(player_id, info):
-		for node in get_tree().get_root().get_node("Board").get_children():
-			if node.get_name() == info.name:
+remote func removePlayer(player_id, info):
+	for node in get_tree().get_root().get_node("Board").get_children():
+		if node.get_name() == info.name:
+			
+			if node.position in rightSeats:
+				rightSeats[node.position] = null
+				for i in range(0, rightSeats.keys().size() - 1):
+					if rightSeats[rightSeats.keys()[i]] != null:
+						continue
+					if rightSeats[rightSeats.keys()[i + 1]] == null:
+						break
+					rightSeats[rightSeats.keys()[i]] = rightSeats[rightSeats.keys()[i + 1]]
+					rightSeats[rightSeats.keys()[i]].position = rightSeats.keys()[i]
+					rightSeats[rightSeats.keys()[i]].reorient()
+					rightSeats[rightSeats.keys()[i + 1]] = null
 				
-				if node.position in rightSeats:
-					rightSeats[node.position] = null
-					for i in range(0, rightSeats.keys().size() - 1):
-						if rightSeats[rightSeats.keys()[i]] != null:
-							continue
-						if rightSeats[rightSeats.keys()[i + 1]] == null:
-							break
-						rightSeats[rightSeats.keys()[i]] = rightSeats[rightSeats.keys()[i + 1]]
-						rightSeats[rightSeats.keys()[i]].position = rightSeats.keys()[i]
-						rightSeats[rightSeats.keys()[i]].reorient()
-						rightSeats[rightSeats.keys()[i + 1]] = null
+			elif node.position in leftSeats:
+				leftSeats[node.position] = null
+				for i in range(0, leftSeats.keys().size() - 1):
+					if leftSeats[leftSeats.keys()[i]] != null:
+						continue	
+					if leftSeats[leftSeats.keys()[i + 1]] == null:
+						break
+					leftSeats[leftSeats.keys()[i]] = leftSeats[leftSeats.keys()[i + 1]]
+					leftSeats[leftSeats.keys()[i]].position = leftSeats.keys()[i]
+					leftSeats[leftSeats.keys()[i]].reorient()
+					leftSeats[leftSeats.keys()[i + 1]] = null
 					
-				elif node.position in leftSeats:
-					leftSeats[node.position] = null
-					for i in range(0, leftSeats.keys().size() - 1):
-						if leftSeats[leftSeats.keys()[i]] != null:
-							continue	
-						if leftSeats[leftSeats.keys()[i + 1]] == null:
-							break
-						leftSeats[leftSeats.keys()[i]] = leftSeats[leftSeats.keys()[i + 1]]
-						leftSeats[leftSeats.keys()[i]].position = leftSeats.keys()[i]
-						leftSeats[leftSeats.keys()[i]].reorient()
-						leftSeats[leftSeats.keys()[i + 1]] = null
-						
-				playerOrder.erase(node)
-				node.queue_free()
-		players.erase(player_id)
+			playerOrder.erase(node)
+			node.queue_free()
+	players.erase(player_id)
 		
 
-func updateGame(cardsOrVals):
+func updateGame(cardsOrVals, ignoreSelf, ignoreServer):
 	if cardsOrVals == "cards":
-		rpc('updateGameState', gamestate)
+		rpc('updateGameState', gamestate, ignoreSelf, ignoreServer)
 		gamestate = {}
 	elif cardsOrVals == "vals":
 		rpc('updateGameValues', gamestateValues)
 	
-remotesync func updateGameState(state):
+remotesync func updateGameState(state, ignoreSelf, ignoreServer):
+	if ignoreServer and get_tree().is_network_server():
+		return
 	for participant in state:
-		if participant == self_data.name:
+		if ignoreSelf and participant == self_data.name:
 			continue
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
 		for area in state[participant]:
 			var areaNode = playerNode.find_node(area)
+			if area == "Discard" or area == "Active":
+				for child in areaNode.get_children():
+					areaNode.remove_child(child)
+					child.queue_free()
 			for card in state[participant][area]:
 				if typeof(card) == TYPE_INT:
-					areaNode.get_children()[0].queue_free()	
+					if areaNode.get_child_count() != 0:
+						var cardToDelete = areaNode.get_children()[0]
+						areaNode.remove_child(cardToDelete)
+						cardToDelete.queue_free()
 					continue
 				var faceUp = false
 				var cardInstance = load("res://Cards/" + card + ".tscn")
@@ -229,7 +242,7 @@ remotesync func updateGameState(state):
 				newCard.set_network_master(playerNode.get_network_master())
 				if area != "Discard":
 					newCard.position.x += 180 * areaNode.get_child_count()
-				if area == "Active":
+				if area == "Active" or area == "Discard":
 					faceUp = true
 					newMinionsPlayed.append(newCard)
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
@@ -241,7 +254,41 @@ remotesync func updateGameState(state):
 				if not newCard.is_network_master():
 					if not faceUp:
 						newCard.get_node("Cardback").visible = true
-	
+
+remotesync func updateGameValues(state):
+	for participant in state:
+		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
+		if Global.getActiveMinion(playerNode):
+			var activeMinion = Global.getActiveMinion(playerNode)
+			activeMinion.attack = state[participant]["ActiveAttack"]
+			activeMinion.get_node("AttackLabel").update()
+			activeMinion.get_node("AttackLabel2").update()
+		playerNode.find_node("Lives").text = str(state[participant]["Lives"])
+		if state[participant]["Eliminated"]:
+			playerNode.find_node("Eliminated").visible = true
+			if participant == self_data.name:
+				clickableHand = false
+
+func updateGamestateArray():
+	for playerNode in get_tree().get_nodes_in_group("Players"):
+		if not Global.getActiveMinion(playerNode):
+			gamestate[playerNode.name] = {}
+			gamestate[playerNode.name]["Active"] = [-1]
+		else:
+			gamestate[playerNode.name] = {}
+			gamestate[playerNode.name]["Active"] = [Global.getActiveMinion(playerNode).idName]
+		var DiscardArray = []
+		var discards = Global.getDiscard(playerNode)
+		for card in discards:
+			DiscardArray.append(card.idName)
+		DiscardArray.invert()
+		gamestate[playerNode.name]["Discard"] = DiscardArray
+		
+		
+		var hand = Global.getHand(playerNode)
+#		if hand != null:
+#			print(hand.size())
+
 	
 func callBlinds(bigBlind, smallBlind):
 	rset_id(bigBlind.id, 'isBigBlind', true)
@@ -326,7 +373,7 @@ remotesync func forwardBet(playerName, amount):
 	bettingPlayer.find_node("Money").text = str(int(bettingPlayer.find_node("Money").text) - moneyToSubtract)
 	bettingPlayer.find_node("BetAmount").text = str(amount)
 	if amount == 0:	
-		if not big == bettingPlayer.name:
+		if not (big == bettingPlayer.name and firstRound):
 			bettingPlayer.find_node("BetAmount").text = "Check"
 		else:
 			bettingPlayer.find_node("BetAmount").text = str(Global.blindAmount)
@@ -350,7 +397,11 @@ func sendBetActions():
 	var iterations = 0
 	while true:
 		if activePlayers.size() == 1:
-			break
+			winningPlayers.append(activePlayers[0])
+			consolidatePot()
+			yield(get_tree().create_timer(1), "timeout")
+			get_tree().get_root().get_node("Board").endCurrentRound()
+			return
 		if lastBetter != null:
 			if lastBetter == activePlayers[i].name and currentBet > 0:
 				if firstRound and activePlayers[i].name == big and not raisedThisRound:
@@ -402,10 +453,10 @@ remotesync func togglePot():
 	var PotLabelNode = get_tree().get_root().get_node("Board").get_node("PotLabel")
 	var PotAmountNode = get_tree().get_root().get_node("Board").get_node("PotAmount")
 	
-	if PotLabelNode.visible:
-		PotLabelNode.visible = false
-	if PotAmountNode.visible:
-		PotAmountNode.visible = false
+#	if PotLabelNode.visible:
+#		PotLabelNode.visible = false
+#	if PotAmountNode.visible:
+#		PotAmountNode.visible = false
 	if not PotLabelNode.visible:
 		PotLabelNode.visible = true
 	if not PotAmountNode.visible:
@@ -416,7 +467,8 @@ remotesync func togglePot():
 func consolidatePot():
 	for playerNode in get_tree().get_nodes_in_group("Players"):
 		var playerBet = playerNode.find_node("BetAmount")
-		currentPot += int(playerBet.text)
+		if not playerBet.text == "Check":
+			currentPot += int(playerBet.text)
 	rset('currentPot', currentPot)
 	rpc('updatePot')
 		
@@ -471,7 +523,7 @@ func sendPreflop():
 		rpc_id(remainingPlayer.id, 'drawPreflop', preflopToSend)
 		gamestate[remainingPlayer.name] = {}
 		gamestate[remainingPlayer.name]["Keeps"] = preflopToSend
-	updateGame("cards")
+	updateGame("cards", true, false)
 	
 remotesync func drawPreflop(preflop):
 	var KeepsNode = Global.getMyPlayer().find_node("Keeps")
@@ -529,7 +581,7 @@ remotesync func receiveFlop(playerName, Keeps, Discards):
 	
 	confirmedFlops += 1
 	if confirmedFlops >= activePlayers.size():
-		updateGame("cards")
+		updateGame("cards", true, false)
 		sendBetActions()
 
 func sendTurn():
@@ -562,7 +614,7 @@ remotesync func receiveTurn(playerName, Keeps, Discards):
 	
 	confirmedTurns += 1
 	if confirmedTurns >= activePlayers.size():
-		updateGame("cards")
+		updateGame("cards", true, false)
 		sendBetActions()
 
 
@@ -596,7 +648,7 @@ remotesync func receiveRiver(playerName, Keeps, Discards):
 	
 	confirmedRivers += 1
 	if confirmedRivers >= activePlayers.size():
-		updateGame("cards")
+		updateGame("cards", true, false)
 		sendBetActions()
 
 
@@ -612,7 +664,8 @@ remotesync func prepareBattlePhase(remaining):
 	for playerName in remaining:
 		gamestateValues[playerName] = {
 			'Lives': 3,
-			'ActiveAttack': 0
+			'ActiveAttack': 0,
+			'Eliminated': false
 		}
 	if get_tree().is_network_server():
 		get_tree().get_root().get_node("Board").battlePhase()
@@ -631,7 +684,7 @@ func determineTargeting(remainingPlayers):
 func playMinions():
 	determineTargeting(activePlayers)
 	
-	confirmedPlays = 0
+	self.confirmedPlays = 0
 	
 	newMinionsPlayed = []
 	for participant in activePlayers:
@@ -648,38 +701,149 @@ func playMinions():
 		activeMinion.activateBox()
 		gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
 	
+	
+	
+	yield(get_tree().create_timer(1), "timeout")
+#--------------------Trigger phase-------------------------------------------
 		#trigger phase and update Labels and status
 	for minion in newMinionsPlayed:
+		print(minion.idName)
 		minion.trigger()
 		minion.activateBox()
 		gamestateValues[minion.minionOwner.name]["ActiveAttack"] = minion.attack
+		updateGamestateArray()
+		updateGame("cards", false, true)
+		updateGame("vals", true, false)
+		yield(get_tree().create_timer(0.5), "timeout")
 	
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
 		activeMinion.activateBox()
 		gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
 	
-	updateGame("vals")
+	updateGame("vals", true, false)
 	
-remotesync func updateGameValues(state):
-	for participant in state:
-		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
-		var activeMinion = Global.getActiveMinion(playerNode)
-		activeMinion.attack = state[participant]["ActiveAttack"]
-		activeMinion.get_node("AttackLabel").update()
-		activeMinion.get_node("AttackLabel2").update()
-		playerNode.find_node("Lives").text = str(state[participant]["Lives"])
+	yield(get_tree().create_timer(1), "timeout")
+	
+#-----------------Attack phase------------------------------------------
+
+	emit_signal("attackPhase")
+
+remotesync func playMinion():
+	var myPlayer = Global.getMyPlayer()
+	if Global.hasActiveMinion(myPlayer):
+		rpc_id(1, 'confirmPlay')
+		return
+	#send some message
+	clickableHand = true	
+
+func attackPhase():
+	Global.playersToDamage = []
+	var deathsFromAttacks = []
+	
+	for participant in activePlayers:
+		var activeMinion = Global.getActiveMinion(participant)
+		deathsFromAttacks += activeMinion.doAttack()
+	
+	#death discards resolve
+	for death in deathsFromAttacks:
+		var killedMinion = death[0]
+		var murderer = death[1]
+		if murderer.has_method("devour"):
+			murderer.devour(killedMinion)
+		else:
+			Global.killMinion(killedMinion, murderer)
+	
+	updateGamestateArray()
+	updateGame("cards", false, true)
+	
+	#last laugh phase
+	for death in deathsFromAttacks:
+		var killedMinion = death[0]
+		if killedMinion.has_method("lastLaugh"):
+			killedMinion.lastLaugh()
+	
+	updateGamestateArray()
+	updateGame("cards", false, true)
+	
+	#update statuses and health
+	for participant in activePlayers:
+		if not participant in Global.playersToDamage:
+			if Global.hasActiveMinion(participant):
+				participant.takeDamage(-1)
+				gamestateValues[participant.name]["Lives"] = participant.health
+				var minion = Global.getActiveMinion(participant)
+				minion.activateBox()
+				gamestateValues[participant.name]["ActiveAttack"] = minion.attack
+			else:
+				continue
+		else:
+			participant.takeDamage(1)
+			gamestateValues[participant.name]["Lives"] = participant.health
+			
+	#find eliminated players
+	var newlyDead = []
+	for participant in activePlayers:
+		#if player is at 0 health
+		if participant.health <= 0:
+			newlyDead.append(participant)
+			participant.get_node("Eliminated").visible = true
+			continue	
+		#if player is out of steam
+		if Global.isHandEmpty(participant) and not Global.hasActiveMinion(participant):
+			newlyDead.append(participant)
+			participant.get_node("Eliminated").visible = true
+	
+	#remove players from game
+	if newlyDead.size() > 0:
+		for dead in newlyDead:
+			gamestateValues[dead.name]["Eliminated"] = true
+			activePlayers.erase(dead)
+	
+	
+	updateGame("vals", true, false)
+	
+	#check for win
+	if activePlayers.size() <= 1:
+		gameOver = true
+		if activePlayers.size() == 1:
+			winningPlayers.append(activePlayers[0])
+			#$Label.text = remainingPlayers[0].playerName + " wins!"
+		else:
+			for participant in newlyDead:
+				winningPlayers.append(participant)
+			#$Label.text = "pot split!"
+	
+	for participant in activePlayers:
+		var activeMinion = Global.getActiveMinion(participant)
+		if activeMinion != null:
+			if activeMinion.has_method("endRound"):
+				activeMinion.endRound()
+				gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
+
+func distributeMoney():
+	var moneyDict = {}
+	for winner in winningPlayers:
+		var currentMoney = int(winner.find_node("Money").text)
+		currentMoney += currentPot/winningPlayers.size()
+		moneyDict[winner.name] = currentMoney
+	rpc('updateMoney', moneyDict)
+	
+remotesync func updateMoney(moneyDict):
+	for winner in moneyDict:
+		var winnerNode = get_tree().get_root().get_node("Board").get_node(winner)
+		winnerNode.find_node("Money").text = str(moneyDict[winner])
+		if winner == self_data.name:
+			self_data.money = moneyDict[winner]
+	get_tree().get_root().get_node("Board").get_node("PotAmount").text = '0'
 		
 	
 
-func attackPhase():
-	pass
-
-remotesync func playMinion():
-	#send some message
-	clickableHand = true
+remotesync func confirmPlay():
+	self.confirmedPlays += 1
 	
 func sendPlayToServer(playerName, play):
+	clickableHand = false
 	rpc_id(1, 'receivePlay', playerName, play)
 	
 remotesync func receivePlay(playerName, play):
@@ -687,8 +851,59 @@ remotesync func receivePlay(playerName, play):
 	gamestate[playerName]["Active"] = [play]
 	gamestate[playerName]["Hand"] = [-1]
 	
-	confirmedPlays += 1
-	if confirmedPlays >= activePlayers.size():
-		updateGame("cards")
+	#check if its server and add to newMinionsPlayed
+	if playerName == self_data.name:
+		var myPlayer = Global.getMyPlayer()
+		newMinionsPlayed.append(myPlayer.find_node("Active").get_children()[0])
+	
+	confirmPlay()
+
+
+func setConfirmedPlays(newVal):
+	confirmedPlays = newVal
+	if newVal >= activePlayers.size():
+		updateGame("cards", true, false)
 		emit_signal("continueGameSequence")
+	
+func getConfirmedPlays():
+	return confirmedPlays
+	
+func resetAllPlayers():
+	rpc('sendResets')
+	
+remotesync func sendResets():
+	for participant in get_tree().get_nodes_in_group("Players"):
+		participant.resetAll()
+		
+func resetValues():
+	gamestate = {}
+	gamestateValues = {}
+	rset('phase', "preflop")
+	rset('firstRound', true)
+	rset('isBigBlind', false)
+	rset('isSmallBlind', false)
+	rset('big', null)
+	rset('small', null)
+	rset('currentPot', 0)
+	rset('currentBet', Global.blindAmount)
+	rset('lastBetter', null)
+	rset('firstBetter', null)
+	rset('raisedThisRound', false)
+	rset('bigBlindCheckedFirstRound', false)
+	rset('bigBlindFoldedFirstRound', false)
+
+	justFolded = false
+	checksAllAround = true
+	confirmedFlops = 0
+	confirmedTurns = 0
+	confirmedRivers = 0
+	self.confirmedPlays = 0
+
+	clickableHand = false
+	newMinionsPlayed.clear()
+	winningPlayers.clear()
+	gameOver = false
+
+	activePlayers = playerOrder
+	
 	

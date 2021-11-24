@@ -40,12 +40,13 @@ func _on_TextureButton_pressed():
 	startRound()
 
 func startRound():
+	randomize()
+	Global.deck = deck.duplicate(true)
+	#Global.deck.shuffle()
 	Network.togglePots()
-	Network.currentBet = Global.blindAmount
-	Network.currentPot = 0
+	var rotatingPlayer = Network.playerOrder.pop_front()
+	Network.playerOrder.append(rotatingPlayer)
 	Network.activePlayers = Network.playerOrder.duplicate(true)
-	var rotatingPlayer = Network.activePlayers.pop_front()
-	Network.activePlayers.append(rotatingPlayer)
 	for participant in Network.activePlayers:
 		participant.get_node("BettingPhase").visible = true
 		participant.get_node("CombatPhase").visible = false
@@ -66,6 +67,17 @@ func flop():
 	
 func battlePhase():
 	Network.determineTargeting(Network.activePlayers)
-	Network.playMinions()
+	while not Network.gameOver:
+		Network.playMinions()
+		yield(Network, "attackPhase")
+		Network.attackPhase()
+	endCurrentRound()
 	
+func endCurrentRound():
+	Network.distributeMoney()
+	restart()
 
+func restart():
+	Network.resetAllPlayers()
+	Network.resetValues()
+	startRound()

@@ -57,6 +57,23 @@ func activateBox():
 		attack = 0
 	damageThreshold = attack
 	
+func preview(on):
+	if on:
+		determineBox()
+		discard = Global.getDiscard(minionOwner)
+		var attackPreview = baseAttack
+		if activeBox == 1:
+			for card in discard:
+				if card.cardName == cardName:
+					attack += 5
+				else:
+					break
+		$AttackLabel.text = str(attackPreview)
+		$AttackLabel2.text = str(attackPreview)
+	else:
+		$AttackLabel.update()
+		$AttackLabel2.update()
+		
 func trigger():
 	#determineBox()
 	pass

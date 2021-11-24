@@ -22,9 +22,6 @@ func _on_ConfirmPlay_pressed():
 		if player.name == Network.self_data.name:
 			myPlayer = player
 	var play = myPlayer.get_node("CombatPhase").get_node("Active").get_children()[0]
-	print(play)
-	print(play.idName)
 	
 	Network.sendPlayToServer(Network.self_data.name, play.idName)
-	Network.clickableHand = false
 	visible = false

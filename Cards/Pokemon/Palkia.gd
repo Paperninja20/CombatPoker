@@ -58,7 +58,21 @@ func activateBox():
 		attack = 0
 	damageThreshold = attack
 	
+func preview(on):
+	if on:
+		determineBox()
+		discard = Global.getDiscard(minionOwner)
+		var attackPreview = baseAttack
+		if activeBox == 1:
+			attackPreview += 3
+		$AttackLabel.text = str(attackPreview)
+		$AttackLabel2.text = str(attackPreview)
+	else:
+		$AttackLabel.update()
+		$AttackLabel2.update()
+		
 func trigger():
+	print("triggered palkia")
 	determineBox()
 	if activeBox == 1:
 		var tempTarget = targetPlayer
@@ -69,6 +83,7 @@ func trigger():
 				continue
 			for card in Global.getHand(tempTarget):
 				Global.deck.append([card.idName, card.universe])
+				card.get_parent().remove_child(card)
 				card.queue_free()
 			tempTarget = tempTarget.targeting
 			
@@ -80,9 +95,9 @@ func trigger():
 
 	elif activeBox == 2:
 		get_parent().remove_child(self)
-		attackingPlayer.get_node("Active").add_child(self)
-		attackingPlayer.get_node("Active").remove_child(attackingMinion)
-		minionOwner.get_node("Active").add_child(attackingMinion)
+		attackingPlayer.find_node("Active").add_child(self)
+		attackingPlayer.find_node("Active").remove_child(attackingMinion)
+		minionOwner.find_node("Active").add_child(attackingMinion)
 		attackingMinion.minionOwner = minionOwner
 		minionOwner = attackingPlayer
 		minionOwner.targeting.determineAdjacentMinions()

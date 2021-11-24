@@ -43,7 +43,7 @@ var cards = {
 	"SpeedyGonzales" : ["Rodent", 1]
 }
 
-var turnTimer = 15
+var turnTimer = 150
 var blindAmount = 10
 var dir
 var exploreFactor = 10
@@ -73,6 +73,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
+	deck.push_front(["NickFury", "Marvel"])
+	deck.push_front(["NickFury", "Marvel"])
+	deck.push_front(["NickFury", "Marvel"])
+	deck.push_front(["NickFury", "Marvel"])
 	
 func reparent(node, newParent):
 	var parent = node.get_parent()
@@ -92,7 +96,7 @@ func getActiveMinion(player):
 	return null
 
 func hasActiveMinion(player):
-	if player.find_node("Active").get_child_count() == 0:
+	if player.find_node("Active").get_child_count() <= 0:
 		return false
 	return true
 
@@ -115,7 +119,7 @@ func getHandCards(player):
 	return resultArr
 
 func isDiscardEmpty(player):
-	if player.discard.size() == 0:
+	if player.find_node("Discard").get_child_count() == 0:
 		return true
 	return false
 
@@ -124,12 +128,11 @@ func getDiscard(player):
 		return []
 	#var discard = player.find_node("Discard").get_children()
 	#iscard.invert()
-	var discard = player.discard
-	return discard
+	return player.find_node("Discard").get_children()
 	
 func getTentativeHand(player):
 	var tentativeHand = []
-	if player.get_node("BettingPhase/Preflop").get_child_count < 2:
+	if player.get_node("BettingPhase/Preflop").get_child_count() < 2:
 		return tentativeHand
 	tentativeHand += player.get_node("BettingPhase/Preflop").get_children()
 	

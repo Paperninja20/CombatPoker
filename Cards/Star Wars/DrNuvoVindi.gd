@@ -60,7 +60,7 @@ func lastLaugh():
 		minionOwner.discard = tempDiscard
 		for card in discardToTake:
 			card.get_parent().remove_child(card)
-			minionOwner.get_node("Discard").add_child(card)
+			minionOwner.find_node("Discard").add_child(card)
 		discardToTake.clear()
 		var playerWhoKilledDoc = killedBy.minionOwner
 		if Global.hasActiveMinion(playerWhoKilledDoc):
