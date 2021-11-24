@@ -30,6 +30,15 @@ var gamestateValues = {}
 #		BetAmount: 100
 #		Eliminated: false
 #}
+
+var playsThisTurn = {}
+#{
+#	playerNickname: play,
+#	playerNickname: play,
+#	...
+#}
+
+
 remotesync var phase = "preflop"
 remotesync var firstRound = true
 remotesync var isBigBlind = false
@@ -59,7 +68,6 @@ var gameOver = false
 
 var playerOrder = []
 var activePlayers = []
-
 
 var leftSeats = {
 	Vector2(360, 750): null,
@@ -244,7 +252,8 @@ remotesync func updateGameState(state, ignoreSelf, ignoreServer):
 					newCard.position.x += 180 * areaNode.get_child_count()
 				if area == "Active" or area == "Discard":
 					faceUp = true
-					newMinionsPlayed.append(newCard)
+					if area == "Active":
+						newMinionsPlayed.append(newCard)
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
 					faceUp = true
 				elif area == "Discards":
@@ -255,6 +264,25 @@ remotesync func updateGameState(state, ignoreSelf, ignoreServer):
 					if not faceUp:
 						newCard.get_node("Cardback").visible = true
 
+remotesync func updatePlays(plays):
+	for participant in plays:
+		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
+		if playerNode.is_network_master():
+			continue
+		var cardInstance = load("res://Cards/" + plays[participant] + ".tscn")
+		var newCard = cardInstance.instance()
+		newCard.set_network_master(playerNode.get_network_master())
+		playerNode.find_node("Active").add_child(newCard)
+		newCard.minionOwner = playerNode
+		newMinionsPlayed.append(newCard)
+		var playerHand = playerNode.find_node("Hand")
+		for card in playerHand.get_children():
+			if card.idName == plays[participant]:
+				playerHand.remove_child(card)
+				card.queue_free()
+				break
+				
+	
 remotesync func updateGameValues(state):
 	for participant in state:
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
@@ -686,6 +714,7 @@ func playMinions():
 	
 	self.confirmedPlays = 0
 	
+	playsThisTurn = {}
 	newMinionsPlayed = []
 	for participant in activePlayers:
 		rpc_id(participant.id, 'playMinion')
@@ -838,7 +867,6 @@ remotesync func updateMoney(moneyDict):
 	get_tree().get_root().get_node("Board").get_node("PotAmount").text = '0'
 		
 	
-
 remotesync func confirmPlay():
 	self.confirmedPlays += 1
 	
@@ -847,22 +875,20 @@ func sendPlayToServer(playerName, play):
 	rpc_id(1, 'receivePlay', playerName, play)
 	
 remotesync func receivePlay(playerName, play):
-	gamestate[playerName] = {}
-	gamestate[playerName]["Active"] = [play]
-	gamestate[playerName]["Hand"] = [-1]
+	playsThisTurn[playerName] = play
 	
 	#check if its server and add to newMinionsPlayed
 	if playerName == self_data.name:
 		var myPlayer = Global.getMyPlayer()
 		newMinionsPlayed.append(myPlayer.find_node("Active").get_children()[0])
-	
+		
 	confirmPlay()
 
 
 func setConfirmedPlays(newVal):
 	confirmedPlays = newVal
 	if newVal >= activePlayers.size():
-		updateGame("cards", true, false)
+		rpc('updatePlays', playsThisTurn)
 		emit_signal("continueGameSequence")
 	
 func getConfirmedPlays():
