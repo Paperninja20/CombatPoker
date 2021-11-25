@@ -54,10 +54,6 @@ func trigger():
 	#determineBox()
 	pass
 
-func lastLaugh():
-	#determineBox()
-	pass
-	
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]

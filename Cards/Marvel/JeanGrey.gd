@@ -72,8 +72,6 @@ func trigger():
 		minionOwner.discard.pop_front()
 		triggered = true
 
-func lastLaugh():
-	pass
 	
 func doAttack():
 	if attack >= target.damageThreshold:

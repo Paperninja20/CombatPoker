@@ -61,9 +61,6 @@ func trigger():
 			tempTarget.takeDamage(2)
 			tempTarget = tempTarget.targeting
 
-func lastLaugh():
-	#determineBox()
-	pass
 	
 func doAttack():
 	if attack >= target.damageThreshold:

@@ -57,9 +57,6 @@ func trigger():
 	if activeBox == 1:
 		targetPlayer.takeDamage(1)
 
-func lastLaugh():
-	#determineBox()
-	pass
 	
 func doAttack():
 	if attack >= target.damageThreshold:

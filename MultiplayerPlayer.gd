@@ -72,6 +72,7 @@ func draw(count):
 			handPos += 180
 		newCard.position.x += 180 * $CombatPhase/Hand.get_child_count()
 		$CombatPhase/Hand.add_child(newCard)
+		newCard.minionOwner = self
 		
 		if self.is_network_master():
 			var handButton = load("res://HandButton.tscn")
@@ -236,10 +237,12 @@ func _on_TextureButton_button_down():
 	var x = 960 - (195 * playerDiscard.size())/2
 	var y = 540
 	for card in playerDiscard:
-		card.scale *= 1.5
+		var parentScale = scale.x
+		card.scale *= 2.5
+		card.scale /= parentScale
 		card.z_index += 3
 		card.global_position = Vector2(x, y)
-		x += 195
+		x += 325
 
 func _on_TextureButton_button_up():
 	var DiscardNode = find_node("Discard")
@@ -249,7 +252,10 @@ func _on_TextureButton_button_up():
 	var playerDiscard = DiscardNode.get_children()
 	
 	for card in playerDiscard:
+		var parentScale = scale.x
+		card.scale /= 2.5
+		card.scale *= parentScale
 		card.position = Vector2(0, 0)
 		card.z_index -= 3
-		card.scale /= 1.5
+		
 

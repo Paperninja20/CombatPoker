@@ -73,9 +73,6 @@ func trigger():
 		#print("Heavy Dealt " + str(spray) + " aoe")
 			
 			
-
-func lastLaugh():
-	pass
 	
 func doAttack():
 	determineBox()

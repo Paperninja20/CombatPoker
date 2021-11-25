@@ -82,7 +82,8 @@ func playMinions():
 		
 	#trigger phase and update Labels and status
 	for minion in newMinionsPlayed:
-		minion.trigger()
+		if minion.has_method("trigger"):
+			minion.trigger()
 		minion.activateBox()
 		minion.get_node("AttackLabel").update()
 		minion.get_node("AttackLabel2").update()

@@ -63,8 +63,6 @@ func trigger():
 		damageThreshold = attack
 		triggered = true
 
-func lastLaugh():
-	pass
 
 func doAttack():
 	if attack >= target.damageThreshold:

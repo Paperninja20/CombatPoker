@@ -68,10 +68,24 @@ func flop():
 func battlePhase():
 	Network.determineTargeting(Network.activePlayers)
 	while not Network.gameOver:
+		print("Calling play minions")
 		Network.playMinions()
 		yield(Network, "attackPhase")
 		Network.attackPhase()
+		yield(Network, "playPhase")
+		print("received playphase signal")
 	endCurrentRound()
+
+func playMinionsPhase():
+	if not Network.gameOver:
+		print("Calling play minions")
+		Network.playMinions()
+	else:
+		endCurrentRound()
+
+func attackPhase():
+	print("Calling attack phase")
+	Network.attackPhase()
 	
 func endCurrentRound():
 	Network.distributeMoney()

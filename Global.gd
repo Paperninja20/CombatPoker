@@ -51,6 +51,8 @@ var deck = []
 var simulationMode = 1
 var gamesToSimulate = 1000
 var playersToDamage = []
+var deathsThisRound = []
+var minionsThatDiedThisRound = []
 # Called when the node enters the scene tree for the first time.
 var HandBuilding = 1
 var P1Hand = []
@@ -73,10 +75,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-	deck.push_front(["NickFury", "Marvel"])
-	deck.push_front(["NickFury", "Marvel"])
-	deck.push_front(["NickFury", "Marvel"])
-	deck.push_front(["NickFury", "Marvel"])
+	deck.push_front(["DoomShroom", "PvZ"])
+	deck.push_front(["CadBane", "Star Wars"])
+	deck.push_front(["DoomShroom", "PvZ"])
+	deck.push_front(["CadBane", "Star Wars"])
 	
 func reparent(node, newParent):
 	var parent = node.get_parent()
@@ -128,7 +130,9 @@ func getDiscard(player):
 		return []
 	#var discard = player.find_node("Discard").get_children()
 	#iscard.invert()
-	return player.find_node("Discard").get_children()
+	var discardToReturn = player.find_node("Discard").get_children()
+	discardToReturn.invert()
+	return discardToReturn
 	
 func getTentativeHand(player):
 	var tentativeHand = []
@@ -155,6 +159,8 @@ func killMinion(minion, murderer):
 	minion.killedBy = murderer
 	if not "Hollow" in minion.attributes and not "Hollow" in minion.baseAttributes:
 		playersToDamage.append(minion.minionOwner)
+	if not minion in minionsThatDiedThisRound:
+		minionsThatDiedThisRound.append(minion)
 
 func resetMinion(minion):
 	minion.attack = minion.baseAttack

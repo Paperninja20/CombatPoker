@@ -80,12 +80,6 @@ func preview(on):
 		$AttackLabel.update()
 		$AttackLabel2.update()
 		
-func trigger():
-	pass
-
-func lastLaugh():
-	pass
-	
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]

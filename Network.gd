@@ -8,6 +8,8 @@ const MAX_PLAYERS = 6
 signal turnOver
 signal continueGameSequence
 signal attackPhase
+signal playPhase
+signal VisualEffectOver
 
 var gamestate = {}
 
@@ -60,6 +62,8 @@ var confirmedFlops = 0
 var confirmedTurns = 0
 var confirmedRivers = 0
 var confirmedPlays = 0 setget setConfirmedPlays, getConfirmedPlays
+
+var VisualEffectsDone = 0
 
 var clickableHand = false
 var newMinionsPlayed = []
@@ -233,7 +237,7 @@ remotesync func updateGameState(state, ignoreSelf, ignoreServer):
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
 		for area in state[participant]:
 			var areaNode = playerNode.find_node(area)
-			if area == "Discard" or area == "Active":
+			if area == "Discard" or area == "Active" or area == "Hand":
 				for child in areaNode.get_children():
 					areaNode.remove_child(child)
 					child.queue_free()
@@ -256,6 +260,11 @@ remotesync func updateGameState(state, ignoreSelf, ignoreServer):
 						newMinionsPlayed.append(newCard)
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
 					faceUp = true
+				if area == "Hand" and playerNode.is_network_master():
+					var handButton = load("res://HandButton.tscn")
+					var newButton = handButton.instance()
+					newCard.add_child(newButton)
+					newCard.move_child(newButton, 0)		
 				elif area == "Discards":
 					faceUp = true
 				areaNode.add_child(newCard)
@@ -312,8 +321,12 @@ func updateGamestateArray():
 		DiscardArray.invert()
 		gamestate[playerNode.name]["Discard"] = DiscardArray
 		
-		
+		var HandArray = []
 		var hand = Global.getHand(playerNode)
+		if hand != null:
+			for card in hand:
+				HandArray.append(card.idName)
+		gamestate[playerNode.name]["Hand"] = HandArray
 #		if hand != null:
 #			print(hand.size())
 
@@ -696,7 +709,7 @@ remotesync func prepareBattlePhase(remaining):
 			'Eliminated': false
 		}
 	if get_tree().is_network_server():
-		get_tree().get_root().get_node("Board").battlePhase()
+		get_tree().get_root().get_node("Board").playMinionsPhase()
 		
 func determineTargeting(remainingPlayers):
 	for i in range(0, remainingPlayers.size()):
@@ -716,6 +729,7 @@ func playMinions():
 	
 	playsThisTurn = {}
 	newMinionsPlayed = []
+	print("telling players to play minions")
 	for participant in activePlayers:
 		rpc_id(participant.id, 'playMinion')
 		
@@ -736,7 +750,10 @@ func playMinions():
 #--------------------Trigger phase-------------------------------------------
 		#trigger phase and update Labels and status
 	for minion in newMinionsPlayed:
-		print(minion.idName)
+		if not minion.has_method("trigger"):
+			continue
+		rpc('glow', minion.minionOwner.name, "trigger")
+		yield(Network, 'VisualEffectOver')
 		minion.trigger()
 		minion.activateBox()
 		gamestateValues[minion.minionOwner.name]["ActiveAttack"] = minion.attack
@@ -752,15 +769,23 @@ func playMinions():
 	
 	updateGame("vals", true, false)
 	
-	yield(get_tree().create_timer(1), "timeout")
+	var targetingArray = {}
+	for participant in activePlayers:
+		targetingArray[participant.name] = participant.targeting.name
+	
+	rpc('swordAnimations', targetingArray)
+	
+	yield(get_tree().create_timer(1.8), "timeout")
+	
 	
 #-----------------Attack phase------------------------------------------
 
-	emit_signal("attackPhase")
+	get_tree().get_root().get_node("Board").attackPhase()
 
 remotesync func playMinion():
 	var myPlayer = Global.getMyPlayer()
 	if Global.hasActiveMinion(myPlayer):
+		print(myPlayer.name, " has ", Global.getActiveMinion(myPlayer).idName)
 		rpc_id(1, 'confirmPlay')
 		return
 	#send some message
@@ -768,29 +793,49 @@ remotesync func playMinion():
 
 func attackPhase():
 	Global.playersToDamage = []
-	var deathsFromAttacks = []
+	Global.deathsThisRound = []
+	Global.minionsThatDiedThisRound = []
 	
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
-		deathsFromAttacks += activeMinion.doAttack()
+		Global.deathsThisRound += activeMinion.doAttack()
+		
 	
 	#death discards resolve
-	for death in deathsFromAttacks:
+	for death in Global.deathsThisRound:
 		var killedMinion = death[0]
 		var murderer = death[1]
 		if murderer.has_method("devour"):
 			murderer.devour(killedMinion)
 		else:
 			Global.killMinion(killedMinion, murderer)
-	
 	updateGamestateArray()
 	updateGame("cards", false, true)
 	
 	#last laugh phase
-	for death in deathsFromAttacks:
-		var killedMinion = death[0]
-		if killedMinion.has_method("lastLaugh"):
-			killedMinion.lastLaugh()
+	
+	var i = activePlayers.size() - 1
+	while i >= 0:
+		print(Global.minionsThatDiedThisRound, " died this round")
+		if not activePlayers[i].find_node("Discard").get_child_count() == 0:
+			var topMinion = activePlayers[i].find_node("Discard").get_children()[-1]
+			print(topMinion.idName, "is top")
+			if not topMinion in Global.minionsThatDiedThisRound:
+				i -= 1
+				continue
+			if topMinion.has_method("lastLaugh"):
+				print(topMinion.idName, " has lastLaugh triggerable")
+				print("sending glow for ", topMinion.idName)
+				rpc('glow', topMinion.minionOwner.name, "lastLaugh")
+				yield(Network, 'VisualEffectOver')
+				Global.minionsThatDiedThisRound.erase(topMinion)
+				topMinion.lastLaugh()
+				updateGamestateArray()
+				updateGame("cards", false, true)
+				yield(get_tree().create_timer(0.5), "timeout")
+		i -= 1
+	print("done with loop")
+
 	
 	updateGamestateArray()
 	updateGame("cards", false, true)
@@ -849,6 +894,9 @@ func attackPhase():
 			if activeMinion.has_method("endRound"):
 				activeMinion.endRound()
 				gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
+	
+	print("done with attack phase")
+	get_tree().get_root().get_node("Board").playMinionsPhase()
 
 func distributeMoney():
 	var moneyDict = {}
@@ -932,4 +980,42 @@ func resetValues():
 
 	activePlayers = playerOrder
 	
+
+remotesync func glow(playerName, effect):
+	var playerNode = get_tree().get_root().get_node("Board").get_node(playerName)
+	var minion
+	match effect:
+		"trigger":
+			minion = Global.getActiveMinion(playerNode)
+			if minion != null:
+				minion.scale *= 1.2
+				minion.modulate = Color(1.5, 1.5, 1.5)
+				yield(get_tree().create_timer(0.5), "timeout")
+				minion.scale /= 1.2
+				minion.modulate = Color(1, 1, 1)
+			yield(get_tree().create_timer(0.1), "timeout")
+			rpc_id(1, 'VisualEffectDone')
+		"lastLaugh":
+			minion = Global.getDiscard(playerNode)[0]
+			if minion != null:
+				print("glowing ", minion.idName)
+				minion.modulate = Color(1.5, 1.5, 1.5)
+				yield(get_tree().create_timer(0.5), "timeout")
+				minion.modulate = Color(1, 1, 1)
+			yield(get_tree().create_timer(0.1), "timeout")
+			rpc_id(1, 'VisualEffectDone')
+			
+
+remotesync func swordAnimations(targetArray):
+	for participant in targetArray:
+		var playerNode = get_tree().get_root().get_node("Board").get_node(participant) 
+		var targetNode = get_tree().get_root().get_node("Board").get_node(targetArray[participant])
+		var swordSprite = playerNode.get_node("Sword")
+		swordSprite.swordAttackAnimation(targetNode)
+
+remotesync func VisualEffectDone():
+	VisualEffectsDone += 1
+	if VisualEffectsDone >= activePlayers.size():
+		emit_signal("VisualEffectOver")
 	
+

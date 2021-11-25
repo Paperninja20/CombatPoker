@@ -63,9 +63,7 @@ func trigger():
 		minionOwner.draw(2)
 		minionOwner.takeDamage(-2)
 
-func lastLaugh():
-	pass
-	
+
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]

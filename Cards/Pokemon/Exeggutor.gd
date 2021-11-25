@@ -44,9 +44,6 @@ func activateBox():
 		attack = 0
 	damageThreshold = attack
 	
-func trigger():
-	pass
-
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]

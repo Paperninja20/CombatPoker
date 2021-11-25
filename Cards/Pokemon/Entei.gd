@@ -64,9 +64,6 @@ func trigger():
 		newMinion.minionOwner.determineAdjacentMinions()
 		newMinion.attackingPlayer.determineAdjacentMinions()
 
-func lastLaugh():
-	pass
-
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]

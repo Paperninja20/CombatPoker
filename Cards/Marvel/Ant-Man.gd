@@ -96,12 +96,6 @@ func doAttack():
 		return [[target, self]]
 	else:
 		return []
-	
-func trigger():
-	pass
-
-func lastLaugh():
-	pass
 
 
 func _on_Area2D_mouse_entered():

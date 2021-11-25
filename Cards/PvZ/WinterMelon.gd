@@ -76,13 +76,6 @@ func preview(on):
 		$AttackLabel.update()
 		$AttackLabel2.update()
 		
-func trigger():
-	#determineBox()
-	pass
-
-func lastLaugh():
-	#determineBox()
-	pass
 	
 func doAttack():
 	if attack >= target.damageThreshold:

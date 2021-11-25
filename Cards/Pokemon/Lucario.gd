@@ -74,18 +74,13 @@ func preview(on):
 	else:
 		$AttackLabel.update()
 		$AttackLabel2.update()
-		
-func trigger():
-	pass
+
 
 func doAttack():
 	if attack >= target.damageThreshold:
 		return [[target, self]]
 	else:
 		return []
-		
-func lastLaugh():
-	pass
 
 func _on_Area2D_mouse_entered():
 	hovering = true
