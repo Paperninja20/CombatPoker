@@ -44,6 +44,8 @@ func submit():
 			newCard.position.x += 180 * myPlayer.find_node("Discards").get_child_count()
 			myPlayer.find_node("Discards").add_child(newCard)
 			
+		get_parent().slotsAvailable -= keeps.size()
+		get_parent().currentlyDiscarding += discards.size()
 		Network.sendTurnToServer(Network.self_data.name, keeps, discards)
 		get_parent().softReset()
 		

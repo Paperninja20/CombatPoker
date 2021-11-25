@@ -24,14 +24,14 @@ func _on_Select_pressed():
 		if RiverTurnData.slotsAvailable <= 0:
 			return
 		XNode.visible = false
-		RiverTurnData.currentlyDiscarding -= 1
-		RiverTurnData.slotsAvailable -= 1
+		#RiverTurnData.currentlyDiscarding -= 1
+		#RiverTurnData.slotsAvailable -= 1
 	else:
 		if RiverTurnData.currentlyDiscarding == 2:
 			return
 		XNode.visible = true
-		RiverTurnData.currentlyDiscarding += 1
-		RiverTurnData.slotsAvailable += 1
+		#RiverTurnData.currentlyDiscarding += 1
+		#RiverTurnData.slotsAvailable += 1
 		
 		
 	if RiverTurnData.keep:

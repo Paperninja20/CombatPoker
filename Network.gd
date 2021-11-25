@@ -816,7 +816,7 @@ func attackPhase():
 	
 	var i = activePlayers.size() - 1
 	while i >= 0:
-		print(Global.minionsThatDiedThisRound, " died this round")
+		print(Global.minionsThatDiedThisRound, " died this round", activePlayers[i].name)
 		if not activePlayers[i].find_node("Discard").get_child_count() == 0:
 			var topMinion = activePlayers[i].find_node("Discard").get_children()[-1]
 			print(topMinion.idName, "is top")

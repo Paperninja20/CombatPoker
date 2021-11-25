@@ -94,7 +94,8 @@ func trigger():
 		newMinion.determineBox()
 		newMinion.activateBox()
 		newMinion.get_node("AttackLabel").update()
-		newMinion.trigger()
+		if newMinion.has_method("trigger"):
+			newMinion.trigger()
 	triggered = true
 		
 func lastLaugh():

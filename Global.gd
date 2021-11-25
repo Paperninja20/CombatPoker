@@ -75,10 +75,11 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-	deck.push_front(["DoomShroom", "PvZ"])
-	deck.push_front(["CadBane", "Star Wars"])
-	deck.push_front(["DoomShroom", "PvZ"])
-	deck.push_front(["CadBane", "Star Wars"])
+	deck.push_front(["AsajjVentress", "Star Wars"])
+	deck.push_front(["BattleDroid", "Star Wars"])
+	deck.push_front(["BattleDroid", "Star Wars"])
+	deck.push_front(["CaptainAmerica", "Marvel"])
+
 	
 func reparent(node, newParent):
 	var parent = node.get_parent()
@@ -161,6 +162,7 @@ func killMinion(minion, murderer):
 		playersToDamage.append(minion.minionOwner)
 	if not minion in minionsThatDiedThisRound:
 		minionsThatDiedThisRound.append(minion)
+		print("added ", minion.idName, " aka ", minion, " to ", minionsThatDiedThisRound, " by doomshroom")
 
 func resetMinion(minion):
 	minion.attack = minion.baseAttack

@@ -119,10 +119,13 @@ func resetAll():
 	resetBettingArea()
 	for child in $CombatPhase/Hand.get_children():
 		$CombatPhase/Hand.remove_child(child)
+		child.queue_free()
 	for child in $CombatPhase/Active.get_children():
 		$CombatPhase/Active.remove_child(child)
+		child.queue_free()
 	for child in $CombatPhase/Discard.get_children():
 		$CombatPhase/Discard.remove_child(child)
+		child.queue_free()
 	$CombatPhase/Lives.text = '3'
 	$Eliminated.visible = false
 	$CombatPhase.visible = false
