@@ -481,27 +481,28 @@ func sendBetActions():
 		for remaining in activePlayers:
 			remainingNames.append(remaining.name)
 		rpc('prepareBattlePhase', remainingNames)
-		rset('phase', "Battle")
+		rset('phase', "battle")
 	
 	if firstRound:
 		rset('firstRound', false)	
 	return
 	
-func togglePots():
-	rpc('togglePot')
-	
-remotesync func togglePot():
+func togglePots(on):
+	if on:
+		rpc('togglePot', true)
+	else:
+		rpc('togglePot', false)
+		
+remotesync func togglePot(on):
 	var PotLabelNode = get_tree().get_root().get_node("Board").get_node("PotLabel")
 	var PotAmountNode = get_tree().get_root().get_node("Board").get_node("PotAmount")
 	
-#	if PotLabelNode.visible:
-#		PotLabelNode.visible = false
-#	if PotAmountNode.visible:
-#		PotAmountNode.visible = false
-	if not PotLabelNode.visible:
+	if on:
 		PotLabelNode.visible = true
-	if not PotAmountNode.visible:
 		PotAmountNode.visible = true
+	else:
+		PotLabelNode.visible = false
+		PotAmountNode.visible = false
 
 
 	
@@ -783,10 +784,8 @@ remotesync func playMinion():
 		rpc_id(1, 'confirmPlay')
 		return
 	#send some message
-	print(myPlayer.name, " about to start timer")
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Playing")
-	print(myPlayer.name, " started timer")
 	
 	clickableHand = true	
 
@@ -982,7 +981,7 @@ remotesync func glow(playerName, effect):
 			minion = Global.getActiveMinion(playerNode)
 			if minion != null:
 				minion.scale *= 1.2
-				minion.modulate = Color(1.5, 1.5, 1.5)
+				minion.modulate = Color(1, 1, 1.5)
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.scale /= 1.2
 				minion.modulate = Color(1, 1, 1)
@@ -991,7 +990,7 @@ remotesync func glow(playerName, effect):
 		"lastLaugh":
 			minion = Global.getDiscard(playerNode)[0]
 			if minion != null:
-				minion.modulate = Color(1.5, 1.5, 1.5)
+				minion.modulate = Color(1.5, 1, 1)
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.modulate = Color(1, 1, 1)
 			yield(get_tree().create_timer(0.1), "timeout")

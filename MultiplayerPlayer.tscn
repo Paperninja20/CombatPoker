@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://MultiplayerPlayer.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Avatar.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Assets/heart.png" type="Texture" id=6]
 [ext_resource path="res://Assets/eliminated.png" type="Texture" id=7]
 [ext_resource path="res://Sword.gd" type="Script" id=8]
+[ext_resource path="res://PlayerIcon.gd" type="Script" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 58
@@ -119,7 +120,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="PlayerIcon" type="TextureButton" parent="."]
+margin_left = -35.2778
+margin_top = -34.6478
+margin_right = 664.722
+margin_bottom = 665.352
+rect_scale = Vector2( 0.1, 0.1 )
+texture_normal = ExtResource( 2 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Sprite" type="Sprite" parent="."]
+visible = false
 scale = Vector2( 0.1, 0.1 )
 texture = ExtResource( 2 )
 
@@ -143,3 +157,5 @@ __meta__ = {
 }
 [connection signal="button_down" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_down"]
 [connection signal="button_up" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_up"]
+[connection signal="button_down" from="PlayerIcon" to="PlayerIcon" method="_on_PlayerIcon_button_down"]
+[connection signal="button_up" from="PlayerIcon" to="PlayerIcon" method="_on_PlayerIcon_button_up"]

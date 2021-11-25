@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://MultiplayerGameServer.gd" type="Script" id=2]
@@ -32,6 +32,7 @@
 [ext_resource path="res://ConfirmPlay.gd" type="Script" id=30]
 [ext_resource path="res://Assets/TimeCircleFull.png" type="Texture" id=31]
 [ext_resource path="res://VisualTimer.gd" type="Script" id=32]
+[ext_resource path="res://KeepsDiscards.gd" type="Script" id=33]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -80,6 +81,14 @@ shader_param/blurSize = 15
 size = 170
 font_data = ExtResource( 3 )
 
+[sub_resource type="ShaderMaterial" id=13]
+shader = ExtResource( 22 )
+shader_param/blurSize = 20
+
+[sub_resource type="DynamicFont" id=14]
+size = 70
+font_data = ExtResource( 3 )
+
 [node name="Board" type="Node2D"]
 script = ExtResource( 2 )
 
@@ -92,7 +101,7 @@ scale = Vector2( 1.01146, 1.03079 )
 z_index = -20
 texture = ExtResource( 1 )
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="Start" type="TextureButton" parent="."]
 margin_left = 830.0
 margin_top = 400.0
 margin_right = 1090.0
@@ -105,7 +114,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerCount" type="Label" parent="TextureButton"]
+[node name="PlayerCount" type="Label" parent="Start"]
 margin_left = -116.224
 margin_top = -94.4719
 margin_right = 401.782
@@ -542,6 +551,7 @@ margin_top = 875.0
 margin_right = 590.0
 margin_bottom = 1375.0
 rect_scale = Vector2( 0.25, 0.25 )
+step = 0.0
 value = 100.0
 texture_progress = ExtResource( 31 )
 fill_mode = 5
@@ -549,7 +559,53 @@ script = ExtResource( 32 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
+
+[node name="KeepsDiscards" type="Node2D" parent="."]
+visible = false
+z_index = 40
+script = ExtResource( 33 )
+
+[node name="Blur" type="Sprite" parent="KeepsDiscards" groups=[
+"Flop",
+]]
+material = SubResource( 13 )
+position = Vector2( 985.599, 542.891 )
+scale = Vector2( 1.14698, 1.14698 )
+texture = ExtResource( 16 )
+
+[node name="Keeps" type="Node2D" parent="KeepsDiscards"]
+position = Vector2( 460, 540 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="Discards" type="Node2D" parent="KeepsDiscards"]
+position = Vector2( 1190, 540 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="KeepsLabel" type="Label" parent="KeepsDiscards"]
+margin_left = 503.384
+margin_top = 265.0
+margin_right = 691.384
+margin_bottom = 355.0
+custom_fonts/font = SubResource( 14 )
+text = "KEEPS"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DiscardsLabel" type="Label" parent="KeepsDiscards"]
+margin_left = 1147.97
+margin_top = 261.265
+margin_right = 1469.97
+margin_bottom = 526.265
+custom_fonts/font = SubResource( 14 )
+text = "DISCARDS
+"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Start" to="." method="_on_TextureButton_pressed"]
 [connection signal="timeout" from="TurnTimer" to="TurnTimer" method="_on_TurnTimer_timeout"]
 [connection signal="mouse_entered" from="BetActions/Check" to="BetActions/Check" method="_on_Check_mouse_entered"]
 [connection signal="mouse_exited" from="BetActions/Check" to="BetActions/Check" method="_on_Check_mouse_exited"]

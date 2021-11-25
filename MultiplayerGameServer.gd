@@ -36,14 +36,14 @@ func _ready():
 func _on_TextureButton_pressed():
 	if Network.players.size() < 2:
 		return
-	get_node("TextureButton").visible = false
+	get_node("Start").visible = false
 	startRound()
 
 func startRound():
 	randomize()
 	Global.deck = deck.duplicate(true)
 	Global.deck.shuffle()
-	Network.togglePots()
+	Network.togglePots(true)
 	var rotatingPlayer = Network.playerOrder.pop_front()
 	Network.playerOrder.append(rotatingPlayer)
 	Network.activePlayers = Network.playerOrder.duplicate(true)
@@ -65,16 +65,16 @@ func betting():
 func flop():
 	Network.sendFlop()
 	
-func battlePhase():
-	Network.determineTargeting(Network.activePlayers)
-	while not Network.gameOver:
-		print("Calling play minions")
-		Network.playMinions()
-		yield(Network, "attackPhase")
-		Network.attackPhase()
-		yield(Network, "playPhase")
-		print("received playphase signal")
-	endCurrentRound()
+#func battlePhase():
+#	Network.determineTargeting(Network.activePlayers)
+#	while not Network.gameOver:
+#		print("Calling play minions")
+#		Network.playMinions()
+#		yield(Network, "attackPhase")
+#		Network.attackPhase()
+#		yield(Network, "playPhase")
+#		print("received playphase signal")
+#	endCurrentRound()
 
 func playMinionsPhase():
 	if not Network.gameOver:
@@ -89,7 +89,13 @@ func attackPhase():
 	
 func endCurrentRound():
 	Network.distributeMoney()
-	restart()
+	if Global.autoStart:
+		restart()
+	else:
+		Network.resetAllPlayers()
+		Network.resetValues()
+		Network.togglePots(false)
+		get_node("Start").visible = true
 
 func restart():
 	Network.resetAllPlayers()

@@ -43,7 +43,8 @@ var cards = {
 	"SpeedyGonzales" : ["Rodent", 1]
 }
 
-var turnTimer = 5
+var autoStart = false
+var turnTimer = 15
 var blindAmount = 10
 var dir
 var exploreFactor = 10

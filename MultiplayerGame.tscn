@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
@@ -31,6 +31,7 @@
 [ext_resource path="res://ConfirmPlay.gd" type="Script" id=29]
 [ext_resource path="res://Assets/TimeCircleFull.png" type="Texture" id=30]
 [ext_resource path="res://VisualTimer.gd" type="Script" id=31]
+[ext_resource path="res://KeepsDiscards.gd" type="Script" id=32]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -59,9 +60,9 @@ font_data = ExtResource( 2 )
 size = 90
 font_data = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 21 )
-shader_param/blurSize = 15
+shader_param/blurSize = 20
 
 [sub_resource type="DynamicFont" id=9]
 size = 170
@@ -69,6 +70,10 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=10]
 size = 170
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 70
 font_data = ExtResource( 2 )
 
 [node name="Board" type="Node2D"]
@@ -232,7 +237,7 @@ script = ExtResource( 13 )
 [node name="Blur" type="Sprite" parent="FlopScreen" groups=[
 "Flop",
 ]]
-material = SubResource( 8 )
+material = SubResource( 13 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -375,7 +380,7 @@ script = ExtResource( 26 )
 [node name="Blur" type="Sprite" parent="RiverTurn" groups=[
 "RiverTurn",
 ]]
-material = SubResource( 8 )
+material = SubResource( 13 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -495,10 +500,57 @@ margin_top = 875.0
 margin_right = 590.0
 margin_bottom = 1375.0
 rect_scale = Vector2( 0.25, 0.25 )
+step = 0.0
 value = 100.0
 texture_progress = ExtResource( 30 )
 fill_mode = 5
 script = ExtResource( 31 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="KeepsDiscards" type="Node2D" parent="."]
+visible = false
+z_index = 40
+script = ExtResource( 32 )
+
+[node name="Blur" type="Sprite" parent="KeepsDiscards" groups=[
+"Flop",
+]]
+material = SubResource( 13 )
+position = Vector2( 985.599, 542.891 )
+scale = Vector2( 1.14698, 1.14698 )
+texture = ExtResource( 14 )
+
+[node name="Keeps" type="Node2D" parent="KeepsDiscards"]
+position = Vector2( 460, 540 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="Discards" type="Node2D" parent="KeepsDiscards"]
+position = Vector2( 1190, 540 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="KeepsLabel" type="Label" parent="KeepsDiscards"]
+margin_left = 503.384
+margin_top = 265.0
+margin_right = 691.384
+margin_bottom = 355.0
+custom_fonts/font = SubResource( 14 )
+text = "KEEPS"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DiscardsLabel" type="Label" parent="KeepsDiscards"]
+margin_left = 1147.97
+margin_top = 261.265
+margin_right = 1469.97
+margin_bottom = 526.265
+custom_fonts/font = SubResource( 14 )
+text = "DISCARDS
+"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }

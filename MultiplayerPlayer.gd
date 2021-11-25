@@ -15,6 +15,9 @@ var targeting
 var handIndex = 0
 var discard = []
 
+var keeps = []
+var discards = []
+
 var playsThisRound = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -131,7 +134,9 @@ func resetAll():
 	$CombatPhase.visible = false
 	$BettingPhase.visible = true
 	health = 3
-	discard = []
+	discard.clear()
+	keeps.clear()
+	discards.clear()
 	
 
 
@@ -148,6 +153,8 @@ func resetBettingArea():
 
 func transitionHand():
 	for card in $BettingPhase/Keeps.get_children():
+		if not card.get_node("Cardback").visible:
+			keeps.append(card.idName)
 		$BettingPhase/Keeps.remove_child(card)
 		$CombatPhase/Hand.add_child(card)
 		card.minionOwner = self
@@ -159,8 +166,11 @@ func transitionHand():
 			card.add_child(newButton)
 			card.move_child(newButton, 0)
 			
-	for child in $BettingPhase/Discards.get_children():
-		child.queue_free()
+	for card in $BettingPhase/Discards.get_children():
+		discards.append(card.idName)
+		$BettingPhase/Discards.remove_child(card)
+		card.queue_free()
+		
 	$BettingPhase/BetAmount.text = '0'
 	$BettingPhase/BetAmount.visible = false
 	$BettingPhase.visible = false
