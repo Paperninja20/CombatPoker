@@ -11,14 +11,14 @@ var hovering = false
 
 func _input(event):
 	if event is InputEventMouseButton and hovering:
+		get_parent().reset()
 		if event.is_pressed():
 			Network.sendCall()
 			if get_tree().is_network_server():
 				Network.serverEndBet(true)
 			else:
 				Network.serverEndBet(false)
-				
-			get_parent().reset()
+
 			set("custom_colors/font_color", Color("#ffffff"))
 			hovering = false
 			get_parent().get_parent().get_node("TurnTimer").reset()

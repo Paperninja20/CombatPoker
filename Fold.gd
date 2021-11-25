@@ -11,17 +11,23 @@ var hovering = false
 
 func _input(event):
 	if event is InputEventMouseButton and hovering:
+		get_parent().reset()
 		if event.is_pressed():
-			Network.sendFold()
-			if get_tree().is_network_server():
-				Network.serverEndBet(true)
-			else:
-				Network.serverEndBet(false)
-			get_parent().reset()
-			set("custom_colors/font_color", Color("#ffffff"))
-			hovering = false
-			get_parent().get_parent().get_node("TurnTimer").reset()
+			submit()
+			
 
+func submit():
+	get_parent().get_parent().get_node("TurnTimer").reset()
+	get_parent().reset()
+	Network.sendFold()
+	if get_tree().is_network_server():
+		Network.serverEndBet(true)
+	else:
+		Network.serverEndBet(false)
+	set("custom_colors/font_color", Color("#ffffff"))
+	hovering = false
+	
+	
 func _on_Fold_mouse_entered():
 	set("custom_colors/font_color", Color("#848384"))
 	hovering = true

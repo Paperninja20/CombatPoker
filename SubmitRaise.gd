@@ -42,10 +42,10 @@ func _on_SubmitRaise_pressed():
 		get_parent().get_node("RaiseAmount").editable = true
 		return
 		
+	get_parent().get_parent().reset()
+	get_parent().get_parent().get_parent().get_node("TurnTimer").reset()
 	Network.sendRaise(raiseAmount)
 	if get_tree().is_network_server():
 		Network.serverEndBet(true)
 	else:
 		Network.serverEndBet(false)
-	get_parent().get_parent().reset()
-	get_parent().get_parent().get_parent().get_node("TurnTimer").reset()

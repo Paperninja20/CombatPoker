@@ -587,6 +587,8 @@ func sendFlop():
 			var card = Global.deck.pop_front()
 			flopToSend.append(card[0])
 		rpc_id(remainingPlayer.id, 'flopActions', flopToSend)
+	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
+	turnTimer.startPhase("Mulling")
 		
 remotesync func flopActions(flop):
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")

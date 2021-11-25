@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
 [ext_resource path="res://MultiplayerGameServer.gd" type="Script" id=2]
@@ -30,6 +30,8 @@
 [ext_resource path="res://SelectRiverTurn.gd" type="Script" id=28]
 [ext_resource path="res://ConfirmRiverTurn.gd" type="Script" id=29]
 [ext_resource path="res://ConfirmPlay.gd" type="Script" id=30]
+[ext_resource path="res://Assets/TimeCircleFull.png" type="Texture" id=31]
+[ext_resource path="res://VisualTimer.gd" type="Script" id=32]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -530,6 +532,20 @@ custom_fonts/font = SubResource( 12 )
 text = "CONFIRM"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VisualTimer" type="TextureProgress" parent="."]
+margin_left = 90.0
+margin_top = 875.0
+margin_right = 590.0
+margin_bottom = 1375.0
+rect_scale = Vector2( 0.25, 0.25 )
+value = 100.0
+texture_progress = ExtResource( 31 )
+fill_mode = 5
+script = ExtResource( 32 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
