@@ -64,5 +64,4 @@ func submit():
 		Network.sendRiverToServer(Network.self_data.name, keeps, discards)
 		get_parent().reset()
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.stop()
-	turnTimer.wait_time = Global.turnTimer
+	turnTimer.reset()

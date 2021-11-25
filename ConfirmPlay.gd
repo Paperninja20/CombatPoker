@@ -17,6 +17,9 @@ func _ready():
 
 
 func _on_ConfirmPlay_pressed():
+	submit()
+	
+func submit():
 	var myPlayer
 	for player in get_tree().get_nodes_in_group("Players"):
 		if player.name == Network.self_data.name:
@@ -25,3 +28,5 @@ func _on_ConfirmPlay_pressed():
 	
 	Network.sendPlayToServer(Network.self_data.name, play.idName)
 	visible = false
+	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
+	turnTimer.reset()

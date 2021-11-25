@@ -8,13 +8,19 @@ var turn = ''
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	wait_time = Global.turnTimer
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+func _process(delta):
+	#print(time_left)
+	pass
+	
+	
+func startPhase(phase):
+	turn = phase
+	start()
 
 func _on_TurnTimer_timeout():
 	match turn:
@@ -32,8 +38,10 @@ func _on_TurnTimer_timeout():
 			elif Network.phase == "turn" or Network.phase == "river":
 				get_parent().get_node("RiverTurn").get_node("ConfirmRiverTurn").submit()
 		"Playing":
-			pass
+			var myPlayer = Global.getMyPlayer()
+			print(myPlayer.name, " turnTimer")
+			myPlayer.playMinion()
+			get_parent().get_node("ConfirmPlay").submit()
 
 func reset():
 	stop()
-	wait_time = Global.turnTimer

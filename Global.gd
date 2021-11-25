@@ -43,7 +43,7 @@ var cards = {
 	"SpeedyGonzales" : ["Rodent", 1]
 }
 
-var turnTimer = 150
+var turnTimer = 5
 var blindAmount = 10
 var dir
 var exploreFactor = 10
@@ -75,10 +75,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-	deck.push_front(["AsajjVentress", "Star Wars"])
-	deck.push_front(["BattleDroid", "Star Wars"])
-	deck.push_front(["BattleDroid", "Star Wars"])
-	deck.push_front(["CaptainAmerica", "Marvel"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["BattleDroid", "Star Wars"])
+#	deck.push_front(["BattleDroid", "Star Wars"])
+#	deck.push_front(["CaptainAmerica", "Marvel"])
 
 	
 func reparent(node, newParent):

@@ -535,9 +535,7 @@ func serverEndBet(isServer):
 	
 remotesync func bettingPhase():
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.turn = "Betting"
-	turnTimer.wait_time = Global.turnTimer
-	turnTimer.start()
+	turnTimer.startPhase("Betting")
 	var betActionsNode = get_tree().get_root().get_node("Board").get_node("BetActions")
 	if firstRound and isBigBlind and not raisedThisRound:
 		betActionsNode.get_node("Call").visible = false
@@ -592,9 +590,7 @@ func sendFlop():
 		
 remotesync func flopActions(flop):
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.turn = "Mulling"
-	turnTimer.wait_time = Global.turnTimer
-	turnTimer.start()
+	turnTimer.startPhase("Mulling")
 	
 	var flopActions = get_tree().get_root().get_node("Board").get_node("FlopScreen")
 	
@@ -633,9 +629,7 @@ func sendTurn():
 	
 remotesync func turnActions(turn):
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.turn = "Mulling"
-	turnTimer.wait_time = Global.turnTimer
-	turnTimer.start()
+	turnTimer.startPhase("Mulling")
 	
 	var turnActions = get_tree().get_root().get_node("Board").get_node("RiverTurn")
 		
@@ -667,9 +661,7 @@ func sendRiver():
 	
 remotesync func riverActions(river):
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.turn = "Mulling"
-	turnTimer.wait_time = Global.turnTimer
-	turnTimer.start()
+	turnTimer.startPhase("Mulling")
 	
 	var riverActions = get_tree().get_root().get_node("Board").get_node("RiverTurn")
 		
@@ -789,6 +781,11 @@ remotesync func playMinion():
 		rpc_id(1, 'confirmPlay')
 		return
 	#send some message
+	print(myPlayer.name, " about to start timer")
+	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
+	turnTimer.startPhase("Playing")
+	print(myPlayer.name, " started timer")
+	
 	clickableHand = true	
 
 func attackPhase():
@@ -816,16 +813,12 @@ func attackPhase():
 	
 	var i = activePlayers.size() - 1
 	while i >= 0:
-		print(Global.minionsThatDiedThisRound, " died this round", activePlayers[i].name)
 		if not activePlayers[i].find_node("Discard").get_child_count() == 0:
 			var topMinion = activePlayers[i].find_node("Discard").get_children()[-1]
-			print(topMinion.idName, "is top")
 			if not topMinion in Global.minionsThatDiedThisRound:
 				i -= 1
 				continue
 			if topMinion.has_method("lastLaugh"):
-				print(topMinion.idName, " has lastLaugh triggerable")
-				print("sending glow for ", topMinion.idName)
 				rpc('glow', topMinion.minionOwner.name, "lastLaugh")
 				yield(Network, 'VisualEffectOver')
 				Global.minionsThatDiedThisRound.erase(topMinion)
@@ -834,7 +827,6 @@ func attackPhase():
 				updateGame("cards", false, true)
 				yield(get_tree().create_timer(0.5), "timeout")
 		i -= 1
-	print("done with loop")
 
 	
 	updateGamestateArray()
@@ -895,7 +887,6 @@ func attackPhase():
 				activeMinion.endRound()
 				gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
 	
-	print("done with attack phase")
 	get_tree().get_root().get_node("Board").playMinionsPhase()
 
 func distributeMoney():
@@ -998,7 +989,6 @@ remotesync func glow(playerName, effect):
 		"lastLaugh":
 			minion = Global.getDiscard(playerNode)[0]
 			if minion != null:
-				print("glowing ", minion.idName)
 				minion.modulate = Color(1.5, 1.5, 1.5)
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.modulate = Color(1, 1, 1)
