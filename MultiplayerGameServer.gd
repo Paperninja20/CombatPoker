@@ -46,6 +46,8 @@ func startRound():
 	Network.togglePots(true)
 	var rotatingPlayer = Network.playerOrder.pop_front()
 	Network.playerOrder.append(rotatingPlayer)
+	Network.rotations += 1
+	Network.rotations %= Network.playerOrder.size()
 	Network.activePlayers = Network.playerOrder.duplicate(true)
 	for participant in Network.activePlayers:
 		participant.get_node("BettingPhase").visible = true

@@ -56,6 +56,8 @@ remotesync var bigBlindFoldedFirstRound = false
 remotesync var big = null
 remotesync var small = null
 
+var rotations = 0
+
 var justFolded = false
 var checksAllAround = true
 var confirmedFlops = 0
@@ -186,7 +188,8 @@ remote func _send_player_info(player_id, info, newPlayer):
 					
 	get_tree().get_root().get_node("Board").add_child(new_player)
 	new_player.add_to_group("Players")
-	playerOrder.append(new_player)
+	var indexToInsert = playerOrder.size() - rotations
+	playerOrder.insert(indexToInsert, new_player)
 
 remote func removePlayer(player_id, info):
 	for node in get_tree().get_root().get_node("Board").get_children():

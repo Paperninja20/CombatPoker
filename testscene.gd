@@ -8,10 +8,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var sample = [1, 2, 3, 4]
-	for i in sample:
-		print(i)
-		yield(get_tree().create_timer(4), "timeout")
+	var sample = [1, 2, 3, 4]	
+	sample.insert(2, 4)
+	print(sample)
 	pass # Replace with function body.
 
 
