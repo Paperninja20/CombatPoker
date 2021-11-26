@@ -40,7 +40,7 @@ font_data = ExtResource( 2 )
 script = ExtResource( 8 )
 
 [node name="Background" type="Sprite" parent="."]
-position = Vector2( 955.327, 540 )
+position = Vector2( 955.327, 537.881 )
 scale = Vector2( 1.01146, 1.03079 )
 texture = ExtResource( 1 )
 
@@ -152,16 +152,17 @@ __meta__ = {
 }
 
 [node name="IPField" type="LineEdit" parent="."]
-margin_left = 878.124
-margin_top = 382.063
-margin_right = 1448.12
-margin_bottom = 506.063
+margin_left = 867.529
+margin_top = 388.42
+margin_right = 1437.53
+margin_bottom = 512.42
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )
 custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "127.0.0.1"
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false

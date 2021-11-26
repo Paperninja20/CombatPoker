@@ -2,7 +2,7 @@ extends Node
 
 
 const DEFAULT_IP = '127.0.0.1'
-const DEFAULT_PORT = 1909
+const DEFAULT_PORT = 9999
 const MAX_PLAYERS = 6
 
 signal turnOver
@@ -107,13 +107,13 @@ func CreateLobby(player_nickname, player_money):
 	peer.connect("peer_connected", self, "_Peer_Connected")
 	peer.connect("peer_disconnected", self, "_Peer_Disconnected")
 	
-func JoinLobby(player_nickname, player_money):
+func JoinLobby(player_nickname, player_money, ip):
 	self_data.name = player_nickname
 	self_data.money = player_money
 # warning-ignore:return_value_discarded
 	get_tree().connect("connected_to_server", self, '_connected_to_server')
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_client(DEFAULT_IP, DEFAULT_PORT)
+	peer.create_client(ip, DEFAULT_PORT)
 	get_tree().set_network_peer(peer)
 	self_data.id = get_tree().get_network_unique_id()
 	
