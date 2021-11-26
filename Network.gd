@@ -125,6 +125,7 @@ func _connected_to_server():
 	
 func _Peer_Connected(player_id):
 	print("User " + str(player_id) + " Connected")
+	rpc_id(player_id, 'sendServerSettings', Global.turnTimer)
 	
 func _Peer_Disconnected(player_id):
 	print("User " + str(player_id) + " Disconnected")
@@ -197,6 +198,10 @@ remote func _send_player_info(player_id, info, newPlayer):
 	var indexToInsert = playerOrder.size() - rotations
 	playerOrder.insert(indexToInsert, new_player)
 	allPlayers.append(new_player)
+
+remotesync func sendServerSettings(turnTime):
+	Global.turnTimer = turnTime
+	get_tree().get_root().get_node("Board").get_node("TurnTimer").wait_time = Global.turnTimer
 
 remotesync func removePlayer(player_id, info):
 	for participant in get_tree().get_nodes_in_group("Players"):

@@ -152,10 +152,10 @@ __meta__ = {
 }
 
 [node name="IPField" type="LineEdit" parent="."]
-margin_left = 867.529
-margin_top = 388.42
-margin_right = 1437.53
-margin_bottom = 512.42
+margin_left = 868.0
+margin_top = 388.0
+margin_right = 1860.0
+margin_bottom = 512.0
 custom_styles/read_only = SubResource( 18 )
 custom_styles/focus = SubResource( 19 )
 custom_styles/normal = SubResource( 20 )
