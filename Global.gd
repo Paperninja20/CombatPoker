@@ -62,6 +62,7 @@ var P3Hand = []
 var P4Hand = []
 
 var altDown = false
+var magnifying = false
 
 func _ready():
 	dir = OS.get_executable_path().get_base_dir()
@@ -76,8 +77,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-#	deck.push_front(["AsajjVentress", "Star Wars"])
-#	deck.push_front(["BattleDroid", "Star Wars"])
+#	deck.push_front(["JeanGrey", "Marvel"])
+#	deck.push_front(["TheHulk", "Marvel"])
+#	deck.push_front(["JeanGrey", "Marvel"])
+#	deck.push_front(["TheHulk", "Marvel"])
 #	deck.push_front(["BattleDroid", "Star Wars"])
 #	deck.push_front(["CaptainAmerica", "Marvel"])
 
@@ -222,13 +225,22 @@ func _input(event):
 		altDown = false
 	
 func magnify(card):
-	card.scale *= 4.75
+	if magnifying:
+		return
+	magnifying = true
+	card.scale = Vector2(8, 8)
+	card.oldPos = card.global_position
+	card.global_position = Vector2(960, 540)
 	if not card.z_index > 300:
 		card.z_index += 500	
 	card.magnified = true
 
 func demagnify(card, newScale):
+	if not magnifying:
+		return
+	magnifying = false
 	card.scale = newScale
+	card.global_position = card.oldPos
 	card.z_index -= 500
 	card.magnified = false
 

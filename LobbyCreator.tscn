@@ -14,13 +14,13 @@
 size = 90
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxEmpty" id=18]
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="StyleBoxEmpty" id=19]
 
-[sub_resource type="StyleBoxEmpty" id=4]
+[sub_resource type="StyleBoxEmpty" id=20]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=21]
 size = 90
 font_data = ExtResource( 2 )
 
@@ -122,10 +122,10 @@ margin_left = 880.012
 margin_top = 169.335
 margin_right = 1450.01
 margin_bottom = 283.335
-custom_styles/read_only = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
+custom_styles/read_only = SubResource( 18 )
+custom_styles/focus = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
+custom_fonts/font = SubResource( 21 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "Player"
@@ -139,10 +139,10 @@ margin_left = 879.906
 margin_top = 278.719
 margin_right = 1449.9
 margin_bottom = 392.719
-custom_styles/read_only = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
+custom_styles/read_only = SubResource( 18 )
+custom_styles/focus = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
+custom_fonts/font = SubResource( 21 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "500"
@@ -156,9 +156,9 @@ margin_left = 867.529
 margin_top = 388.42
 margin_right = 1437.53
 margin_bottom = 512.42
-custom_styles/read_only = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
+custom_styles/read_only = SubResource( 18 )
+custom_styles/focus = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
 custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )

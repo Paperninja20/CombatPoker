@@ -9,7 +9,6 @@ var hovering = false
 # Called when the node enters the scene tree for the first time.
 func _input(event):
 	if event is InputEventMouseButton and hovering:
-		get_parent().reset()
 		if event.is_pressed():
 			set("custom_colors/font_color", Color("#ffffff"))
 			for node in get_children():

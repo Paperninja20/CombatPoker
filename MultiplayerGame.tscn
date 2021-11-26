@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=53 format=2]
 
 [ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
@@ -32,6 +32,9 @@
 [ext_resource path="res://Assets/TimeCircleFull.png" type="Texture" id=30]
 [ext_resource path="res://VisualTimer.gd" type="Script" id=31]
 [ext_resource path="res://KeepsDiscards.gd" type="Script" id=32]
+[ext_resource path="res://YesRebuy.gd" type="Script" id=33]
+[ext_resource path="res://NoRebuy.gd" type="Script" id=34]
+[ext_resource path="res://ConfirmRebuy.gd" type="Script" id=35]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -56,11 +59,11 @@ font_data = ExtResource( 2 )
 size = 50
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=15]
 size = 90
 font_data = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id=22]
 shader = ExtResource( 21 )
 shader_param/blurSize = 20
 
@@ -74,6 +77,24 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=11]
 size = 70
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 90
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 72
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="StyleBoxEmpty" id=20]
+
+[sub_resource type="DynamicFont" id=21]
+size = 90
 font_data = ExtResource( 2 )
 
 [node name="Board" type="Node2D"]
@@ -197,15 +218,14 @@ __meta__ = {
 
 [node name="PotAmount" type="Label" parent="."]
 visible = false
-margin_left = 828.0
-margin_top = 445.0
-margin_right = 1004.0
-margin_bottom = 559.0
+margin_left = 936.0
+margin_top = 475.0
+margin_right = 995.0
+margin_bottom = 589.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_scale = Vector2( 0.75, 0.75 )
-rect_pivot_offset = Vector2( 240.42, 95.5417 )
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 15 )
 text = "0"
 align = 1
 valign = 1
@@ -215,14 +235,13 @@ __meta__ = {
 
 [node name="PotLabel" type="Label" parent="."]
 visible = false
-margin_left = 828.0
-margin_top = 374.0
-margin_right = 1004.0
-margin_bottom = 488.0
+margin_left = 895.0
+margin_top = 403.0
+margin_right = 1063.0
+margin_bottom = 517.0
 rect_scale = Vector2( 0.75, 0.75 )
-rect_pivot_offset = Vector2( 240.42, 95.5417 )
-custom_fonts/font = SubResource( 7 )
-text = "Pot"
+custom_fonts/font = SubResource( 15 )
+text = "POT"
 align = 1
 valign = 1
 __meta__ = {
@@ -237,7 +256,7 @@ script = ExtResource( 13 )
 [node name="Blur" type="Sprite" parent="FlopScreen" groups=[
 "Flop",
 ]]
-material = SubResource( 8 )
+material = SubResource( 22 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -380,7 +399,7 @@ script = ExtResource( 26 )
 [node name="Blur" type="Sprite" parent="RiverTurn" groups=[
 "RiverTurn",
 ]]
-material = SubResource( 8 )
+material = SubResource( 22 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -517,7 +536,7 @@ script = ExtResource( 32 )
 [node name="Blur" type="Sprite" parent="KeepsDiscards" groups=[
 "Flop",
 ]]
-material = SubResource( 8 )
+material = SubResource( 22 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -554,6 +573,87 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="RebuyScreen" type="Node2D" parent="."]
+visible = false
+
+[node name="Blur" type="Sprite" parent="RebuyScreen" groups=[
+"Flop",
+]]
+material = SubResource( 22 )
+position = Vector2( 985.599, 542.891 )
+scale = Vector2( 1.14698, 1.14698 )
+texture = ExtResource( 14 )
+
+[node name="Rebuy" type="Label" parent="RebuyScreen"]
+margin_left = 762.651
+margin_top = 294.489
+margin_right = 1080.65
+margin_bottom = 408.489
+custom_fonts/font = SubResource( 16 )
+text = "REBUY?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Yes" type="Label" parent="RebuyScreen/Rebuy"]
+margin_left = -68.8922
+margin_top = 154.728
+margin_right = 53.1078
+margin_bottom = 245.728
+mouse_filter = 1
+custom_fonts/font = SubResource( 17 )
+text = "YES"
+script = ExtResource( 33 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="No" type="Label" parent="RebuyScreen/Rebuy"]
+margin_left = 238.293
+margin_top = 154.728
+margin_right = 360.293
+margin_bottom = 245.728
+mouse_filter = 1
+custom_fonts/font = SubResource( 17 )
+text = "NO"
+script = ExtResource( 34 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoneyField" type="LineEdit" parent="RebuyScreen/Rebuy"]
+visible = false
+margin_left = -58.0
+margin_top = 139.0
+margin_right = 230.0
+margin_bottom = 253.0
+custom_styles/read_only = SubResource( 18 )
+custom_styles/focus = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
+custom_fonts/font = SubResource( 21 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "500"
+align = 2
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmRebuy" type="TextureButton" parent="RebuyScreen/Rebuy"]
+visible = false
+margin_left = 230.931
+margin_top = 154.783
+margin_right = 1430.93
+margin_bottom = 784.783
+rect_scale = Vector2( 0.12, 0.12 )
+texture_normal = ExtResource( 17 )
+texture_pressed = ExtResource( 18 )
+script = ExtResource( 35 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="TurnTimer" to="TurnTimer" method="_on_TurnTimer_timeout"]
 [connection signal="mouse_entered" from="BetActions/Raise" to="BetActions/Raise" method="_on_Raise_mouse_entered"]
 [connection signal="mouse_exited" from="BetActions/Raise" to="BetActions/Raise" method="_on_Raise_mouse_exited"]
@@ -573,3 +673,8 @@ __meta__ = {
 [connection signal="pressed" from="RiverTurn/ConfirmRiverTurn" to="RiverTurn/ConfirmRiverTurn" method="_on_ConfirmRiverTurn_pressed"]
 [connection signal="pressed" from="RiverTurn/Hide" to="RiverTurn/Hide" method="_on_Hide_pressed"]
 [connection signal="pressed" from="ConfirmPlay" to="ConfirmPlay" method="_on_ConfirmPlay_pressed"]
+[connection signal="mouse_entered" from="RebuyScreen/Rebuy/Yes" to="RebuyScreen/Rebuy/Yes" method="_on_Yes_mouse_entered"]
+[connection signal="mouse_exited" from="RebuyScreen/Rebuy/Yes" to="RebuyScreen/Rebuy/Yes" method="_on_Yes_mouse_exited"]
+[connection signal="mouse_entered" from="RebuyScreen/Rebuy/No" to="RebuyScreen/Rebuy/No" method="_on_No_mouse_entered"]
+[connection signal="mouse_exited" from="RebuyScreen/Rebuy/No" to="RebuyScreen/Rebuy/No" method="_on_No_mouse_exited"]
+[connection signal="pressed" from="RebuyScreen/Rebuy/ConfirmRebuy" to="RebuyScreen/Rebuy/ConfirmRebuy" method="_on_ConfirmRebuy_pressed"]

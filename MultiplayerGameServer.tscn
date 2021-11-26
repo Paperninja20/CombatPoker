@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
 [ext_resource path="res://MultiplayerGameServer.gd" type="Script" id=2]
@@ -33,6 +33,9 @@
 [ext_resource path="res://Assets/TimeCircleFull.png" type="Texture" id=31]
 [ext_resource path="res://VisualTimer.gd" type="Script" id=32]
 [ext_resource path="res://KeepsDiscards.gd" type="Script" id=33]
+[ext_resource path="res://YesRebuy.gd" type="Script" id=34]
+[ext_resource path="res://NoRebuy.gd" type="Script" id=35]
+[ext_resource path="res://ConfirmRebuy.gd" type="Script" id=36]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -89,6 +92,32 @@ shader_param/blurSize = 20
 size = 70
 font_data = ExtResource( 3 )
 
+[sub_resource type="DynamicFont" id=15]
+size = 90
+font_data = ExtResource( 3 )
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = ExtResource( 22 )
+shader_param/blurSize = 20
+
+[sub_resource type="DynamicFont" id=16]
+size = 90
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 72
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="StyleBoxEmpty" id=20]
+
+[sub_resource type="DynamicFont" id=21]
+size = 90
+font_data = ExtResource( 3 )
+
 [node name="Board" type="Node2D"]
 script = ExtResource( 2 )
 
@@ -114,7 +143,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerCount" type="Label" parent="Start"]
+[node name="StartLabel" type="Label" parent="Start"]
 margin_left = -116.224
 margin_top = -94.4719
 margin_right = 401.782
@@ -228,40 +257,6 @@ rect_scale = Vector2( 0.25, 0.25 )
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 4 )
 script = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PotAmount" type="Label" parent="."]
-visible = false
-margin_left = 828.0
-margin_top = 445.0
-margin_right = 1004.0
-margin_bottom = 559.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_scale = Vector2( 0.75, 0.75 )
-rect_pivot_offset = Vector2( 240.42, 95.5417 )
-custom_fonts/font = SubResource( 2 )
-text = "0"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PotLabel" type="Label" parent="."]
-visible = false
-margin_left = 828.0
-margin_top = 374.0
-margin_right = 1004.0
-margin_bottom = 488.0
-rect_scale = Vector2( 0.75, 0.75 )
-rect_pivot_offset = Vector2( 240.42, 95.5417 )
-custom_fonts/font = SubResource( 2 )
-text = "Pot"
-align = 1
-valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -605,6 +600,119 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="PotAmount" type="Label" parent="."]
+visible = false
+margin_left = 936.0
+margin_top = 475.0
+margin_right = 995.0
+margin_bottom = 589.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = SubResource( 15 )
+text = "0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PotLabel" type="Label" parent="."]
+visible = false
+margin_left = 895.0
+margin_top = 403.0
+margin_right = 1063.0
+margin_bottom = 517.0
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = SubResource( 15 )
+text = "POT"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RebuyScreen" type="Node2D" parent="."]
+visible = false
+
+[node name="Blur" type="Sprite" parent="RebuyScreen" groups=[
+"Flop",
+]]
+material = SubResource( 22 )
+position = Vector2( 985.599, 542.891 )
+scale = Vector2( 1.14698, 1.14698 )
+texture = ExtResource( 16 )
+
+[node name="Rebuy" type="Label" parent="RebuyScreen"]
+margin_left = 762.651
+margin_top = 294.489
+margin_right = 1080.65
+margin_bottom = 408.489
+custom_fonts/font = SubResource( 16 )
+text = "REBUY?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Yes" type="Label" parent="RebuyScreen/Rebuy"]
+margin_left = -68.8922
+margin_top = 154.728
+margin_right = 53.1078
+margin_bottom = 245.728
+mouse_filter = 1
+custom_fonts/font = SubResource( 17 )
+text = "YES"
+script = ExtResource( 34 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="No" type="Label" parent="RebuyScreen/Rebuy"]
+margin_left = 238.293
+margin_top = 154.728
+margin_right = 360.293
+margin_bottom = 245.728
+mouse_filter = 1
+custom_fonts/font = SubResource( 17 )
+text = "NO"
+script = ExtResource( 35 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MoneyField" type="LineEdit" parent="RebuyScreen/Rebuy"]
+visible = false
+margin_left = -58.0
+margin_top = 139.0
+margin_right = 230.0
+margin_bottom = 253.0
+custom_styles/read_only = SubResource( 18 )
+custom_styles/focus = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
+custom_fonts/font = SubResource( 21 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "500"
+align = 2
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmRebuy" type="TextureButton" parent="RebuyScreen/Rebuy"]
+visible = false
+margin_left = 230.931
+margin_top = 154.783
+margin_right = 1430.93
+margin_bottom = 784.783
+rect_scale = Vector2( 0.12, 0.12 )
+texture_normal = ExtResource( 17 )
+texture_pressed = ExtResource( 18 )
+script = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="Start" to="." method="_on_TextureButton_pressed"]
 [connection signal="timeout" from="TurnTimer" to="TurnTimer" method="_on_TurnTimer_timeout"]
 [connection signal="mouse_entered" from="BetActions/Check" to="BetActions/Check" method="_on_Check_mouse_entered"]
@@ -625,3 +733,8 @@ __meta__ = {
 [connection signal="pressed" from="RiverTurn/ConfirmRiverTurn" to="RiverTurn/ConfirmRiverTurn" method="_on_ConfirmRiverTurn_pressed"]
 [connection signal="pressed" from="RiverTurn/Hide" to="RiverTurn/Hide" method="_on_Hide_pressed"]
 [connection signal="pressed" from="ConfirmPlay" to="ConfirmPlay" method="_on_ConfirmPlay_pressed"]
+[connection signal="mouse_entered" from="RebuyScreen/Rebuy/Yes" to="RebuyScreen/Rebuy/Yes" method="_on_Yes_mouse_entered"]
+[connection signal="mouse_exited" from="RebuyScreen/Rebuy/Yes" to="RebuyScreen/Rebuy/Yes" method="_on_Yes_mouse_exited"]
+[connection signal="mouse_entered" from="RebuyScreen/Rebuy/No" to="RebuyScreen/Rebuy/No" method="_on_No_mouse_entered"]
+[connection signal="mouse_exited" from="RebuyScreen/Rebuy/No" to="RebuyScreen/Rebuy/No" method="_on_No_mouse_exited"]
+[connection signal="pressed" from="RebuyScreen/Rebuy/ConfirmRebuy" to="RebuyScreen/Rebuy/ConfirmRebuy" method="_on_ConfirmRebuy_pressed"]

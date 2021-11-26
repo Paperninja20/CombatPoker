@@ -15,7 +15,7 @@ func _ready():
 	mainPlayer.set_network_master(playerInfo.id, true)
 	mainPlayer.get_node("PlayerTag").text = playerInfo.name
 	mainPlayer.get_node("BettingPhase/Money").text = "$" + str(playerInfo.money)
-	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.65,0.65)
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.75,0.75)
 	mainPlayer.scale = Vector2(.9, .9)
 	mainPlayer.position = Vector2(960, 920)
 	get_tree().get_root().get_node("Board").add_child(mainPlayer)

@@ -10,8 +10,6 @@ var player = preload("res://MultiplayerPlayer.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	
 	var mainPlayer = player.instance()
 	var playerInfo = Network.self_data
 	mainPlayer.name = playerInfo.name
@@ -19,11 +17,12 @@ func _ready():
 	mainPlayer.set_network_master(playerInfo.id, true)
 	mainPlayer.get_node("PlayerTag").text = playerInfo.name
 	mainPlayer.get_node("BettingPhase/Money").text = "$" + str(playerInfo.money)
-	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.65,0.65)
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.75,0.75)
 	mainPlayer.scale = Vector2(.9, .9)
 	mainPlayer.position = Vector2(960, 920)
 	get_tree().get_root().get_node("Board").add_child(mainPlayer)
 	Network.playerOrder.append(mainPlayer)
+	Network.allPlayers.append(mainPlayer)
 	mainPlayer.add_to_group("Players")
 	
 	for entry in Global.deck:
@@ -35,6 +34,8 @@ func _ready():
 #	pass
 func _on_TextureButton_pressed():
 	if Network.players.size() < 2:
+		return
+	if Network.playerOrder.size() < 2:
 		return
 	get_node("Start").visible = false
 	startRound()
@@ -91,13 +92,16 @@ func attackPhase():
 	
 func endCurrentRound():
 	Network.distributeMoney()
+	Network.kickPlayers()
 	if Global.autoStart:
 		restart()
 	else:
 		Network.resetAllPlayers()
 		Network.resetValues()
 		Network.togglePots(false)
-		get_node("Start").visible = true
+		var myPlayer = Global.getMyPlayer()
+		if myPlayer in Network.playerOrder:
+			get_node("Start").visible = true
 
 func restart():
 	Network.resetAllPlayers()

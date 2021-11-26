@@ -50,10 +50,12 @@ scale = Vector2( 0.5, 0.5 )
 
 [node name="BetAmount" type="Label" parent="BettingPhase"]
 visible = false
-margin_left = -52.006
-margin_top = -380.172
-margin_right = 45.994
-margin_bottom = -306.172
+margin_left = -19.0
+margin_top = -380.0
+margin_right = 19.0
+margin_bottom = -306.0
+grow_horizontal = 2
+grow_vertical = 2
 custom_fonts/font = SubResource( 1 )
 text = "0"
 align = 1

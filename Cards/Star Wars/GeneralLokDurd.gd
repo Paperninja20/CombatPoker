@@ -6,8 +6,8 @@ extends Node2D
 # var b = "text"
 export var cardName = "General Lok Durd of the Separatist Alliance"
 var idName = "GeneralLokDurd"
-export var baseAttack = 9
-export var attack = 9
+export var baseAttack = 7
+export var attack = 7
 export var rarity = "Legendary"
 export var universe = "Star Wars"
 var universeTriggers = ["Star Wars"]
@@ -16,7 +16,7 @@ var attackingPlayer = null
 var target = null
 var targetPlayer = null
 var killedBy = null
-var damageThreshold = 9
+var damageThreshold = 7
 var activeBox = 0
 var attributes = []
 var baseAttributes = []
@@ -28,9 +28,11 @@ var minionOwner
 var triggered = false
 var hovering
 var magnified
+var oldPos
 
 func _ready():
 	minionOwner = get_parent().get_parent()
+	oldPos = global_position
 
 func determineBox():
 	#discard = Global.getDiscard(minionOwner)
@@ -62,13 +64,13 @@ func endRound():
 
 func _on_Area2D_mouse_entered():
 	hovering = true
-	if Global.altDown:
+	if Global.altDown and not magnified:
 		Global.magnify(self)
 
 func _on_Area2D_mouse_exited():
 	hovering = false
-	if magnified:
-		Global.demagnify(self, Vector2(1,1))
+#	if magnified:
+#		Global.demagnify(self, Vector2(1,1))
 	
 func _input(event):
 	if event.is_action_pressed("Alt"):

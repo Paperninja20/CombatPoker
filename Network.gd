@@ -4,6 +4,7 @@ extends Node
 const DEFAULT_IP = '127.0.0.1'
 const DEFAULT_PORT = 9999
 const MAX_PLAYERS = 6
+var ipAddressToJoin
 
 signal turnOver
 signal continueGameSequence
@@ -74,17 +75,17 @@ var gameOver = false
 
 var playerOrder = []
 var activePlayers = []
+var allPlayers = []
 
 var leftSeats = {
-	Vector2(360, 750): null,
-	Vector2(360, 160): null,
+	Vector2(360, 775): null,
+	Vector2(360, 185): null,
 	Vector2(960, 120): null
-
 }
 
 var rightSeats = {
-	Vector2(1560, 750): null,
-	Vector2(1560, 160): null
+	Vector2(1560, 775): null,
+	Vector2(1560, 185): null
 }
 
 var players = {}
@@ -108,6 +109,7 @@ func CreateLobby(player_nickname, player_money):
 	peer.connect("peer_disconnected", self, "_Peer_Disconnected")
 	
 func JoinLobby(player_nickname, player_money, ip):
+	ipAddressToJoin = ip
 	self_data.name = player_nickname
 	self_data.money = player_money
 # warning-ignore:return_value_discarded
@@ -127,6 +129,10 @@ func _Peer_Connected(player_id):
 func _Peer_Disconnected(player_id):
 	print("User " + str(player_id) + " Disconnected")
 	rpc('removePlayer', player_id, players[player_id])
+	
+remotesync func kicked():
+	get_tree().network_peer = null
+	get_tree().change_scene('res://LobbyCreator.tscn')
 	
 remote func _send_player_info(player_id, info, newPlayer):
 	if get_tree().is_network_server():
@@ -152,7 +158,7 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.set_network_master(player_id, true)
 	new_player.get_node("PlayerTag").text = info.name
 	new_player.get_node("BettingPhase/Money").text = "$" + str(info.money)
-	new_player.scale = Vector2(0.65, 0.65)
+	new_player.scale = Vector2(0.7, 0.7)
 	if newPlayer:
 		var availableSeat = false
 		for seat in leftSeats:
@@ -190,13 +196,14 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.add_to_group("Players")
 	var indexToInsert = playerOrder.size() - rotations
 	playerOrder.insert(indexToInsert, new_player)
+	allPlayers.append(new_player)
 
-remote func removePlayer(player_id, info):
-	for node in get_tree().get_root().get_node("Board").get_children():
-		if node.get_name() == info.name:
+remotesync func removePlayer(player_id, info):
+	for participant in get_tree().get_nodes_in_group("Players"):
+		if participant.name == info.name:
 			
-			if node.position in rightSeats:
-				rightSeats[node.position] = null
+			if participant.position in rightSeats:
+				rightSeats[participant.position] = null
 				for i in range(0, rightSeats.keys().size() - 1):
 					if rightSeats[rightSeats.keys()[i]] != null:
 						continue
@@ -207,8 +214,8 @@ remote func removePlayer(player_id, info):
 					rightSeats[rightSeats.keys()[i]].reorient()
 					rightSeats[rightSeats.keys()[i + 1]] = null
 				
-			elif node.position in leftSeats:
-				leftSeats[node.position] = null
+			elif participant.position in leftSeats:
+				leftSeats[participant.position] = null
 				for i in range(0, leftSeats.keys().size() - 1):
 					if leftSeats[leftSeats.keys()[i]] != null:
 						continue	
@@ -219,8 +226,8 @@ remote func removePlayer(player_id, info):
 					leftSeats[leftSeats.keys()[i]].reorient()
 					leftSeats[leftSeats.keys()[i + 1]] = null
 					
-			playerOrder.erase(node)
-			node.queue_free()
+			playerOrder.erase(participant)
+			participant.queue_free()
 	players.erase(player_id)
 		
 
@@ -1033,4 +1040,39 @@ remotesync func VisualEffectDone():
 	if VisualEffectsDone >= activePlayers.size():
 		emit_signal("VisualEffectOver")
 	
+func kickPlayers():
+	var brokePlayers = []
+	for participant in playerOrder:
+		if int(participant.find_node("Money").text) <= 0:
+			brokePlayers.append(participant)
+			#rpc_id(participant.id, 'kicked')
+	for broke in brokePlayers:
+		playerOrder.erase(broke)
+		rpc_id(broke.id, 'showRebuyScreen')
+		
+remotesync func showRebuyScreen():
+	get_tree().get_root().get_node("Board").get_node("RebuyScreen").visible = true
+	if get_tree().is_network_server():
+		var startButton = get_tree().get_root().get_node("Board").get_node("Start")
+		startButton.visible = false
+	
+func sendRebuy(playerName, money):
+	rpc_id(1, 'playerRebuy', playerName, money)
+	
+remotesync func playerRebuy(playerName, money):
+	for participant in allPlayers:
+		print(participant, " vs ", playerName)
+		if participant.name == playerName:
+			var indexToInsert = playerOrder.size() - rotations
+			playerOrder.insert(indexToInsert, participant)
+			rpc('updatePlayerMoney', playerName, money)
+			break
+
+remotesync func updatePlayerMoney(playerName, money):
+	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(playerName)
+	bettingPlayer.find_node("Money").text = str(money)
+
+func kickSelf():
+	var myPlayer = Global.getMyPlayer()
+	rpc_id(myPlayer.id, 'kicked')
 

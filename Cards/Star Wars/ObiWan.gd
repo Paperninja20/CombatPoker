@@ -28,9 +28,11 @@ var minionOwner
 var triggered = false
 var hovering
 var magnified
+var oldPos
 
 func _ready():
 	minionOwner = get_parent().get_parent()
+	oldPos = global_position
 
 func determineBox():
 	discard = Global.getDiscard(minionOwner)
@@ -75,13 +77,13 @@ func endRound():
 	
 func _on_Area2D_mouse_entered():
 	hovering = true
-	if Global.altDown:
+	if Global.altDown and not magnified:
 		Global.magnify(self)
 
 func _on_Area2D_mouse_exited():
 	hovering = false
-	if magnified:
-		Global.demagnify(self, Vector2(1,1))
+#	if magnified:
+#		Global.demagnify(self, Vector2(1,1))
 	
 func _input(event):
 	if event.is_action_pressed("Alt"):

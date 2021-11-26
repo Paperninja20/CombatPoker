@@ -157,6 +157,7 @@ func transitionHand():
 			keeps.append(card.idName)
 		$BettingPhase/Keeps.remove_child(card)
 		$CombatPhase/Hand.add_child(card)
+		card.oldPos = card.global_position
 		card.minionOwner = self
 		if not self.is_network_master():
 			card.get_node("Cardback").visible = true
@@ -225,7 +226,7 @@ func reorient():
 	if position.x > 960:
 		get_node("BettingPhase/BetAmount").rect_position.x = -500
 	elif position.x < 960:
-		get_node("BettingPhase/BetAmount").rect_position.x = 400		
+		get_node("BettingPhase/BetAmount").rect_position.x = 500		
 					
 func determineAdjacentMinions():
 	if not Global.hasActiveMinion(self):
