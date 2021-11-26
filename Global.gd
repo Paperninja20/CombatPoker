@@ -229,6 +229,10 @@ func magnify(card):
 		return
 	magnifying = true
 	card.scale = Vector2(8, 8)
+	if not card.minionOwner.is_network_master():
+		card.scale *= 1.285
+	if card.get_parent().name == "Active":
+		card.scale /= 2
 	card.oldPos = card.global_position
 	card.global_position = Vector2(960, 540)
 	if not card.z_index > 300:

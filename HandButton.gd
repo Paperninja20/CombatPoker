@@ -49,26 +49,26 @@ func _on_Hand_Button_pressed():
 
 func _on_Hand_Button_mouse_entered():
 	hovering = true
-	if Global.altDown:
+	if Global.altDown and not magnified:
 		Global.magnify(get_parent())
-		magnified = true
+		magnified = get_parent().magnified
 
 
 func _on_Hand_Button_mouse_exited():
 	hovering = false
-	if magnified:
-		Global.demagnify(get_parent(), Vector2(1,1))
-		magnified = false
+#	if magnified:
+#		Global.demagnify(get_parent(), Vector2(1,1))
+#		magnified = false
 
 func _input(event):
 	if event.is_action_pressed("Alt"):
 		if hovering:
-			Global.magnify(get_parent())
-			magnified = true
+			Global.magnify(get_parent())	
+			magnified = get_parent().magnified
 	if event.is_action_released("Alt"):
 		if magnified:
 			Global.demagnify(get_parent(), Vector2(1,1))
-			magnified = false
+			magnified = get_parent().magnified
 		
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
@@ -76,4 +76,4 @@ func _notification(what):
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 		if magnified:
 			Global.demagnify(get_parent(), Vector2(1,1))
-			magnified = false
+			magnified = get_parent().magnified
