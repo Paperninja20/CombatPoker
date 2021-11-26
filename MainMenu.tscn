@@ -51,10 +51,10 @@ __meta__ = {
 }
 
 [node name="CollectData" type="Label" parent="."]
-margin_left = 627.662
-margin_top = 381.269
-margin_right = 1265.66
-margin_bottom = 612.269
+margin_left = 627.921
+margin_top = 442.383
+margin_right = 1265.92
+margin_bottom = 673.383
 rect_pivot_offset = Vector2( -1262.85, -482.581 )
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
@@ -110,10 +110,10 @@ __meta__ = {
 }
 
 [node name="Games" type="Label" parent="."]
-margin_left = 591.784
-margin_top = 491.949
-margin_right = 1109.79
-margin_bottom = 622.949
+margin_left = 563.501
+margin_top = 550.685
+margin_right = 1081.51
+margin_bottom = 681.685
 rect_pivot_offset = Vector2( 240.42, 95.5417 )
 custom_fonts/font = SubResource( 1 )
 text = "Games:"
@@ -124,10 +124,10 @@ __meta__ = {
 }
 
 [node name="GamesInput" type="LineEdit" parent="."]
-margin_left = 1028.0
-margin_top = 505.888
-margin_right = 1598.0
-margin_bottom = 619.888
+margin_left = 999.718
+margin_top = 567.002
+margin_right = 1569.72
+margin_bottom = 681.002
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )

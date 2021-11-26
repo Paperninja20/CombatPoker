@@ -21,7 +21,6 @@ func _on_CreateLobby_mouse_entered():
 	set("custom_colors/font_color", Color("#848384"))
 	hovering = true
 
-
 func _on_CreateLobby_mouse_exited():
 	set("custom_colors/font_color", Color("#ffffff"))
 	hovering = false

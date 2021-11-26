@@ -984,7 +984,18 @@ remotesync func glow(playerName, effect):
 			minion = Global.getActiveMinion(playerNode)
 			if minion != null:
 				minion.scale *= 1.2
-				minion.modulate = Color(1, 1, 1.5)
+				match minion.universe:
+					"Marvel":
+						minion.modulate = Color(1, 1, 1.5)
+					"Star Wars":
+						minion.modulate = Color(1.5, 1, 1)
+					"PvZ":
+						minion.modulate = Color(1, 1.5, 1)
+					"Pokemon":
+						minion.modulate = Color(1.5, 1.5, 1)
+					"Rodent":
+						minion.modulate = Color(1.5, 1.5, 1.5)
+				
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.scale /= 1.2
 				minion.modulate = Color(1, 1, 1)
@@ -993,7 +1004,17 @@ remotesync func glow(playerName, effect):
 		"lastLaugh":
 			minion = Global.getDiscard(playerNode)[0]
 			if minion != null:
-				minion.modulate = Color(1.5, 1, 1)
+				match minion.universe:
+					"Marvel":
+						minion.modulate = Color(1, 1, 1.5)
+					"Star Wars":
+						minion.modulate = Color(1.5, 1, 1)
+					"PvZ":
+						minion.modulate = Color(1, 1.5, 1)
+					"Pokemon":
+						minion.modulate = Color(1.5, 1.5, 1)
+					"Rodent":
+						minion.modulate = Color(1.5, 1.5, 1.5)
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.modulate = Color(1, 1, 1)
 			yield(get_tree().create_timer(0.1), "timeout")
