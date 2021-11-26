@@ -4,7 +4,7 @@
 [ext_resource path="res://Assets/nexthover.png" type="Texture" id=2]
 [ext_resource path="res://Main.gd" type="Script" id=3]
 [ext_resource path="res://Assets/next.png" type="Texture" id=4]
-[ext_resource path="res://Assets/felt.jpg" type="Texture" id=5]
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=6]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=7]
 

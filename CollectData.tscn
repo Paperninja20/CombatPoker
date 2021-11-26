@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/back.png" type="Texture" id=1]
 [ext_resource path="res://CollectData.gd" type="Script" id=2]
-[ext_resource path="res://Assets/felt.jpg" type="Texture" id=5]
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=6]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=7]
 
@@ -23,7 +23,7 @@ script = ExtResource( 2 )
 [node name="Background" type="Sprite" parent="."]
 position = Vector2( 955.327, 540 )
 scale = Vector2( 1.01146, 1.03079 )
-texture = ExtResource( 5 )
+texture = ExtResource( 3 )
 
 [node name="Message" type="Label" parent="."]
 margin_left = 579.99

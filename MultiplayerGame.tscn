@@ -1,6 +1,6 @@
 [gd_scene load_steps=44 format=2]
 
-[ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://MultiplayerGame.gd" type="Script" id=3]
 [ext_resource path="res://Raise.gd" type="Script" id=4]
@@ -60,7 +60,7 @@ font_data = ExtResource( 2 )
 size = 90
 font_data = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=13]
+[sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 21 )
 shader_param/blurSize = 20
 
@@ -72,7 +72,7 @@ font_data = ExtResource( 2 )
 size = 170
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=14]
+[sub_resource type="DynamicFont" id=11]
 size = 70
 font_data = ExtResource( 2 )
 
@@ -237,7 +237,7 @@ script = ExtResource( 13 )
 [node name="Blur" type="Sprite" parent="FlopScreen" groups=[
 "Flop",
 ]]
-material = SubResource( 13 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -380,7 +380,7 @@ script = ExtResource( 26 )
 [node name="Blur" type="Sprite" parent="RiverTurn" groups=[
 "RiverTurn",
 ]]
-material = SubResource( 13 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -517,7 +517,7 @@ script = ExtResource( 32 )
 [node name="Blur" type="Sprite" parent="KeepsDiscards" groups=[
 "Flop",
 ]]
-material = SubResource( 13 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -535,7 +535,7 @@ margin_left = 503.384
 margin_top = 265.0
 margin_right = 691.384
 margin_bottom = 355.0
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 11 )
 text = "KEEPS"
 align = 1
 __meta__ = {
@@ -547,7 +547,7 @@ margin_left = 1147.97
 margin_top = 261.265
 margin_right = 1469.97
 margin_bottom = 526.265
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 11 )
 text = "DISCARDS
 "
 align = 1

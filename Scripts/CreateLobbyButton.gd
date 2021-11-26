@@ -10,6 +10,7 @@ func _input(event):
 	if event is InputEventMouseButton and hovering:
 		if event.is_pressed():
 			print(get_parent().get_node("NicknameField").text)
+			#Network.CreateLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text), int(get_parent().get_node("IPField").text))
 			Network.CreateLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text))
 			get_tree().change_scene("res://MultiplayerGameServer.tscn")
 			hovering = false

@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://Assets/felt.jpg" type="Texture" id=1]
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/CardSlot.png" type="Texture" id=3]
 [ext_resource path="res://Assets/editPressed.png" type="Texture" id=4]
@@ -12,7 +12,7 @@
 [ext_resource path="res://Assets/back.png" type="Texture" id=10]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=11]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=7]
 size = 250
 font_data = ExtResource( 2 )
 
@@ -62,7 +62,7 @@ margin_left = -745.315
 margin_top = 98.7766
 margin_right = -46.3154
 margin_bottom = 414.777
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 7 )
 text = "MENU"
 align = 1
 valign = 1
