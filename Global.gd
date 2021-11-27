@@ -47,7 +47,7 @@ var money = "500"
 var ip = "127.0.0.1"
 
 var autoStart = false
-var turnTimer = 15
+var turnTimer = 45
 var blindAmount = 10
 var dir
 var exploreFactor = 10

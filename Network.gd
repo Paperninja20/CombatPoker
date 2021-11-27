@@ -360,7 +360,17 @@ func callBlinds(bigBlind, smallBlind):
 	rset_id(smallBlind.id, 'isSmallBlind', true)
 	rset('big', bigBlind.name)
 	rset('small', smallBlind.name)
+	rpc('markBlinds')
 	rpc('enterBlinds')
+	
+remotesync func markBlinds():
+	for participant in get_tree().get_nodes_in_group("Players"):
+		if participant.name == big:
+			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/BigBlind.png")
+		elif participant.name == small:
+			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/SmallBlind.png")
+		else:
+			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/Avatar.png")
 	
 	
 remotesync func enterBlinds():
@@ -788,7 +798,11 @@ func playMinions():
 	yield(get_tree().create_timer(1), "timeout")
 #--------------------Trigger phase-------------------------------------------
 		#trigger phase and update Labels and status
-	for minion in newMinionsPlayed:
+		
+	for participant in activePlayers:
+		var minion = Global.getActiveMinion(participant)
+		if not minion in newMinionsPlayed:
+			continue
 		if not minion.has_method("trigger"):
 			continue
 		rpc('glow', minion.minionOwner.name, "trigger")
@@ -856,12 +870,12 @@ func attackPhase():
 	
 	#last laugh phase
 	
-	var i = activePlayers.size() - 1
-	while i >= 0:
+	var i = 0
+	while i < activePlayers.size():
 		if not activePlayers[i].find_node("Discard").get_child_count() == 0:
 			var topMinion = activePlayers[i].find_node("Discard").get_children()[-1]
 			if not topMinion in Global.minionsThatDiedThisRound:
-				i -= 1
+				i += 1
 				continue
 			if topMinion.has_method("lastLaugh"):
 				rpc('glow', topMinion.minionOwner.name, "lastLaugh")
@@ -871,7 +885,7 @@ func attackPhase():
 				updateGamestateArray()
 				updateGame("cards", false, true)
 				yield(get_tree().create_timer(0.5), "timeout")
-		i -= 1
+		i += 1
 
 	
 	updateGamestateArray()
