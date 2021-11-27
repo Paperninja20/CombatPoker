@@ -21,7 +21,6 @@ func _ready():
 	get_tree().get_root().get_node("Board").add_child(mainPlayer)
 	mainPlayer.add_to_group("Players")
 	
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

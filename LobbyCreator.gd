@@ -8,6 +8,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$NicknameField.text = Global.username
+	$MoneyField.text = Global.money
+	$IPField.text = Global.ip
 	pass # Replace with function body.
 
 
@@ -17,4 +20,7 @@ func _ready():
 
 
 func _on_Back_pressed():
+	Global.username = $NicknameField.text
+	Global.money = $MoneyField.text
+	Global.ip = $IPField.text
 	get_tree().change_scene("res://MainMenu.tscn")

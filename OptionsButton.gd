@@ -10,7 +10,11 @@ var hovering = false
 func _input(event):
 	if event is InputEventMouseButton and hovering:
 		if event.is_pressed():
+			Global.username = get_parent().get_node("NicknameField").text
+			Global.money = get_parent().get_node("MoneyField").text
+			Global.ip = get_parent().get_node("IPField").text
 			get_tree().change_scene("res://MultiplayerOptions.tscn")
+			
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -12,9 +12,13 @@ func _input(event):
 			print(get_parent().get_node("NicknameField").text)
 			#Network.CreateLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text), int(get_parent().get_node("IPField").text))
 			Network.CreateLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text))
+			Global.username = get_parent().get_node("NicknameField").text
+			Global.money = get_parent().get_node("MoneyField").text
+			Global.ip = get_parent().get_node("IPField").text
 			get_tree().change_scene("res://MultiplayerGameServer.tscn")
 			hovering = false
 			set("custom_colors/font_color", Color("#c9a17e"))
+			
 
 
 func _on_CreateLobby_mouse_entered():

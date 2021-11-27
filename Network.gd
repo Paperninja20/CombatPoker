@@ -11,6 +11,7 @@ signal continueGameSequence
 signal attackPhase
 signal playPhase
 signal VisualEffectOver
+signal transitionOver
 
 var gamestate = {}
 
@@ -483,20 +484,29 @@ func sendBetActions():
 	consolidatePot()
 	
 	if phase == "preflop":
-		sendFlop()
 		rset('phase', "flop")
+		sendTransition()
+		yield(self, "transitionOver")
+		sendFlop()
 	elif phase == "flop":
-		sendTurn()
 		rset('phase', "turn")
+		sendTransition()
+		yield(self, "transitionOver")
+		sendTurn()
 	elif phase == "turn":
-		sendRiver()
 		rset('phase', "river")
+		sendTransition()
+		yield(self, "transitionOver")
+		sendRiver()
 	elif phase == "river":
+		rset('phase', "battle")
 		var remainingNames = []
 		for remaining in activePlayers:
 			remainingNames.append(remaining.name)
+		sendTransition()
+		yield(self, "transitionOver")
 		rpc('prepareBattlePhase', remainingNames)
-		rset('phase', "battle")
+		
 	
 	if firstRound:
 		rset('firstRound', false)	
@@ -568,7 +578,12 @@ remotesync func bettingPhase():
 		betActionsNode.get_node("Check").visible = false
 		betActionsNode.get_node("Raise").rect_position.x += 170
 	betActionsNode.visible = true
-
+	
+func sendTransition():
+	rpc('playTransition')
+	yield(get_tree().create_timer(1.6), "timeout")
+	emit_signal("transitionOver")
+	
 func sendPreflop():
 	for remainingPlayer in activePlayers:
 		var preflopToSend = []
@@ -1080,4 +1095,11 @@ remotesync func updatePlayerMoney(playerName, money):
 func kickSelf():
 	var myPlayer = Global.getMyPlayer()
 	rpc_id(myPlayer.id, 'kicked')
+	
+remotesync func playTransition():
+	var transitionNode = get_tree().get_root().get_node("Board").get_node("TransitionAnimation")
+	transitionNode.visible = true
+	transitionNode.get_node("TransitionLabel").text = phase.to_upper()
+	transitionNode.get_node("TransitionLabel").animate()
+	
 

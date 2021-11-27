@@ -42,6 +42,9 @@ var cards = {
 	"Jerry" : ["Rodent", 1],
 	"SpeedyGonzales" : ["Rodent", 1]
 }
+var username = "Player"
+var money = "500"
+var ip = "127.0.0.1"
 
 var autoStart = false
 var turnTimer = 15

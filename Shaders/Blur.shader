@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-uniform int blurSize : hint_range(0,20);
+uniform int blurSize : hint_range(0,50);
 
 void fragment()
 {

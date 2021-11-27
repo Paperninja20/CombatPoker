@@ -12,9 +12,13 @@ func _input(event):
 			print(get_parent().get_node("NicknameField").text)
 			#Network.JoinLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text), get_parent().get_node("IPField").text)
 			Network.JoinLobby(get_parent().get_node("NicknameField").text, int(get_parent().get_node("MoneyField").text), get_parent().get_node("IPField").text)
+			Global.username = get_parent().get_node("NicknameField").text
+			Global.money = get_parent().get_node("MoneyField").text
+			Global.ip = get_parent().get_node("IPField").text
 			get_tree().change_scene("res://MultiplayerGame.tscn")
 			hovering = false
 			set("custom_colors/font_color", Color("#c9a17e"))
+			
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

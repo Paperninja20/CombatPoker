@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
 [ext_resource path="res://MultiplayerGameServer.gd" type="Script" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://YesRebuy.gd" type="Script" id=34]
 [ext_resource path="res://NoRebuy.gd" type="Script" id=35]
 [ext_resource path="res://ConfirmRebuy.gd" type="Script" id=36]
+[ext_resource path="res://TransitionLabel.gd" type="Script" id=37]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -70,7 +71,7 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 22 )
-shader_param/blurSize = 15
+shader_param/blurSize = 30
 
 [sub_resource type="DynamicFont" id=10]
 size = 170
@@ -78,7 +79,7 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=11]
 shader = ExtResource( 22 )
-shader_param/blurSize = 15
+shader_param/blurSize = 30
 
 [sub_resource type="DynamicFont" id=12]
 size = 170
@@ -86,7 +87,7 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 22 )
-shader_param/blurSize = 20
+shader_param/blurSize = 30
 
 [sub_resource type="DynamicFont" id=14]
 size = 70
@@ -98,7 +99,7 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=22]
 shader = ExtResource( 22 )
-shader_param/blurSize = 20
+shader_param/blurSize = 30
 
 [sub_resource type="DynamicFont" id=16]
 size = 90
@@ -116,6 +117,10 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=21]
 size = 90
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 200
 font_data = ExtResource( 3 )
 
 [node name="Board" type="Node2D"]
@@ -713,6 +718,35 @@ script = ExtResource( 36 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TransitionAnimation" type="Node2D" parent="."]
+visible = false
+z_index = 110
+
+[node name="Blur" type="Sprite" parent="TransitionAnimation" groups=[
+"Flop",
+]]
+material = SubResource( 22 )
+position = Vector2( 985.599, 542.891 )
+scale = Vector2( 1.14698, 1.14698 )
+texture = ExtResource( 16 )
+
+[node name="TransitionLabel" type="Label" parent="TransitionAnimation"]
+margin_left = 552.0
+margin_top = -253.0
+margin_right = 1369.0
+margin_bottom = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = SubResource( 23 )
+text = "PREFLOP"
+align = 1
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="TransitionAnimation/TransitionLabel"]
 [connection signal="pressed" from="Start" to="." method="_on_TextureButton_pressed"]
 [connection signal="timeout" from="TurnTimer" to="TurnTimer" method="_on_TurnTimer_timeout"]
 [connection signal="mouse_entered" from="BetActions/Check" to="BetActions/Check" method="_on_Check_mouse_entered"]

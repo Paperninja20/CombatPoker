@@ -53,6 +53,8 @@ func startRound():
 	for participant in Network.activePlayers:
 		participant.get_node("BettingPhase").visible = true
 		participant.get_node("CombatPhase").visible = false
+	Network.sendTransition()
+	yield(Network, "transitionOver")
 	Network.sendPreflop()
 	
 	#set and call blinds
