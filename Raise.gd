@@ -19,7 +19,7 @@ func _input(event):
 			if Network.currentBet != 0:
 				$RaiseAmount.text = str(Network.currentBet * 2)
 			else:
-				$RaiseAmount.text = str(Global.blindAmount)
+				$RaiseAmount.text = str(1)
 
 func _on_Raise_mouse_entered():
 	set("custom_colors/font_color", Color("#848384"))

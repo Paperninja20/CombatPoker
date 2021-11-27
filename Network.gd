@@ -54,6 +54,7 @@ remotesync var firstBetter = null
 remotesync var raisedThisRound = false
 remotesync var bigBlindCheckedFirstRound = false
 remotesync var bigBlindFoldedFirstRound = false
+remotesync var checksAllAround = true
 
 remotesync var big = null
 remotesync var small = null
@@ -61,7 +62,7 @@ remotesync var small = null
 var rotations = 0
 
 var justFolded = false
-var checksAllAround = true
+
 var confirmedFlops = 0
 var confirmedTurns = 0
 var confirmedRivers = 0
@@ -161,6 +162,7 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.get_node("PlayerTag").text = info.name
 	new_player.get_node("BettingPhase/Money").text = "$" + str(info.money)
 	new_player.scale = Vector2(0.7, 0.7)
+	new_player.seat = playerOrder.size() + 1
 	if newPlayer:
 		var availableSeat = false
 		for seat in leftSeats:
@@ -196,8 +198,14 @@ remote func _send_player_info(player_id, info, newPlayer):
 					
 	get_tree().get_root().get_node("Board").add_child(new_player)
 	new_player.add_to_group("Players")
-	var indexToInsert = playerOrder.size() - rotations
-	playerOrder.insert(indexToInsert, new_player)
+	
+	var highestSeat = 0
+	var highestSeatIndex = 0
+	for i in range(0, playerOrder.size()):
+		if playerOrder[i].seat > highestSeat:
+			highestSeat = playerOrder[i].seat
+			highestSeatIndex = i
+	playerOrder.insert(highestSeatIndex + 1, new_player)
 	allPlayers.append(new_player)
 
 remotesync func sendServerSettings(turnTime):
@@ -386,7 +394,7 @@ func sendRaise(amount):
 	if moneyToSubtract < 0:
 		moneyToSubtract = 0
 	self_data.money -= moneyToSubtract
-	checksAllAround = false
+	rset('checksAllAround', false)
 	rset('lastBetter', self_data.name)
 	rset('currentBet', amount)
 	rset('raisedThisRound', true)
@@ -464,14 +472,17 @@ func sendBetActions():
 				if firstRound and activePlayers[i].name == big and not raisedThisRound:
 					pass
 				else:
+					print("break1")
 					break
 		if checksAllAround and not firstRound and iterations > 0:
+			print("break2")
 			break
-		if bigBlindCheckedFirstRound:
+		if bigBlindCheckedFirstRound and firstRound:
 			bigBlindCheckedFirstRound = false
+			print("break3")
 			break
-		if bigBlindFoldedFirstRound:
-			bigBlindFoldedFirstRound = false
+		if bigBlindFoldedFirstRound and currentBet <= Global.blindAmount and firstRound:
+			print("break4")
 			break
 		rpc_id(activePlayers[i].id, 'bettingPhase')
 		yield(self, "turnOver")
@@ -1084,12 +1095,34 @@ func sendRebuy(playerName, money):
 	
 remotesync func playerRebuy(playerName, money):
 	for participant in allPlayers:
-		print(participant, " vs ", playerName)
+		print(participant.name)
 		if participant.name == playerName:
-			var indexToInsert = playerOrder.size() - rotations
-			playerOrder.insert(indexToInsert, participant)
+			if playerOrder.size() == 1:
+				playerOrder.append(participant)
+				rpc('updatePlayerMoney', playerName, money)
+				return
+			#edge cases
+			if participant.seat == 1 or participant.seat >= allPlayers.size():
+				var highestSeat = 0
+				var highestSeatIndex = 0
+				for i in range(0, playerOrder.size()):
+					if playerOrder[i].seat > highestSeat:
+						highestSeat = playerOrder[i].seat
+						highestSeatIndex = i
+				playerOrder.insert(highestSeatIndex + 1, participant)
+				rpc('updatePlayerMoney', playerName, money)
+				return
+				
+			for i in range(0, playerOrder.size()):
+				if i == playerOrder.size() - 1:
+					if playerOrder[i].seat < participant.seat and playerOrder[0].seat > participant.seat:
+						playerOrder.insert(i + 1, participant)
+						break
+				else:
+					if playerOrder[i].seat < participant.seat and playerOrder[i + 1].seat > participant.seat:
+						playerOrder.insert(i + 1, participant)
+						break
 			rpc('updatePlayerMoney', playerName, money)
-			break
 
 remotesync func updatePlayerMoney(playerName, money):
 	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(playerName)

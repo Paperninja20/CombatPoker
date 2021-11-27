@@ -20,6 +20,7 @@ func _ready():
 	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.75,0.75)
 	mainPlayer.scale = Vector2(.9, .9)
 	mainPlayer.position = Vector2(960, 920)
+	mainPlayer.seat = 1
 	get_tree().get_root().get_node("Board").add_child(mainPlayer)
 	Network.playerOrder.append(mainPlayer)
 	Network.allPlayers.append(mainPlayer)
@@ -43,7 +44,7 @@ func _on_TextureButton_pressed():
 func startRound():
 	randomize()
 	Global.deck = deck.duplicate(true)
-	#Global.deck.shuffle()
+	Global.deck.shuffle()
 	Network.togglePots(true)
 	var rotatingPlayer = Network.playerOrder.pop_front()
 	Network.playerOrder.append(rotatingPlayer)

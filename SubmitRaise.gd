@@ -20,14 +20,14 @@ func _ready():
 func _on_SubmitRaise_pressed():
 	var raiseAmount = int(get_parent().get_node("RaiseAmount").text)
 	
-	if raiseAmount < Network.currentBet * 2 or raiseAmount < Global.blindAmount:
+	if raiseAmount < Network.currentBet * 2 or raiseAmount < 1:
 		get_parent().get_node("RaiseAmount").text = "Too Low!"
 		get_parent().get_node("RaiseAmount").editable = false
 		yield(get_tree().create_timer(0.5), "timeout")
 		if Network.currentBet != 0:
 			get_parent().get_node("RaiseAmount").text = str(Network.currentBet * 2)
 		else:
-			get_parent().get_node("RaiseAmount").text = str(Global.blindAmount)
+			get_parent().get_node("RaiseAmount").text = str(1)
 		get_parent().get_node("RaiseAmount").editable = true
 		return
 

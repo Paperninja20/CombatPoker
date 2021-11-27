@@ -68,7 +68,7 @@ font_data = ExtResource( 2 )
 size = 90
 font_data = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=24]
+[sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 21 )
 shader_param/blurSize = 30
 
@@ -265,7 +265,7 @@ script = ExtResource( 13 )
 [node name="Blur" type="Sprite" parent="FlopScreen" groups=[
 "Flop",
 ]]
-material = SubResource( 24 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -448,7 +448,7 @@ script = ExtResource( 26 )
 [node name="Blur" type="Sprite" parent="RiverTurn" groups=[
 "RiverTurn",
 ]]
-material = SubResource( 24 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -585,7 +585,7 @@ script = ExtResource( 32 )
 [node name="Blur" type="Sprite" parent="KeepsDiscards" groups=[
 "Flop",
 ]]
-material = SubResource( 24 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
@@ -629,16 +629,16 @@ visible = false
 [node name="Blur" type="Sprite" parent="RebuyScreen" groups=[
 "Flop",
 ]]
-material = SubResource( 24 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
 
 [node name="Rebuy" type="Label" parent="RebuyScreen"]
-margin_left = 762.651
-margin_top = 294.489
-margin_right = 1080.65
-margin_bottom = 408.489
+margin_left = 801.0
+margin_top = 390.0
+margin_right = 1119.0
+margin_bottom = 504.0
 custom_fonts/font = SubResource( 12 )
 text = "REBUY?"
 __meta__ = {
@@ -711,7 +711,7 @@ z_index = 110
 [node name="Blur" type="Sprite" parent="TransitionAnimation" groups=[
 "Flop",
 ]]
-material = SubResource( 24 )
+material = SubResource( 8 )
 position = Vector2( 985.599, 542.891 )
 scale = Vector2( 1.14698, 1.14698 )
 texture = ExtResource( 14 )
