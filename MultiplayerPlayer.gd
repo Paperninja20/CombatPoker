@@ -39,6 +39,7 @@ func playMinion():
 	playedMinion.position.x = 0
 	Global.reparent(playedMinion, "Active")
 	Global.determinePlay(playedMinion)
+	playedMinion.get_node("Cardback").visible = false
 	capCheck()
 	return playedMinion
 			

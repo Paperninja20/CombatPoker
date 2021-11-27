@@ -65,6 +65,7 @@ func trigger():
 		minionOwner.determineAdjacentMinions()
 		newMinion.minionOwner.determineAdjacentMinions()
 		newMinion.attackingPlayer.determineAdjacentMinions()
+		Network.newMinionsPlayed.append(newMinion)
 
 func doAttack():
 	if attack >= target.damageThreshold:

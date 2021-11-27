@@ -630,14 +630,17 @@ remotesync func flopActions(flop):
 	var card1 = load("res://Cards/" + flop[0] + ".tscn").instance()
 	flopActions.get_node("Flop1").add_child(card1)
 	flopActions.flop1 = card1.idName
+	flopActions.find_node("RevealButton").myCard = card1.idName
 	
 	var card2 = load("res://Cards/" + flop[1] + ".tscn").instance()
 	flopActions.get_node("Flop2").add_child(card2)
 	flopActions.flop2 = card2.idName
+	flopActions.find_node("RevealButton2").myCard = card2.idName
 	
 	var card3 = load("res://Cards/" + flop[2] + ".tscn").instance()
 	flopActions.get_node("Flop3").add_child(card3)
 	flopActions.flop3 = card3.idName
+	flopActions.find_node("RevealButton3").myCard = card3.idName
 	
 	flopActions.visible = true
 	

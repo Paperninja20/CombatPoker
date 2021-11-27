@@ -21,15 +21,19 @@ func _on_Select_pressed():
 	var flopData = get_parent().get_parent()
 		
 	var flopNumber = get_parent().get_name()
+
 	
 	var XNode = get_parent().get_node("X")
 	if XNode.visible:
 		XNode.visible = false
 		flopData.currentlyDiscarding -= 1
+		if flopData.currentlyDiscarding == 0:
+			flopData.toggleRevealButtons(true)
 	else:
 		if flopData.currentlyDiscarding == 2:
 			return
 		XNode.visible = true
+		flopData.toggleRevealButtons(false)
 		flopData.currentlyDiscarding += 1
 		
 	

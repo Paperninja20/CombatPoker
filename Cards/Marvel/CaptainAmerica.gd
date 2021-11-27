@@ -35,8 +35,7 @@ func _ready():
 	oldPos = global_position
 
 func determineBox():
-	discard = Global.getDiscard(minionOwner)
-	if discard.size() == 0:
+	if Global.getHand(minionOwner) != null:
 		activeBox = 0
 		return
 	if universe in discard[0].universeTriggers:
@@ -83,7 +82,7 @@ func preview(on):
 func trigger():
 	determineBox()
 	if activeBox == 0:
-		if minionOwner.discard.size() != 0:
+		if Global.getHand(minionOwner) == null:
 			return
 		Global.killMinion(self, self)
 		var newMinion = minionOwner.playMinion()
@@ -96,8 +95,7 @@ func trigger():
 		newMinion.determineBox()
 		newMinion.activateBox()
 		newMinion.get_node("AttackLabel").update()
-		if newMinion.has_method("trigger"):
-			newMinion.trigger()
+		Network.newMinionsPlayed.append(newMinion)
 	triggered = true
 		
 func lastLaugh():

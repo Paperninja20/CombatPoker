@@ -80,8 +80,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-#	deck.push_front(["JeanGrey", "Marvel"])
-#	deck.push_front(["TheHulk", "Marvel"])
+	deck.push_front(["Entei", "Pokemon"])
+	deck.push_front(["Entei", "Pokemon"])
+	deck.push_front(["CaptainAmerica", "Marvel"])
+	deck.push_front(["NickFury", "Marvel"])
 #	deck.push_front(["JeanGrey", "Marvel"])
 #	deck.push_front(["TheHulk", "Marvel"])
 #	deck.push_front(["BattleDroid", "Star Wars"])
@@ -200,10 +202,10 @@ func determinePlay(minion):
 				break
 		player.playsThisRound.append([minion.cardName, bonusType, stack, ""])
 		return
-	elif (minion.universe in discard[0].universeTriggers) or MACHINECheck(minion, discard[0]):
+	elif minion.universe in discard[0].universeTriggers:
 		bonusType = "classBonus"
 		for card in discard:
-			if (minion.universe in card.universeTriggers) or MACHINECheck(minion, card):
+			if minion.universe in card.universeTriggers:
 				stack += 1
 			else:
 				break

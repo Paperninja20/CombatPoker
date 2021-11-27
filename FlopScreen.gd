@@ -7,6 +7,8 @@ extends Node2D
 var flop1
 var flop2
 var flop3
+var tempflop
+
 
 var keep1 = true
 var keep2 = true
@@ -39,3 +41,46 @@ func reset():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func swapHidden(newHidden, buttonName):
+	tempflop = flop3
+	flop3 = newHidden
+	if flop1 == newHidden:
+		flop1 = tempflop
+	elif flop2 == newHidden:
+		flop2 = tempflop
+	elif flop3 == newHidden:
+		flop3 = tempflop
+	var button1 = find_node("RevealButton")
+	var button2 = find_node("RevealButton2")
+	var button3 = find_node("RevealButton3")
+	
+	match buttonName:
+		"RevealButton":
+			button2.disabled = false
+			button3.disabled = false
+		"RevealButton2":
+			button1.disabled = false
+			button3.disabled = false
+		"RevealButton3":
+			button2.disabled = false
+			button1.disabled = false
+
+func toggleRevealButtons(on):
+	var button1 = find_node("RevealButton")
+	var button2 = find_node("RevealButton2")
+	var button3 = find_node("RevealButton3")
+	
+	if on:
+		button1.visible = true
+		button2.visible = true
+		button3.visible = true
+	else:
+		button1.visible = false
+		button2.visible = false
+		button3.visible = false
+
+		
+		
+		
+		
