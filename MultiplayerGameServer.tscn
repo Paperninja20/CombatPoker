@@ -718,10 +718,10 @@ __meta__ = {
 
 [node name="MoneyField" type="LineEdit" parent="RebuyScreen/Rebuy"]
 visible = false
-margin_left = -58.0
-margin_top = 139.0
-margin_right = 230.0
-margin_bottom = 253.0
+margin_left = -122.626
+margin_top = 141.704
+margin_right = 415.375
+margin_bottom = 255.704
 custom_styles/read_only = SubResource( 27 )
 custom_styles/focus = SubResource( 28 )
 custom_styles/normal = SubResource( 29 )
@@ -729,7 +729,7 @@ custom_fonts/font = SubResource( 30 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "500"
-align = 2
+align = 1
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -737,10 +737,10 @@ __meta__ = {
 
 [node name="ConfirmRebuy" type="TextureButton" parent="RebuyScreen/Rebuy"]
 visible = false
-margin_left = 230.931
-margin_top = 154.783
-margin_right = 1430.93
-margin_bottom = 784.783
+margin_left = 71.8916
+margin_top = 250.447
+margin_right = 1271.89
+margin_bottom = 880.447
 rect_scale = Vector2( 0.12, 0.12 )
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 18 )

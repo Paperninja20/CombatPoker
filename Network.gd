@@ -500,9 +500,10 @@ func sendBetActions():
 			print("break4")
 			break
 		rpc_id(activePlayers[i].id, 'bettingPhase')
-		rpc('glowCurrentBetter', activePlayers[i].name, true)
+		var activePlayerName = activePlayers[i].name
+		rpc('glowCurrentBetter', activePlayerName, true)
 		yield(self, "turnOver")
-		rpc('glowCurrentBetter', activePlayers[i].name, false)
+		rpc('glowCurrentBetter', activePlayerName, false)
 		if not justFolded:
 			i += 1
 		justFolded = false

@@ -80,8 +80,10 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-#	deck.push_front(["Entei", "Pokemon"])
-#	deck.push_front(["Entei", "Pokemon"])
+#	deck.push_front(["RocketRaccoon", "Marvel"])
+#	deck.push_front(["RocketRaccoon", "Marvel"])
+#	deck.push_front(["ChuckE", "Rodent"])
+#	deck.push_front(["ChuckE", "Rodent"])
 #	deck.push_front(["CaptainAmerica", "Marvel"])
 #	deck.push_front(["NickFury", "Marvel"])
 #	deck.push_front(["JeanGrey", "Marvel"])

@@ -68,11 +68,42 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="BlindAmountLabel" type="Label" parent="."]
+margin_left = 336.861
+margin_top = 232.515
+margin_right = 962.86
+margin_bottom = 463.515
+mouse_filter = 1
+custom_fonts/font = SubResource( 1 )
+text = "BLINDS:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlindAmountInput" type="LineEdit" parent="."]
+margin_left = 847.063
+margin_top = 289.618
+margin_right = 1417.07
+margin_bottom = 403.618
+custom_styles/read_only = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+text = "10"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="AutoplayLabel" type="Label" parent="."]
 margin_left = 258.31
-margin_top = 240.509
+margin_top = 357.682
 margin_right = 884.31
-margin_bottom = 471.509
+margin_bottom = 588.682
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "AUTOPLAY:"
@@ -84,9 +115,9 @@ __meta__ = {
 
 [node name="AutoPlayValue" type="Label" parent="."]
 margin_left = 848.858
-margin_top = 243.245
-margin_right = 988.858
-margin_bottom = 474.245
+margin_top = 360.418
+margin_right = 1014.86
+margin_bottom = 591.418
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "OFF"
