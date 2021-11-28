@@ -16,8 +16,11 @@ func _ready():
 	mainPlayer.id = playerInfo.id
 	mainPlayer.set_network_master(playerInfo.id, true)
 	mainPlayer.get_node("PlayerTag").text = playerInfo.name
-	mainPlayer.get_node("BettingPhase/Money").text = "$" + str(playerInfo.money)
-	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.75,0.75)
+	mainPlayer.get_node("BettingPhase/Money").text = str(playerInfo.money)
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.83,0.83)
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_position.y += 6.29 
+	mainPlayer.get_node("BettingPhase/BetAmount").rect_position.x += 15.81
+	mainPlayer.get_node("BettingPhase/Capsule").scale *= .83
 	mainPlayer.scale = Vector2(.9, .9)
 	mainPlayer.position = Vector2(960, 920)
 	mainPlayer.seat = 1

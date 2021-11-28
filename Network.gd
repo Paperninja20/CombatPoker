@@ -127,7 +127,7 @@ func _connected_to_server():
 	
 func _Peer_Connected(player_id):
 	print("User " + str(player_id) + " Connected")
-	rpc_id(player_id, 'sendServerSettings', Global.turnTimer)
+	rpc_id(player_id, 'sendServerSettings', Global.turnTimer, Global.blindAmount)
 	
 func _Peer_Disconnected(player_id):
 	print("User " + str(player_id) + " Disconnected")
@@ -160,7 +160,7 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.id = info.id
 	new_player.set_network_master(player_id, true)
 	new_player.get_node("PlayerTag").text = info.name
-	new_player.get_node("BettingPhase/Money").text = "$" + str(info.money)
+	new_player.get_node("BettingPhase/Money").text = str(info.money)
 	new_player.scale = Vector2(0.7, 0.7)
 	new_player.seat = playerOrder.size() + 1
 	if newPlayer:
@@ -208,7 +208,8 @@ remote func _send_player_info(player_id, info, newPlayer):
 	playerOrder.insert(highestSeatIndex + 1, new_player)
 	allPlayers.append(new_player)
 
-remotesync func sendServerSettings(turnTime):
+remotesync func sendServerSettings(turnTime, blinds):
+	Global.blindAmount = blinds
 	Global.turnTimer = turnTime
 	get_tree().get_root().get_node("Board").get_node("TurnTimer").wait_time = Global.turnTimer
 
@@ -367,11 +368,13 @@ remotesync func markBlinds():
 	for participant in get_tree().get_nodes_in_group("Players"):
 		if participant.name == big:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/BigBlind.png")
+			#participant.find_node("Money").text = str(int(participant.find_node("Money").text) - Global.blindAmount)
 		elif participant.name == small:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/SmallBlind.png")
+			#participant.find_node("Money").text = str(int(participant.find_node("Money").text) - Global.blindAmount/2)
 		else:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/Avatar.png")
-	
+
 	
 remotesync func enterBlinds():
 	if isBigBlind:
@@ -454,10 +457,12 @@ remotesync func forwardBet(playerName, amount):
 			bettingPlayer.find_node("BetAmount").text = str(Global.blindAmount)
 	bettingPlayer.find_node("BetAmount").visible = true
 
+
 remotesync func forwardFold(playerName):
 	var foldingPlayer = get_tree().get_root().get_node("Board").get_node(playerName)
 	foldingPlayer.get_node("Eliminated").visible = true
 	foldingPlayer.find_node("BetAmount").visible = false
+
 	if get_tree().is_network_server():
 		activePlayers.erase(foldingPlayer)
 		justFolded = true
@@ -495,13 +500,16 @@ func sendBetActions():
 			print("break4")
 			break
 		rpc_id(activePlayers[i].id, 'bettingPhase')
+		rpc('glowCurrentBetter', activePlayers[i].name, true)
 		yield(self, "turnOver")
+		rpc('glowCurrentBetter', activePlayers[i].name, false)
 		if not justFolded:
 			i += 1
 		justFolded = false
 		if i == activePlayers.size():
 			i = 0
 			iterations += 1
+	yield(get_tree().create_timer(1), "timeout")
 	consolidatePot()
 	
 	if phase == "preflop":
@@ -568,7 +576,7 @@ remotesync func updatePot():
 	get_tree().get_root().get_node("Board").get_node("PotAmount").text = str(currentPot)
 		
 		
-	
+
 	
 remotesync func endBet():
 	emit_signal("turnOver")
@@ -1152,4 +1160,12 @@ remotesync func playTransition():
 	transitionNode.get_node("TransitionLabel").text = phase.to_upper()
 	transitionNode.get_node("TransitionLabel").animate()
 	
+remotesync func glowCurrentBetter(better, on):
+	for participant in get_tree().get_nodes_in_group("Players"):
+		if participant.name == better:
+			if on:
+				participant.get_node("PlayerGlowing").visible = true
+			else:
+				participant.get_node("PlayerGlowing").visible = false
+
 

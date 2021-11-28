@@ -150,6 +150,7 @@ func resetBettingArea():
 		child.queue_free()
 	$BettingPhase/BetAmount.text = '0'
 	$BettingPhase/BetAmount.visible = false
+	$BettingPhase/Capsule.visible = false
 	$BettingPhase.visible = false
 
 func transitionHand():
@@ -175,6 +176,7 @@ func transitionHand():
 		
 	$BettingPhase/BetAmount.text = '0'
 	$BettingPhase/BetAmount.visible = false
+	$BettingPhase/Capsule.visible = false
 	$BettingPhase.visible = false
 	$CombatPhase.visible = true
 	
@@ -209,7 +211,8 @@ func reorient():
 		get_node("BettingPhase/Keeps").position.y = 230
 		get_node("BettingPhase/Discards").position.y = 100
 		get_node("BettingPhase/Money").rect_position.y = -108
-		get_node("BettingPhase/BetAmount").rect_position.y = 300
+		get_node("BettingPhase/BetAmount").rect_position.y = 305
+		get_node("BettingPhase/Capsule").position.y = 343
 		get_node("CombatPhase/Active").position.y = 160
 		get_node("CombatPhase/Hand").position.y = -100
 		get_node("CombatPhase/Discard").position.y = 160
@@ -218,16 +221,22 @@ func reorient():
 		get_node("BettingPhase/Keeps").position.y = -100
 		get_node("BettingPhase/Discards").position.y = -230
 		get_node("BettingPhase/Money").rect_position.y = 36
-		get_node("BettingPhase/BetAmount").rect_position.y = -380
+		if not self.is_network_master():
+			get_node("BettingPhase/BetAmount").rect_position.y = -380
+		else:
+			get_node("BettingPhase/BetAmount").rect_position.y = -373.71
+		get_node("BettingPhase/Capsule").position.y = -343
 		get_node("CombatPhase/Active").position.y = -160
 		get_node("CombatPhase/Hand").position.y = 100
 		get_node("CombatPhase/Discard").position.y = -160
 		get_node("CombatPhase/TextureButton").rect_position.y = -245
 		
-	if position.x > 960:
-		get_node("BettingPhase/BetAmount").rect_position.x = -500
-	elif position.x < 960:
-		get_node("BettingPhase/BetAmount").rect_position.x = 500		
+	if position.x < 960:
+		get_node("BettingPhase/BetAmount").rect_position.x = 407
+		get_node("BettingPhase/Capsule").position.x = 497
+	elif position.x > 960:
+		get_node("BettingPhase/BetAmount").rect_position.x = -593	
+		get_node("BettingPhase/Capsule").position.x = -501	
 					
 func determineAdjacentMinions():
 	if not Global.hasActiveMinion(self):
@@ -274,3 +283,10 @@ func _on_TextureButton_button_up():
 		card.z_index -= 3
 		
 
+
+
+func _on_BetAmount_visibility_changed():
+	if $BettingPhase/BetAmount.visible:
+		$BettingPhase/Capsule.visible = true
+	else:
+		$BettingPhase/Capsule.visible = false

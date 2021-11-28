@@ -64,10 +64,6 @@ font_data = ExtResource( 2 )
 size = 50
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=7]
-size = 90
-font_data = ExtResource( 2 )
-
 [sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 21 )
 shader_param/blurSize = 30
@@ -104,6 +100,10 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=18]
 size = 200
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=19]
+size = 90
 font_data = ExtResource( 2 )
 
 [node name="Board" type="Node2D"]
@@ -221,38 +221,6 @@ text = "FOLD"
 align = 1
 valign = 1
 script = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PotAmount" type="Label" parent="."]
-visible = false
-margin_left = 936.0
-margin_top = 475.0
-margin_right = 995.0
-margin_bottom = 589.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_scale = Vector2( 0.75, 0.75 )
-custom_fonts/font = SubResource( 7 )
-text = "0"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PotLabel" type="Label" parent="."]
-visible = false
-margin_left = 895.0
-margin_top = 403.0
-margin_right = 1063.0
-margin_bottom = 517.0
-rect_scale = Vector2( 0.75, 0.75 )
-custom_fonts/font = SubResource( 7 )
-text = "POT"
-align = 1
-valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -732,6 +700,38 @@ __meta__ = {
 }
 
 [node name="Tween" type="Tween" parent="TransitionAnimation/TransitionLabel"]
+
+[node name="PotAmount" type="Label" parent="."]
+visible = false
+margin_left = 929.045
+margin_top = 477.636
+margin_right = 1012.05
+margin_bottom = 591.636
+grow_horizontal = 2
+grow_vertical = 2
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = SubResource( 19 )
+text = "0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PotLabel" type="Label" parent="."]
+visible = false
+margin_left = 895.0
+margin_top = 410.0
+margin_right = 1063.0
+margin_bottom = 524.0
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = SubResource( 19 )
+text = "POT"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="TurnTimer" to="TurnTimer" method="_on_TurnTimer_timeout"]
 [connection signal="mouse_entered" from="BetActions/Raise" to="BetActions/Raise" method="_on_Raise_mouse_entered"]
 [connection signal="mouse_exited" from="BetActions/Raise" to="BetActions/Raise" method="_on_Raise_mouse_exited"]

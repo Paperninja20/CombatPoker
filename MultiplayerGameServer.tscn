@@ -97,7 +97,7 @@ shader_param/blurSize = 30
 size = 70
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=19]
 size = 90
 font_data = ExtResource( 3 )
 
@@ -153,13 +153,13 @@ __meta__ = {
 }
 
 [node name="StartLabel" type="Label" parent="Start"]
-margin_left = -116.224
-margin_top = -94.4719
-margin_right = 401.782
-margin_bottom = 36.5281
+margin_left = -284.788
+margin_top = -93.2804
+margin_right = 588.212
+margin_bottom = 37.7196
 rect_pivot_offset = Vector2( 240.42, 95.5417 )
 custom_fonts/font = SubResource( 2 )
-text = "Start Round"
+text = "START ROUND"
 align = 1
 valign = 1
 __meta__ = {
@@ -638,14 +638,14 @@ __meta__ = {
 
 [node name="PotAmount" type="Label" parent="."]
 visible = false
-margin_left = 936.0
-margin_top = 475.0
-margin_right = 995.0
-margin_bottom = 589.0
+margin_left = 929.045
+margin_top = 477.636
+margin_right = 1012.05
+margin_bottom = 591.636
 grow_horizontal = 2
 grow_vertical = 2
 rect_scale = Vector2( 0.75, 0.75 )
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 19 )
 text = "0"
 align = 1
 valign = 1
@@ -656,11 +656,11 @@ __meta__ = {
 [node name="PotLabel" type="Label" parent="."]
 visible = false
 margin_left = 895.0
-margin_top = 403.0
+margin_top = 410.0
 margin_right = 1063.0
-margin_bottom = 517.0
+margin_bottom = 524.0
 rect_scale = Vector2( 0.75, 0.75 )
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 19 )
 text = "POT"
 align = 1
 valign = 1
