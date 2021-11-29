@@ -205,7 +205,10 @@ remote func _send_player_info(player_id, info, newPlayer):
 		if playerOrder[i].seat > highestSeat:
 			highestSeat = playerOrder[i].seat
 			highestSeatIndex = i
-	playerOrder.insert(highestSeatIndex + 1, new_player)
+	if highestSeatIndex == playerOrder.size():
+		playerOrder.append(new_player)
+	else:
+		playerOrder.insert(highestSeatIndex + 1, new_player)
 	allPlayers.append(new_player)
 
 remotesync func sendServerSettings(turnTime, blinds):
@@ -500,7 +503,7 @@ func sendBetActions():
 			print("break4")
 			break
 		rpc_id(activePlayers[i].id, 'bettingPhase')
-		var activePlayerName = activePlayers[i].name
+		var activePlayerName = activePlayers[i].name	
 		rpc('glowCurrentBetter', activePlayerName, true)
 		yield(self, "turnOver")
 		rpc('glowCurrentBetter', activePlayerName, false)
@@ -510,7 +513,7 @@ func sendBetActions():
 		if i == activePlayers.size():
 			i = 0
 			iterations += 1
-	yield(get_tree().create_timer(1), "timeout")
+	yield(get_tree().create_timer(0.75), "timeout")
 	consolidatePot()
 	
 	if phase == "preflop":
@@ -1063,7 +1066,7 @@ remotesync func glow(playerName, effect):
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.scale /= 1.2
 				minion.modulate = Color(1, 1, 1)
-			yield(get_tree().create_timer(0.1), "timeout")
+			yield(get_tree().create_timer(0.3), "timeout")
 			rpc_id(1, 'VisualEffectDone')
 		"lastLaugh":
 			minion = Global.getDiscard(playerNode)[0]
@@ -1081,7 +1084,7 @@ remotesync func glow(playerName, effect):
 						minion.modulate = Color(1.5, 1.5, 1.5)
 				yield(get_tree().create_timer(0.5), "timeout")
 				minion.modulate = Color(1, 1, 1)
-			yield(get_tree().create_timer(0.1), "timeout")
+			yield(get_tree().create_timer(0.3), "timeout")
 			rpc_id(1, 'VisualEffectDone')
 			
 

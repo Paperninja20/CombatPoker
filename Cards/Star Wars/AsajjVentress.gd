@@ -55,6 +55,8 @@ func activateBox():
 		for card in discard:
 			if card.cardName == cardName:
 				debuff -= 4
+			else:
+				break
 		externalBuffs = debuff
 			
 	elif activeBox == 2:
@@ -62,6 +64,8 @@ func activateBox():
 		for card in discard:
 			if universe in card.universeTriggers:
 				debuff -= 2
+			else:
+				break
 		externalBuffs = debuff
 			
 	attack += target.externalBuffs
@@ -79,8 +83,6 @@ func doAttack():
 		
 func endRound():
 	pass
-	
-
 
 
 func _on_Area2D_mouse_entered():

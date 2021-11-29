@@ -38,6 +38,9 @@ func determineBox():
 	if Global.getHand(minionOwner) != null:
 		activeBox = 0
 		return
+	discard = Global.getDiscard(minionOwner)
+	if discard.size() == 0:
+		return
 	if universe in discard[0].universeTriggers:
 		activeBox = 1
 	else:

@@ -25,6 +25,12 @@ func submit():
 		if player.name == Network.self_data.name:
 			myPlayer = player
 	var play = myPlayer.get_node("CombatPhase").get_node("Active").get_children()[0]
+	var soundEffect = load("res://Assets/Sounds/" + play.idName + ".wav")
+	if soundEffect:
+		var soundPlayer = get_parent().get_node("MinionEffectPlayer")
+		soundPlayer.stream = soundEffect
+		soundPlayer.play()
+		
 	
 	Network.sendPlayToServer(Network.self_data.name, play.idName)
 	visible = false

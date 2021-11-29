@@ -171,6 +171,7 @@ func transitionHand():
 			
 	for card in $BettingPhase/Discards.get_children():
 		discards.append(card.idName)
+		Global.demagnify(card, Vector2(1,1))
 		$BettingPhase/Discards.remove_child(card)
 		card.queue_free()
 		

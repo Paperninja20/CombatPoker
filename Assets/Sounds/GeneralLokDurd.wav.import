@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GeneralLokDurd.wav-7818dc9e35c8150a6f7d9fa607523aef.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/GeneralLokDurd.wav"
+dest_files=[ "res://.import/GeneralLokDurd.wav-7818dc9e35c8150a6f7d9fa607523aef.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

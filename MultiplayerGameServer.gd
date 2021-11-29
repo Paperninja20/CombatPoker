@@ -47,7 +47,7 @@ func _on_TextureButton_pressed():
 func startRound():
 	randomize()
 	Global.deck = deck.duplicate(true)
-	Global.deck.shuffle()
+	#Global.deck.shuffle()
 	Network.togglePots(true)
 	var rotatingPlayer = Network.playerOrder.pop_front()
 	Network.playerOrder.append(rotatingPlayer)

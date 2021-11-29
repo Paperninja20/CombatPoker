@@ -6,7 +6,7 @@
 [ext_resource path="res://Cards/Star Wars/Assets/AsajjVentress.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Cardback.png" type="Texture" id=5]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 size = 29
 font_data = ExtResource( 2 )
 
@@ -28,7 +28,7 @@ margin_bottom = -75.7053
 grow_horizontal = 2
 grow_vertical = 2
 rect_pivot_offset = Vector2( 163.454, 13.238 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.647059, 0.117647, 0.133333, 1 )
 text = "1"
 align = 1
@@ -47,7 +47,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rect_rotation = 180.0
 rect_pivot_offset = Vector2( 163.454, 13.238 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.647059, 0.117647, 0.133333, 1 )
 text = "1"
 align = 1

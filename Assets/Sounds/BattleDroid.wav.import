@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/BattleDroid.wav-feabaf76af02c12fe7fe2185707ce784.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/BattleDroid.wav"
+dest_files=[ "res://.import/BattleDroid.wav-feabaf76af02c12fe7fe2185707ce784.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -6,7 +6,7 @@ extends Node
 # var b = "text"
 var playerCount = 2
 
-var classes = ["Marvel", "Pokemon", "Star Wars", "Team Fortress", "Rodent"]
+var classes = ["Marvel", "Pokemon", "Star Wars", "PvZ", "Rodent"]
 
 var cards = {
 	"AntMan" : ["Marvel", 4],
@@ -80,7 +80,26 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-#	deck.push_front(["RocketRaccoon", "Marvel"])
+	deck.push_front(["AsajjVentress", "Star Wars"])
+	deck.push_front(["AsajjVentress", "Star Wars"])
+	deck.push_front(["AsajjVentress", "Star Wars"])
+	deck.push_front(["AsajjVentress", "Star Wars"])
+	deck.push_front(["ObiWan", "Star Wars"])
+	deck.push_front(["ObiWan", "Star Wars"])
+	deck.push_front(["MickeyMouse", "Rodent"])
+#	deck.push_front(["DoomShroom", "PvZ"])
+#	deck.push_front(["ChuckE", "Rodent"])
+#	deck.push_front(["DoomShroom", "PvZ"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["SpeedyGonzales", "Rodent"])
+#	deck.push_front(["Jerry", "Rodent"])
+#	deck.push_front(["CrazyDave", "PvZ"])
+#	deck.push_front(["CrazyDave", "PvZ"])
+#	deck.push_front(["CrazyDave", "PvZ"])
+	
+	
 #	deck.push_front(["RocketRaccoon", "Marvel"])
 #	deck.push_front(["ChuckE", "Rodent"])
 #	deck.push_front(["ChuckE", "Rodent"])
@@ -234,25 +253,24 @@ func _input(event):
 func magnify(card):
 	if magnifying:
 		return
-	magnifying = true
-	card.scale = Vector2(8, 8)
-	if not card.minionOwner.is_network_master():
-		card.scale *= 1.285
-	if card.get_parent().name == "Active":
-		card.scale /= 2
-	card.oldPos = card.global_position
-	card.global_position = Vector2(960, 540)
-	if not card.z_index > 300:
-		card.z_index += 500	
+	if card.get_node("Cardback").visible:
+		return
+	var magnifiedCardNode = get_tree().get_root().get_node("Board").get_node("MagnifiedCard")
+	var cardToMagnify = load("res://Cards/" + card.idName + ".tscn").instance()
+	cardToMagnify.scale = Vector2(4, 4)
+	magnifiedCardNode.add_child(cardToMagnify)
+	magnifiedCardNode.visible = true
 	card.magnified = true
 
 func demagnify(card, newScale):
 	if not magnifying:
 		return
-	magnifying = false
-	card.scale = newScale
-	card.global_position = card.oldPos
-	card.z_index -= 500
+	var magnifiedCardNode = get_tree().get_root().get_node("Board").get_node("MagnifiedCard")
+	if magnifiedCardNode.get_child_count() != 0:
+		var childToRemove = magnifiedCardNode.get_children()[0]
+		magnifiedCardNode.remove_child(childToRemove)
+		childToRemove.queue_free()
+	magnifiedCardNode.visible = false
 	card.magnified = false
 
 #fix for alt-tabs

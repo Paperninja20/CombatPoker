@@ -41,3 +41,11 @@ func setSlotsAvailable(newNum):
 		$Card/X.visible = true
 		keep = false
 	slotsAvailable = newNum
+
+
+func _on_RiverTurn_visibility_changed():
+	var myPlayer = Global.getMyPlayer()
+	if visible:
+		currentlyDiscarding = myPlayer.find_node("Discards").get_child_count()
+		slotsAvailable = 5 - myPlayer.find_node("Keeps").get_child_count()
+		
