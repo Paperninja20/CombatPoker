@@ -80,13 +80,13 @@ func resetDeck():
 			deck.append([card, cards[card][0]])
 			count += 1
 	deck.shuffle()
-	deck.push_front(["AsajjVentress", "Star Wars"])
-	deck.push_front(["AsajjVentress", "Star Wars"])
-	deck.push_front(["AsajjVentress", "Star Wars"])
-	deck.push_front(["AsajjVentress", "Star Wars"])
-	deck.push_front(["ObiWan", "Star Wars"])
-	deck.push_front(["ObiWan", "Star Wars"])
-	deck.push_front(["MickeyMouse", "Rodent"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["AsajjVentress", "Star Wars"])
+#	deck.push_front(["ObiWan", "Star Wars"])
+#	deck.push_front(["ObiWan", "Star Wars"])
+#	deck.push_front(["MickeyMouse", "Rodent"])
 #	deck.push_front(["DoomShroom", "PvZ"])
 #	deck.push_front(["ChuckE", "Rodent"])
 #	deck.push_front(["DoomShroom", "PvZ"])
@@ -192,7 +192,7 @@ func killMinion(minion, murderer):
 		playersToDamage.append(minion.minionOwner)
 	if not minion in minionsThatDiedThisRound:
 		minionsThatDiedThisRound.append(minion)
-		print("added ", minion.idName, " aka ", minion, " to ", minionsThatDiedThisRound, " by doomshroom")
+		#print("added ", minion.idName, " aka ", minion, " to ", minionsThatDiedThisRound, " by doomshroom")
 
 func resetMinion(minion):
 	minion.attack = minion.baseAttack

@@ -55,7 +55,6 @@ remotesync var raisedThisRound = false
 remotesync var bigBlindCheckedFirstRound = false
 remotesync var bigBlindFoldedFirstRound = false
 remotesync var checksAllAround = true
-
 remotesync var big = null
 remotesync var small = null
 
@@ -139,6 +138,9 @@ remotesync func kicked():
 	
 remote func _send_player_info(player_id, info, newPlayer):
 	if get_tree().is_network_server():
+		
+		#Reverse players list so that existing players will be loaded in the correct order on new connections
+		#-----
 		var reversePlayers = {}
 		var reverseKeys = players.keys()
 		var reverseVals = players.values()
@@ -146,15 +148,21 @@ remote func _send_player_info(player_id, info, newPlayer):
 		reverseVals.invert()
 		for i in range(0, players.size()):
 			reversePlayers[reverseKeys[i]] = reverseVals[i]
-			
+		#-----
+		
+		#Load existing players onto newly connected clients
+		#-----
 		for peer_id in reversePlayers:
 			rpc_id(player_id, '_send_player_info', peer_id, players[peer_id], false)
 			if peer_id == 1:
 				continue
 			rpc_id(peer_id, '_send_player_info', player_id, info, true)
+		#-----
 			
 	players[player_id] = info
 	
+	#Prepare new player for existing clients
+	#-----
 	var new_player = player.instance()
 	new_player.name = info.name
 	new_player.id = info.id
@@ -163,6 +171,9 @@ remote func _send_player_info(player_id, info, newPlayer):
 	new_player.get_node("BettingPhase/Money").text = str(info.money)
 	new_player.scale = Vector2(0.7, 0.7)
 	new_player.seat = playerOrder.size() + 1
+	
+	#Determine first available seat
+	#-----
 	if newPlayer:
 		var availableSeat = false
 		for seat in leftSeats:
@@ -195,10 +206,15 @@ remote func _send_player_info(player_id, info, newPlayer):
 					new_player.position = seat
 					leftSeats[seat] = new_player
 					break
-					
+	#-----
+			
+	#Load new player onto existing client	
+	#-----	
 	get_tree().get_root().get_node("Board").add_child(new_player)
 	new_player.add_to_group("Players")
 	
+	#Place player in correct spot in the playerOrder array
+	#-----
 	var highestSeat = 0
 	var highestSeatIndex = 0
 	for i in range(0, playerOrder.size()):
@@ -209,6 +225,8 @@ remote func _send_player_info(player_id, info, newPlayer):
 		playerOrder.append(new_player)
 	else:
 		playerOrder.insert(highestSeatIndex + 1, new_player)
+	#-----
+		
 	allPlayers.append(new_player)
 
 remotesync func sendServerSettings(turnTime, blinds):
@@ -217,9 +235,11 @@ remotesync func sendServerSettings(turnTime, blinds):
 	get_tree().get_root().get_node("Board").get_node("TurnTimer").wait_time = Global.turnTimer
 
 remotesync func removePlayer(player_id, info):
+	
 	for participant in get_tree().get_nodes_in_group("Players"):
 		if participant.name == info.name:
-			
+			#Unload player from clients and rearrange remaining players to fill gap
+			#-----
 			if participant.position in rightSeats:
 				rightSeats[participant.position] = null
 				for i in range(0, rightSeats.keys().size() - 1):
@@ -243,9 +263,9 @@ remotesync func removePlayer(player_id, info):
 					leftSeats[leftSeats.keys()[i]].position = leftSeats.keys()[i]
 					leftSeats[leftSeats.keys()[i]].reorient()
 					leftSeats[leftSeats.keys()[i + 1]] = null
-					
 			playerOrder.erase(participant)
 			participant.queue_free()
+			#-----
 	players.erase(player_id)
 		
 
@@ -270,38 +290,45 @@ remotesync func updateGameState(state, ignoreSelf, ignoreServer):
 					areaNode.remove_child(child)
 					child.queue_free()
 			for card in state[participant][area]:
+				#if value is -1, remove card
+				#-----
 				if typeof(card) == TYPE_INT:
 					if areaNode.get_child_count() != 0:
 						var cardToDelete = areaNode.get_children()[0]
 						areaNode.remove_child(cardToDelete)
 						cardToDelete.queue_free()
 					continue
+				#-----
 				var faceUp = false
 				var cardInstance = load("res://Cards/" + card + ".tscn")
 				var newCard = cardInstance.instance()
 				newCard.set_network_master(playerNode.get_network_master())
 				if area != "Discard":
+					#If discard pile, stack on top
 					newCard.position.x += 180 * areaNode.get_child_count()
-				if area == "Active" or area == "Discard":
+				if area == "Active" or area == "Discard" or area == "Discards":
+					#Active, Discard, Discards will always be face up
 					faceUp = true
 					if area == "Active":
 						newMinionsPlayed.append(newCard)
 				if area == "Keeps" and (areaNode.get_child_count() == 2 or areaNode.get_child_count() == 3):
+					#3rd and 4th keep will always be face up
 					faceUp = true
 				if area == "Hand" and playerNode.is_network_master():
+					#Add hand buttons to cards if client controls the player
 					var handButton = load("res://HandButton.tscn")
 					var newButton = handButton.instance()
 					newCard.add_child(newButton)
-					newCard.move_child(newButton, 0)		
-				elif area == "Discards":
-					faceUp = true
+					newCard.move_child(newButton, 0)	
 				areaNode.add_child(newCard)
 				newCard.minionOwner = playerNode
+				#Hide all other cards
 				if not newCard.is_network_master():
 					if not faceUp:
 						newCard.get_node("Cardback").visible = true
 
 remotesync func updatePlays(plays):
+	#forgot exact reason for this function, IIRC had to do with removing card from hand after minion was played
 	for participant in plays:
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
 		if playerNode.is_network_master():
@@ -321,6 +348,7 @@ remotesync func updatePlays(plays):
 				
 	
 remotesync func updateGameValues(state):
+	#Update attack Labels/Health/Eliminated players
 	for participant in state:
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant)
 		if Global.getActiveMinion(playerNode):
@@ -335,26 +363,37 @@ remotesync func updateGameValues(state):
 				clickableHand = false
 
 func updateGamestateArray():
+	#Push server data into gamestate array
 	for playerNode in get_tree().get_nodes_in_group("Players"):
+		#Check Active minions
+		#-----
 		if not Global.getActiveMinion(playerNode):
 			gamestate[playerNode.name] = {}
 			gamestate[playerNode.name]["Active"] = [-1]
 		else:
 			gamestate[playerNode.name] = {}
 			gamestate[playerNode.name]["Active"] = [Global.getActiveMinion(playerNode).idName]
+		#-----
+		
+		#Handle discards
+		#-----
 		var DiscardArray = []
 		var discards = Global.getDiscard(playerNode)
 		for card in discards:
 			DiscardArray.append(card.idName)
 		DiscardArray.invert()
 		gamestate[playerNode.name]["Discard"] = DiscardArray
+		#-----
 		
+		#Handle Hands
+		#-----
 		var HandArray = []
 		var hand = Global.getHand(playerNode)
 		if hand != null:
 			for card in hand:
 				HandArray.append(card.idName)
 		gamestate[playerNode.name]["Hand"] = HandArray
+		#-----
 #		if hand != null:
 #			print(hand.size())
 
@@ -368,18 +407,18 @@ func callBlinds(bigBlind, smallBlind):
 	rpc('enterBlinds')
 	
 remotesync func markBlinds():
+	#color the blinds
 	for participant in get_tree().get_nodes_in_group("Players"):
 		if participant.name == big:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/BigBlind.png")
-			#participant.find_node("Money").text = str(int(participant.find_node("Money").text) - Global.blindAmount)
 		elif participant.name == small:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/SmallBlind.png")
-			#participant.find_node("Money").text = str(int(participant.find_node("Money").text) - Global.blindAmount/2)
 		else:
 			participant.find_node("PlayerIcon").texture_normal = load("res://Assets/Avatar.png")
 
 	
 remotesync func enterBlinds():
+	
 	if isBigBlind:
 		var currMoney = self_data.money
 		var bet = Global.blindAmount
@@ -406,10 +445,15 @@ remotesync func enterBlinds():
 		
 func sendRaise(amount):
 	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(self_data.name)
+	
+	#All in if its more than what player can afford
+	#-----
 	var moneyToSubtract = amount - int(bettingPlayer.find_node("BetAmount").text)
 	if moneyToSubtract < 0:
 		moneyToSubtract = 0
 	self_data.money -= moneyToSubtract
+	#-----
+	
 	rset('checksAllAround', false)
 	rset('lastBetter', self_data.name)
 	rset('currentBet', amount)
@@ -418,13 +462,15 @@ func sendRaise(amount):
 
 func sendCall():
 	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(self_data.name)
-	var totalMoney = self_data.money + int(bettingPlayer.find_node("BetAmount").text)
 	
+	#All in if its more than what player can afford
+	#-----
+	var totalMoney = self_data.money + int(bettingPlayer.find_node("BetAmount").text)
 	if currentBet > totalMoney:
 		rpc('forwardBet', self_data.name, totalMoney)
 		self_data.money = 0
 		return
-		
+			
 	var moneyToSubtract = currentBet - int(bettingPlayer.find_node("BetAmount").text)
 	if moneyToSubtract < 0:
 		moneyToSubtract = 0
@@ -432,6 +478,7 @@ func sendCall():
 	if moneyToSubtract > self_data.money:	
 		moneyToSubtract = self_data.money
 	self_data.money -= moneyToSubtract
+	#-----
 	
 	rpc('forwardBet', self_data.name, currentBet)
 	
@@ -448,13 +495,17 @@ func sendFold():
 	
 remotesync func forwardBet(playerName, amount):
 	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(playerName)
+	
+	#All in if its more than what player can afford
 	var moneyToSubtract = amount - int(bettingPlayer.find_node("BetAmount").text)
 	if moneyToSubtract < 0:
 		moneyToSubtract = 0
+	
 	bettingPlayer.find_node("Money").text = str(int(bettingPlayer.find_node("Money").text) - moneyToSubtract)
 	bettingPlayer.find_node("BetAmount").text = str(amount)
 	if amount == 0:	
 		if not (big == bettingPlayer.name and firstRound):
+			#turn 0 into check
 			bettingPlayer.find_node("BetAmount").text = "Check"
 		else:
 			bettingPlayer.find_node("BetAmount").text = str(Global.blindAmount)
@@ -471,42 +522,51 @@ remotesync func forwardFold(playerName):
 		justFolded = true
 
 func sendBetActions():
+	#Determine player who goes first
+	#-----
 	var i = 2 % activePlayers.size()
 	if not firstRound:
 		i = 0
 		rset('currentBet', 0)
+	#-----
+	
 	checksAllAround = true
 	
 	var iterations = 0
 	while true:
 		if activePlayers.size() == 1:
+			#If only one player remaining
 			winningPlayers.append(activePlayers[0])
 			consolidatePot()
 			yield(get_tree().create_timer(1), "timeout")
 			get_tree().get_root().get_node("Board").endCurrentRound()
 			return
 		if lastBetter != null:
+			#If bet went all the way around without being raised
 			if lastBetter == activePlayers[i].name and currentBet > 0:
+				#Need this so round doesnt end when player going first is set to last better
 				if firstRound and activePlayers[i].name == big and not raisedThisRound:
 					pass
 				else:
-					print("break1")
 					break
 		if checksAllAround and not firstRound and iterations > 0:
-			print("break2")
 			break
 		if bigBlindCheckedFirstRound and firstRound:
 			bigBlindCheckedFirstRound = false
-			print("break3")
 			break
 		if bigBlindFoldedFirstRound and currentBet <= Global.blindAmount and firstRound:
-			print("break4")
 			break
+		#send bet actions
 		rpc_id(activePlayers[i].id, 'bettingPhase')
+		
+		#Add glow to indicate who's turn it is
+		#-----
 		var activePlayerName = activePlayers[i].name	
 		rpc('glowCurrentBetter', activePlayerName, true)
 		yield(self, "turnOver")
 		rpc('glowCurrentBetter', activePlayerName, false)
+		#-----
+		
 		if not justFolded:
 			i += 1
 		justFolded = false
@@ -516,6 +576,8 @@ func sendBetActions():
 	yield(get_tree().create_timer(0.75), "timeout")
 	consolidatePot()
 	
+	#Handle phase changes
+	#-----
 	if phase == "preflop":
 		rset('phase', "flop")
 		sendTransition()
@@ -539,7 +601,7 @@ func sendBetActions():
 		sendTransition()
 		yield(self, "transitionOver")
 		rpc('prepareBattlePhase', remainingNames)
-		
+	#-----
 	
 	if firstRound:
 		rset('firstRound', false)	
@@ -552,6 +614,7 @@ func togglePots(on):
 		rpc('togglePot', false)
 		
 remotesync func togglePot(on):
+	#make pot visible/invisible
 	var PotLabelNode = get_tree().get_root().get_node("Board").get_node("PotLabel")
 	var PotAmountNode = get_tree().get_root().get_node("Board").get_node("PotAmount")
 	
@@ -561,10 +624,10 @@ remotesync func togglePot(on):
 	else:
 		PotLabelNode.visible = false
 		PotAmountNode.visible = false
-
-
+	
 	
 func consolidatePot():
+	#Server calculates current pot
 	for playerNode in get_tree().get_nodes_in_group("Players"):
 		var playerBet = playerNode.find_node("BetAmount")
 		if not playerBet.text == "Check":
@@ -573,26 +636,27 @@ func consolidatePot():
 	rpc('updatePot')
 		
 remotesync func updatePot():
+	#Update pot number on all clients and reset bet labels
 	for playerNode in get_tree().get_nodes_in_group("Players"):
 		var playerBet = playerNode.find_node("BetAmount")
 		playerBet.text = '0'
 		playerBet.visible = false
 	get_tree().get_root().get_node("Board").get_node("PotAmount").text = str(currentPot)
 		
-		
-
 	
 remotesync func endBet():
 	emit_signal("turnOver")
 
 #func serverEndBet(isServer, fold, check, call, raise, raiseAmount):
 func serverEndBet(isServer):
+	#send endturn message to the server
 	if isServer:
 		emit_signal("turnOver")
 	else:
 		rpc_id(1, 'endBet')
 	
 remotesync func bettingPhase():
+	#function for showing betting actions to player
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Betting")
 	var betActionsNode = get_tree().get_root().get_node("Board").get_node("BetActions")
@@ -618,6 +682,7 @@ func sendTransition():
 	emit_signal("transitionOver")
 	
 func sendPreflop():
+	#server draws preflops and then updates on clients
 	for remainingPlayer in activePlayers:
 		var preflopToSend = []
 		for _i in range(0, 2):
@@ -626,6 +691,7 @@ func sendPreflop():
 		rpc_id(remainingPlayer.id, 'drawPreflop', preflopToSend)
 		gamestate[remainingPlayer.name] = {}
 		gamestate[remainingPlayer.name]["Keeps"] = preflopToSend
+	#for each client, load preflops for players they don't control
 	updateGame("cards", true, false)
 	
 remotesync func drawPreflop(preflop):
@@ -644,17 +710,18 @@ remotesync func drawPreflop(preflop):
 	Network.gamestate[self_data.name]["Keeps"] = [card1.idName, card2.idName]
 		
 func sendFlop():
+	#draw and send flop to all clients
 	confirmedFlops = 0
 	for remainingPlayer in activePlayers:
+		print(remainingPlayer.name)
 		var flopToSend = []
 		for _i in range(0, 3):
 			var card = Global.deck.pop_front()
 			flopToSend.append(card[0])
 		rpc_id(remainingPlayer.id, 'flopActions', flopToSend)
-	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
-	turnTimer.startPhase("Mulling")
 		
 remotesync func flopActions(flop):
+	#Present flop mulligan screen
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Mulling")
 	
@@ -678,9 +745,11 @@ remotesync func flopActions(flop):
 	flopActions.visible = true
 	
 func sendFlopToServer(playerName, Keeps, Discards):
+	#for clients to send back their decisions to the server
 	rpc_id(1, 'receiveFlop', playerName, Keeps, Discards)
 	
 remotesync func receiveFlop(playerName, Keeps, Discards):
+	#for server to track how many people confirmed flop
 	gamestate[playerName] = {}
 	gamestate[playerName]["Keeps"] = Keeps
 	gamestate[playerName]["Discards"] = Discards
@@ -691,12 +760,14 @@ remotesync func receiveFlop(playerName, Keeps, Discards):
 		sendBetActions()
 
 func sendTurn():
+	#Draw and send turn
 	confirmedTurns = 0
 	for remainingPlayer in activePlayers:
 		var turnToSend = Global.deck.pop_front()[0]
 		rpc_id(remainingPlayer.id, 'turnActions', turnToSend)
 	
 remotesync func turnActions(turn):
+	#Present turn mulligan screen
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Mulling")
 	
@@ -712,6 +783,7 @@ func sendTurnToServer(playerName, Keeps, Discards):
 	rpc_id(1, 'receiveTurn', playerName, Keeps, Discards)
 	
 remotesync func receiveTurn(playerName, Keeps, Discards):
+	#for server to track how many players confirmed their turns
 	gamestate[playerName] = {}
 	gamestate[playerName]["Keeps"] = Keeps
 	gamestate[playerName]["Discards"] = Discards
@@ -723,12 +795,14 @@ remotesync func receiveTurn(playerName, Keeps, Discards):
 
 
 func sendRiver():
+	#draw and send river
 	confirmedRivers = 0
 	for remainingPlayer in activePlayers:
 		var riverToSend = Global.deck.pop_front()[0]
 		rpc_id(remainingPlayer.id, 'riverActions', riverToSend)
 	
 remotesync func riverActions(river):
+	#Present river mulligan screen
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Mulling")
 	
@@ -744,6 +818,7 @@ func sendRiverToServer(playerName, Keeps, Discards):
 	rpc_id(1, 'receiveRiver', playerName, Keeps, Discards)
 	
 remotesync func receiveRiver(playerName, Keeps, Discards):
+	#for server to track how many players confirmed river
 	gamestate[playerName] = {}
 	gamestate[playerName]["Keeps"] = Keeps
 	gamestate[playerName]["Discards"] = Discards
@@ -758,11 +833,15 @@ remotesync func receiveRiver(playerName, Keeps, Discards):
 #BATTLE PHASE FUNCS
 
 remotesync func prepareBattlePhase(remaining):
+	#Visually prepare area for all players
 	for participant in get_tree().get_nodes_in_group("Players"):
 		if participant.name in remaining:
 			participant.transitionHand()
 		else:
 			participant.resetBettingArea()
+	#-----
+	
+	#initiate gameValues array
 	for playerName in remaining:
 		gamestateValues[playerName] = {
 			'Lives': 3,
@@ -773,6 +852,7 @@ remotesync func prepareBattlePhase(remaining):
 		get_tree().get_root().get_node("Board").playMinionsPhase()
 		
 func determineTargeting(remainingPlayers):
+	#Determine which players each player is targeting/being targeted by
 	for i in range(0, remainingPlayers.size()):
 		if i == 0:
 			remainingPlayers[i].targetedBy = remainingPlayers[remainingPlayers.size() - 1]
@@ -784,33 +864,40 @@ func determineTargeting(remainingPlayers):
 			remainingPlayers[i].targeting = remainingPlayers[i + 1]
 
 func playMinions():
+	#start by determining targeting
 	determineTargeting(activePlayers)
 	
+	#need self. to trigger the setter
 	self.confirmedPlays = 0
 	
-	playsThisTurn = {}
-	newMinionsPlayed = []
-	print("telling players to play minions")
+	
+	playsThisTurn = {} #to keep track of played minion and who played the minion
+	newMinionsPlayed = [] #to keep track of minions who can be triggered potentially
+	
+	#Tell players they can play minions
 	for participant in activePlayers:
 		rpc_id(participant.id, 'playMinion')
 		
 	yield(self, "continueGameSequence")
 	
 	determineTargeting(activePlayers)
+	
+	#assign targets to active minions
 	for participant in activePlayers:
 		participant.determineAdjacentMinions()
 	
+	#activate boxes if active and update attack
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
 		activeMinion.activateBox()
 		gamestateValues[participant.name]["ActiveAttack"] = activeMinion.attack
 	
 	
-	
 	yield(get_tree().create_timer(1), "timeout")
 #--------------------Trigger phase-------------------------------------------
 		#trigger phase and update Labels and status
 		
+	#iterate through active minions and trigger triggers
 	for participant in activePlayers:
 		var minion = Global.getActiveMinion(participant)
 		if not minion in newMinionsPlayed:
@@ -827,6 +914,7 @@ func playMinions():
 		updateGame("vals", true, false)
 		yield(get_tree().create_timer(0.5), "timeout")
 	
+	#apply changes trigger effects may have had on active boxes
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
 		activeMinion.activateBox()
@@ -834,6 +922,7 @@ func playMinions():
 	
 	updateGame("vals", true, false)
 	
+	#play targeting animation
 	var targetingArray = {}
 	for participant in activePlayers:
 		targetingArray[participant.name] = participant.targeting.name
@@ -848,11 +937,17 @@ func playMinions():
 	get_tree().get_root().get_node("Board").attackPhase()
 
 remotesync func playMinion():
+	#allow player to play minion
 	var myPlayer = Global.getMyPlayer()
+	
+	#if player's minion survived from last turn
+	#-----
 	if Global.hasActiveMinion(myPlayer):
 		print(myPlayer.name, " has ", Global.getActiveMinion(myPlayer).idName)
 		rpc_id(1, 'confirmPlay')
 		return
+	#-----
+	
 	#send some message
 	var turnTimer = get_tree().get_root().get_node("Board").get_node("TurnTimer")
 	turnTimer.startPhase("Playing")
@@ -861,14 +956,14 @@ remotesync func playMinion():
 
 func attackPhase():
 	Global.playersToDamage = []
-	Global.deathsThisRound = []
-	Global.minionsThatDiedThisRound = []
+	Global.deathsThisRound = [] #stores both dead minion and the murderer
+	Global.minionsThatDiedThisRound = [] #stores just the dead minion, includes minions that died from last laughs
 	
+	#execute attacks and append to deathsThisRound
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
 		Global.deathsThisRound += activeMinion.doAttack()
 		
-	
 	#death discards resolve
 	for death in Global.deathsThisRound:
 		var killedMinion = death[0]
@@ -882,6 +977,7 @@ func attackPhase():
 	
 	#last laugh phase
 	
+	#trigger last laughs
 	var i = 0
 	while i < activePlayers.size():
 		if not activePlayers[i].find_node("Discard").get_child_count() == 0:
@@ -951,6 +1047,7 @@ func attackPhase():
 				winningPlayers.append(participant)
 			#$Label.text = "pot split!"
 	
+	#remove one-turn effects i.e. rocket raccoon
 	for participant in activePlayers:
 		var activeMinion = Global.getActiveMinion(participant)
 		if activeMinion != null:
@@ -961,6 +1058,7 @@ func attackPhase():
 	get_tree().get_root().get_node("Board").playMinionsPhase()
 
 func distributeMoney():
+	#distribute money to winning players
 	var moneyDict = {}
 	for winner in winningPlayers:
 		var currentMoney = int(winner.find_node("Money").text)
@@ -969,6 +1067,7 @@ func distributeMoney():
 	rpc('updateMoney', moneyDict)
 	
 remotesync func updateMoney(moneyDict):
+	#update money counts visually
 	for winner in moneyDict:
 		var winnerNode = get_tree().get_root().get_node("Board").get_node(winner)
 		winnerNode.find_node("Money").text = str(moneyDict[winner])
@@ -981,10 +1080,12 @@ remotesync func confirmPlay():
 	self.confirmedPlays += 1
 	
 func sendPlayToServer(playerName, play):
+	#send played minion info from client to server
 	clickableHand = false
 	rpc_id(1, 'receivePlay', playerName, play)
 	
 remotesync func receivePlay(playerName, play):
+	#server receives play
 	playsThisTurn[playerName] = play
 	
 	#check if its server and add to newMinionsPlayed
@@ -996,6 +1097,7 @@ remotesync func receivePlay(playerName, play):
 
 
 func setConfirmedPlays(newVal):
+	#check if everyone is done playing a new minion
 	confirmedPlays = newVal
 	if newVal >= activePlayers.size():
 		rpc('updatePlays', playsThisTurn)
@@ -1008,10 +1110,12 @@ func resetAllPlayers():
 	rpc('sendResets')
 	
 remotesync func sendResets():
+	#visually reset all players
 	for participant in get_tree().get_nodes_in_group("Players"):
 		participant.resetAll()
 		
 func resetValues():
+	#reset all variables
 	gamestate = {}
 	gamestateValues = {}
 	rset('phase', "preflop")
@@ -1044,6 +1148,7 @@ func resetValues():
 	
 
 remotesync func glow(playerName, effect):
+	#handles glow effect for triggers/last laughs
 	var playerNode = get_tree().get_root().get_node("Board").get_node(playerName)
 	var minion
 	match effect:
@@ -1089,6 +1194,7 @@ remotesync func glow(playerName, effect):
 			
 
 remotesync func swordAnimations(targetArray):
+	#sword animations for targeting
 	for participant in targetArray:
 		var playerNode = get_tree().get_root().get_node("Board").get_node(participant) 
 		var targetNode = get_tree().get_root().get_node("Board").get_node(targetArray[participant])
@@ -1096,11 +1202,13 @@ remotesync func swordAnimations(targetArray):
 		swordSprite.swordAttackAnimation(targetNode)
 
 remotesync func VisualEffectDone():
+	#emits signal if animation is over on all clients
 	VisualEffectsDone += 1
 	if VisualEffectsDone >= activePlayers.size():
 		emit_signal("VisualEffectOver")
 	
 func kickPlayers():
+	#kick players who ran out of money
 	var brokePlayers = []
 	for participant in playerOrder:
 		if int(participant.find_node("Money").text) <= 0:
@@ -1111,15 +1219,18 @@ func kickPlayers():
 		rpc_id(broke.id, 'showRebuyScreen')
 		
 remotesync func showRebuyScreen():
+	#display rebuy screen to players who ran out of money
 	get_tree().get_root().get_node("Board").get_node("RebuyScreen").visible = true
 	if get_tree().is_network_server():
 		var startButton = get_tree().get_root().get_node("Board").get_node("Start")
 		startButton.visible = false
 	
 func sendRebuy(playerName, money):
+	#send rebuy info from client to server
 	rpc_id(1, 'playerRebuy', playerName, money)
 	
 remotesync func playerRebuy(playerName, money):
+	#re-add player who rebought on all clients
 	for participant in allPlayers:
 		print(participant.name)
 		if participant.name == playerName:
@@ -1151,20 +1262,24 @@ remotesync func playerRebuy(playerName, money):
 			rpc('updatePlayerMoney', playerName, money)
 
 remotesync func updatePlayerMoney(playerName, money):
+	#update player's money count on all clients
 	var bettingPlayer = get_tree().get_root().get_node("Board").get_node(playerName)
 	bettingPlayer.find_node("Money").text = str(money)
 
 func kickSelf():
+	#leave server
 	var myPlayer = Global.getMyPlayer()
 	rpc_id(myPlayer.id, 'kicked')
 	
 remotesync func playTransition():
+	#play phase transition animation
 	var transitionNode = get_tree().get_root().get_node("Board").get_node("TransitionAnimation")
 	transitionNode.visible = true
 	transitionNode.get_node("TransitionLabel").text = phase.to_upper()
 	transitionNode.get_node("TransitionLabel").animate()
 	
 remotesync func glowCurrentBetter(better, on):
+	#handles glow effect for when its a player's turn
 	for participant in get_tree().get_nodes_in_group("Players"):
 		if participant.name == better:
 			if on:
