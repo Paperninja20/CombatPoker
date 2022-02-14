@@ -1,0 +1,138 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://Assets/CardSlot.png" type="Texture" id=3]
+[ext_resource path="res://Assets/editPressed.png" type="Texture" id=4]
+[ext_resource path="res://Assets/edit.png" type="Texture" id=5]
+[ext_resource path="res://EditButton.gd" type="Script" id=6]
+[ext_resource path="res://CustomSimOptions.gd" type="Script" id=8]
+
+[sub_resource type="DynamicFont" id=5]
+size = 100
+font_data = ExtResource( 2 )
+
+[node name="SimOptions" type="Node2D"]
+position = Vector2( 0, 2.24493 )
+script = ExtResource( 8 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 1062.69, 255.56 )
+scale = Vector2( 1.01146, 1.03079 )
+texture = ExtResource( 1 )
+offset = Vector2( -106.151, 274.404 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="P3" type="Label" parent="."]
+visible = false
+margin_left = -104.267
+margin_top = 583.415
+margin_right = 413.733
+margin_bottom = 970.415
+custom_fonts/font = SubResource( 5 )
+text = "P3
+
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slots" type="Sprite" parent="P3"]
+position = Vector2( 851.587, 62.8683 )
+scale = Vector2( 0.178961, 0.178961 )
+texture = ExtResource( 3 )
+
+[node name="EditButton3" type="TextureButton" parent="P3"]
+margin_left = 1363.55
+margin_top = 6.50293
+margin_right = 2387.55
+margin_bottom = 1030.5
+rect_scale = Vector2( 0.1, 0.1 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="1" type="Sprite" parent="P3"]
+position = Vector2( 448.593, 63.2507 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="2" type="Sprite" parent="P3"]
+position = Vector2( 650.093, 63.2507 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="3" type="Sprite" parent="P3"]
+position = Vector2( 851.593, 63.2507 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="4" type="Sprite" parent="P3"]
+position = Vector2( 1046.09, 63.2507 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="5" type="Sprite" parent="P3"]
+position = Vector2( 1247.59, 63.2507 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="P4" type="Label" parent="."]
+visible = false
+margin_left = -104.267
+margin_top = 834.847
+margin_right = 413.733
+margin_bottom = 1351.85
+custom_fonts/font = SubResource( 5 )
+text = "P4
+
+
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slots" type="Sprite" parent="P4"]
+position = Vector2( 851.587, 62.8683 )
+scale = Vector2( 0.178961, 0.178961 )
+texture = ExtResource( 3 )
+
+[node name="EditButton4" type="TextureButton" parent="P4"]
+margin_left = 1363.55
+margin_top = 6.95557
+margin_right = 2387.55
+margin_bottom = 1030.96
+rect_scale = Vector2( 0.1, 0.1 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="1" type="Sprite" parent="P4"]
+position = Vector2( 448.62, 62.7368 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="2" type="Sprite" parent="P4"]
+position = Vector2( 650.12, 62.7368 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="3" type="Sprite" parent="P4"]
+position = Vector2( 851.62, 62.7368 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="4" type="Sprite" parent="P4"]
+position = Vector2( 1046.12, 62.7368 )
+scale = Vector2( 0.178, 0.178 )
+
+[node name="5" type="Sprite" parent="P4"]
+position = Vector2( 1247.62, 62.7368 )
+scale = Vector2( 0.178, 0.178 )
+
+[connection signal="pressed" from="P3/EditButton3" to="P3/EditButton3" method="_on_EditButton1_pressed"]
+[connection signal="pressed" from="P4/EditButton4" to="P4/EditButton4" method="_on_EditButton1_pressed"]

@@ -6,9 +6,7 @@ var hovering = false
 func _input(event):
 	if event is InputEventMouseButton and hovering:
 		if event.is_pressed():
-			get_tree().change_scene("res://CustomSimOptions.tscn")
-			#hovering = false
-			#set("custom_colors/font_color", Color("#c9a17e"))
+			get_tree().change_scene("res://Rules.tscn")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
