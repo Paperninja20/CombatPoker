@@ -29,7 +29,7 @@ func submit():
 	if soundEffect:
 		var soundPlayer = get_parent().get_node("MinionEffectPlayer")
 		soundPlayer.stream = soundEffect
-		soundPlayer.play()
+		#soundPlayer.play()
 		
 	
 	Network.sendPlayToServer(Network.self_data.name, play.idName)
