@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/CadBane.png-ac5768055488d25a0a3a3f2a1f25c21f.stex"
+path="res://.import/CadBane.png-1c7ed545a7aee75f5e89f5a8c834ba0a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://CadBane.png"
-dest_files=[ "res://.import/CadBane.png-ac5768055488d25a0a3a3f2a1f25c21f.stex" ]
+source_file="res://misc/CadBane.png"
+dest_files=[ "res://.import/CadBane.png-1c7ed545a7aee75f5e89f5a8c834ba0a.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true
