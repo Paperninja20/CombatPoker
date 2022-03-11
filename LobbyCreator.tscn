@@ -14,15 +14,15 @@
 size = 90
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=21]
+size = 90
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxEmpty" id=18]
 
 [sub_resource type="StyleBoxEmpty" id=19]
 
 [sub_resource type="StyleBoxEmpty" id=20]
-
-[sub_resource type="DynamicFont" id=21]
-size = 90
-font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 90
@@ -122,12 +122,12 @@ margin_left = 880.012
 margin_top = 169.335
 margin_right = 1450.01
 margin_bottom = 283.335
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 21 )
 custom_styles/read_only = SubResource( 18 )
 custom_styles/focus = SubResource( 19 )
 custom_styles/normal = SubResource( 20 )
-custom_fonts/font = SubResource( 21 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "Player"
 caret_blink = true
 __meta__ = {
@@ -139,12 +139,12 @@ margin_left = 879.906
 margin_top = 278.719
 margin_right = 1449.9
 margin_bottom = 392.719
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 21 )
 custom_styles/read_only = SubResource( 18 )
 custom_styles/focus = SubResource( 19 )
 custom_styles/normal = SubResource( 20 )
-custom_fonts/font = SubResource( 21 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "500"
 caret_blink = true
 __meta__ = {
@@ -156,12 +156,12 @@ margin_left = 868.0
 margin_top = 388.0
 margin_right = 1860.0
 margin_bottom = 512.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 6 )
 custom_styles/read_only = SubResource( 18 )
 custom_styles/focus = SubResource( 19 )
 custom_styles/normal = SubResource( 20 )
-custom_fonts/font = SubResource( 6 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "127.0.0.1"
 caret_blink = true
 __meta__ = {
@@ -205,6 +205,7 @@ script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="mouse_entered" from="CreateLobby" to="CreateLobby" method="_on_CreateLobby_mouse_entered"]
 [connection signal="mouse_exited" from="CreateLobby" to="CreateLobby" method="_on_CreateLobby_mouse_exited"]
 [connection signal="mouse_entered" from="JoinLobby" to="JoinLobby" method="_on_JoinLobby_mouse_entered"]

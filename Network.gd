@@ -2,7 +2,7 @@ extends Node
 
 
 const DEFAULT_IP = '127.0.0.1'
-const DEFAULT_PORT = 9999
+const DEFAULT_PORT = 1099
 const MAX_PLAYERS = 6
 var ipAddressToJoin
 
@@ -105,6 +105,7 @@ func CreateLobby(player_nickname, player_money):
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(DEFAULT_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
+	print("Server started on " + String(DEFAULT_PORT))
 	
 	peer.connect("peer_connected", self, "_Peer_Connected")
 	peer.connect("peer_disconnected", self, "_Peer_Disconnected")
@@ -113,13 +114,21 @@ func JoinLobby(player_nickname, player_money, ip):
 	ipAddressToJoin = ip
 	self_data.name = player_nickname
 	self_data.money = player_money
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	get_tree().connect("connected_to_server", self, '_connected_to_server')
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_client(ip, DEFAULT_PORT)
+	peer.create_client(ipAddressToJoin, DEFAULT_PORT)
 	get_tree().set_network_peer(peer)
+	print("Connecting... to " + String(DEFAULT_PORT))
+	peer.connect("connection_failed", self, "_OnConnectionFailed")
+	peer.connect("connection_succeeded", self, "_OnConnectionSucceeded")
 	self_data.id = get_tree().get_network_unique_id()
-	
+func _OnConnectionFailed():
+	print("Failed to connect")
+
+func _OnConnectionSucceeded():
+	print("Successfully connected")
+
 func _connected_to_server():
 	players[get_tree().get_network_unique_id()] = self_data
 	rpc('_send_player_info', get_tree().get_network_unique_id(), self_data, true)

@@ -52,8 +52,8 @@ margin_left = -75.436
 margin_top = -48.0931
 margin_right = -30.4364
 margin_bottom = 53.9069
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.933333, 0.0666667, 0.133333, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "3"
 align = 1
 valign = 1
@@ -86,5 +86,6 @@ script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="button_down" from="TextureButton" to="." method="_on_TextureButton_button_down"]
 [connection signal="button_up" from="TextureButton" to="." method="_on_TextureButton_button_up"]

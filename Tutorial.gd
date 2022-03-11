@@ -3,14 +3,9 @@ extends Label
 var hovering = false
 
 # Called when the node enters the scene tree for the first time.
-#func _input(event):
-	#if event is InputEventMouseButton and hovering:
-		#if event.is_pressed():
-			
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _input(event):
+	if event is InputEventMouseButton and hovering:
+		get_tree().change_scene("res://Tutorial.tscn")
 
 
 func _on_Custom_Simulation_mouse_entered():
