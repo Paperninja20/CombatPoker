@@ -2,7 +2,7 @@ extends Node
 
 
 const DEFAULT_IP = '127.0.0.1'
-const DEFAULT_PORT = 1099
+const DEFAULT_PORT = 9999
 const MAX_PLAYERS = 6
 var ipAddressToJoin
 
@@ -101,6 +101,7 @@ func CreateLobby(player_nickname, player_money):
 	self_data.name = player_nickname
 	self_data.money = player_money
 	self_data.id = 1
+	self_data.name = self_data.name + "#" + str(self_data.id);
 	players[1] = self_data
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(DEFAULT_PORT, MAX_PLAYERS)
@@ -123,6 +124,7 @@ func JoinLobby(player_nickname, player_money, ip):
 	peer.connect("connection_failed", self, "_OnConnectionFailed")
 	peer.connect("connection_succeeded", self, "_OnConnectionSucceeded")
 	self_data.id = get_tree().get_network_unique_id()
+	self_data.name = self_data.name + "#" + str(self_data.id);
 func _OnConnectionFailed():
 	print("Failed to connect")
 
