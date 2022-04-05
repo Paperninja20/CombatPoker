@@ -57,8 +57,8 @@ margin_top = -380.0
 margin_right = 93.0
 margin_bottom = -306.0
 grow_horizontal = 2
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.960784, 0.952941, 0.960784, 1 )
+custom_fonts/font = SubResource( 1 )
 text = "0"
 align = 1
 __meta__ = {
@@ -79,8 +79,8 @@ margin_right = 21.0
 margin_bottom = 114.0
 grow_horizontal = 2
 rect_pivot_offset = Vector2( 76, 39 )
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.960784, 0.952941, 0.960784, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "500"
 align = 1
 __meta__ = {
@@ -107,8 +107,8 @@ margin_left = -75.436
 margin_top = -48.0931
 margin_right = -30.4364
 margin_bottom = 53.9069
-custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0.933333, 0.0666667, 0.133333, 1 )
+custom_fonts/font = SubResource( 3 )
 text = "3"
 align = 1
 valign = 1
@@ -162,12 +162,13 @@ margin_left = 40.5383
 margin_top = -32.9237
 margin_right = 121.538
 margin_bottom = 69.0762
-custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.960784, 0.952941, 0.960784, 1 )
+custom_fonts/font = SubResource( 4 )
 text = "P1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="visibility_changed" from="BettingPhase/BetAmount" to="." method="_on_BetAmount_visibility_changed"]
 [connection signal="button_down" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_down"]
 [connection signal="button_up" from="CombatPhase/TextureButton" to="." method="_on_TextureButton_button_up"]

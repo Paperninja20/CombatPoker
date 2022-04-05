@@ -1,0 +1,17 @@
+extends Label
+
+var hovering = false
+
+# Called when the node enters the scene tree for the first time.
+func _input(event):
+	if event is InputEventMouseButton and hovering:
+		get_tree().change_scene("res://Tutorial.tscn")
+
+
+func _on_Custom_Simulation_mouse_entered():
+	set("custom_colors/font_color", Color("#848384"))
+	hovering = true
+
+func _on_Custom_Simulation_mouse_exited():
+	set("custom_colors/font_color", Color("#ffffff"))
+	hovering = false

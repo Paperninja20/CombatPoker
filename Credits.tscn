@@ -1,0 +1,77 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=2]
+[ext_resource path="res://Assets/backpressed.png" type="Texture" id=3]
+[ext_resource path="res://Assets/back.png" type="Texture" id=5]
+[ext_resource path="res://Back.gd" type="Script" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 250
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 90
+font_data = ExtResource( 1 )
+
+[node name="SimOptions" type="Node2D"]
+position = Vector2( 0, 2.24493 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 1062.69, 255.56 )
+scale = Vector2( 1.01146, 1.03079 )
+texture = ExtResource( 2 )
+offset = Vector2( -106.151, 274.404 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Back" type="TextureButton" parent="."]
+margin_left = 1745.72
+margin_top = 20.2448
+margin_right = 2257.72
+margin_bottom = 532.245
+rect_scale = Vector2( 0.25, 0.25 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 3 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackToMenu" type="Label" parent="Back"]
+margin_left = -745.315
+margin_top = 98.7766
+margin_right = -46.3154
+margin_bottom = 414.777
+custom_fonts/font = SubResource( 1 )
+text = "MENU"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Credits" type="Label" parent="."]
+margin_left = 405.0
+margin_top = 143.755
+margin_right = 1451.0
+margin_bottom = 959.755
+rect_pivot_offset = Vector2( 918, 57 )
+mouse_filter = 1
+custom_fonts/font = SubResource( 2 )
+text = "Credits	
+Programmer: Eric Shen 	
+Programmer: Jacob Yu 
+Producer: Paul Lee
+Artist: Christian Rouse
+Artist: Cameron Henritzy
+Artist: Ellen Kim	"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Back" to="Back" method="_on_Back_pressed"]
+[connection signal="mouse_entered" from="Credits" to="Credits" method="_on_Custom_Simulation_mouse_entered"]
+[connection signal="mouse_exited" from="Credits" to="Credits" method="_on_Custom_Simulation_mouse_exited"]

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/Watchword_regular_demo.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://Assets/backgroundFelt.png" type="Texture" id=2]
-[ext_resource path="res://AutoPlayValue.gd" type="Script" id=3]
+[ext_resource path="res://deprecated/AutoPlayValue.gd" type="Script" id=3]
 [ext_resource path="res://MultiplayerOptions.gd" type="Script" id=4]
 [ext_resource path="res://Assets/back.png" type="Texture" id=5]
 [ext_resource path="res://Assets/backpressed.png" type="Texture" id=6]
@@ -11,15 +11,15 @@
 size = 90
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=5]
+size = 90
+font_data = ExtResource( 1 )
+
 [sub_resource type="StyleBoxEmpty" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="DynamicFont" id=5]
-size = 90
-font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 250
@@ -56,12 +56,12 @@ margin_left = 847.063
 margin_top = 167.406
 margin_right = 1417.07
 margin_bottom = 281.406
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 5 )
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "15"
 caret_blink = true
 __meta__ = {
@@ -87,12 +87,12 @@ margin_left = 847.063
 margin_top = 289.618
 margin_right = 1417.07
 margin_bottom = 403.618
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 5 )
 custom_styles/read_only = SubResource( 2 )
 custom_styles/focus = SubResource( 3 )
 custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 text = "10"
 caret_blink = true
 __meta__ = {
@@ -151,6 +151,7 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="mouse_entered" from="AutoPlayValue" to="AutoPlayValue" method="_on_AutoPlayValue_mouse_entered"]
 [connection signal="mouse_exited" from="AutoPlayValue" to="AutoPlayValue" method="_on_AutoPlayValue_mouse_exited"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

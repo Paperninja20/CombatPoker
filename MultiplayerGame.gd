@@ -10,10 +10,10 @@ var player = preload("res://MultiplayerPlayer.tscn")
 func _ready():
 	var mainPlayer = player.instance()
 	var playerInfo = Network.self_data
-	mainPlayer.name = playerInfo.name
+	mainPlayer.name = playerInfo.name + "#" + str(playerInfo.id)
 	mainPlayer.id = playerInfo.id
 	mainPlayer.set_network_master(playerInfo.id, true)
-	mainPlayer.get_node("PlayerTag").text = playerInfo.name
+	mainPlayer.get_node("PlayerTag").text = playerInfo.name + "#" + str(playerInfo.id)
 	mainPlayer.get_node("BettingPhase/Money").text = str(playerInfo.money)
 	mainPlayer.get_node("BettingPhase/BetAmount").rect_scale = Vector2(0.83,0.83)
 	mainPlayer.get_node("BettingPhase/BetAmount").rect_position.x += 15.81
